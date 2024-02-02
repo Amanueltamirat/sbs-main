@@ -1,0 +1,23 @@
+.homescreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5rem;
+  margin-top: 2rem;
+}
+.homescreen > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.homescreen .img {
+  width: 60vw;
+  height: 65vh;
+}
+.fas {
+  font-size: 25px;
+  cursor: pointer;
+}
+.fa-chevron-right {
+  padding-right: 20px;
+}
