@@ -30,6 +30,8 @@ function ArticleDetail() {
 
   const [showModal, setShowModal] = useState(false)
   const [deleteId, setDeleteId] = useState('')
+  // const [emails, setEmails] = useState([])
+  const [userlist, setUserlist] = useState([])
   const {state} = useContext(Store)
   const {userInfo} = state
 const navigate = useNavigate()
@@ -42,7 +44,7 @@ const navigate = useNavigate()
         const { data } = await axios.get(
           `http://localhost:4000/api/articles/${articleId}`
         );
-        console.log(data);
+        // console.log(data);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       };
       fetchData();
@@ -67,6 +69,52 @@ console.log(err)
 
 }
 
+useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const { data } = await axios.get(
+          `http://localhost:4000/api/users`
+        );
+        setUserlist(data)
+      };
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+let allEmaill = []
+
+userlist.map((user)=>{
+  allEmaill.push(user.email)
+})
+// console.log(allEmaill)
+
+var subject = article.title
+var message = `<div style={{maxWidth:300}}  >
+<h3>${article.title}</h3>
+  <img src=${article.image} alt=${article.title} style={{maxWidth:100}}/>
+  <p>${article?.content?article.content:''}</p>
+</div>`
+const sendMail =  async ()=>{
+  try{
+
+const data =  await axios.post(`http://localhost:4000/sendmail`, {
+
+  emails:allEmaill,
+  subject,
+  message
+
+})
+
+  } catch(err){
+    console.log(err)
+  }
+
+console.log('sent')
+navigate('/articles');
+
+}
 
   // console.log(article.author.name);
   return (
@@ -81,7 +129,7 @@ console.log(err)
       ) : (
         <div className="article">
           <h2>{article.title}</h2>
-          <img src={article.image} alt={article.title} />
+          <img src={article.image} alt={article.title}  />
           <p>{htmlReactParcer(article?.content?article.content:'')}</p>
           <div className='author-profile'>
           <div>
@@ -98,7 +146,7 @@ console.log(err)
           </div>
           <p>{article?.createdAt?.substring(0, 10) }</p>
 
-            {userInfo.isAdmin && <div className='btns'>
+            {userInfo?.isAdmin && <div className='btns'>
                 <Button onClick={()=>navigate(`/updatearticle/${article._id}`)}>Edit Article</Button>
                 <Button variant='danger' onClick={()=>{
                   setShowModal(true)
@@ -112,9 +160,17 @@ console.log(err)
                   <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
                 </div>
               </div>}
+              {
+                userInfo?.isAdmin &&
+              <Button onClick={sendMail} className='email-btn' > Send Article To Users</Button>
+              }
         </div>
       )}
+      {
+        userInfo?.isAdmin &&
+
       <Link className='new-btn' to="/newarticles">Create New Article</Link>
+      }
     </div>
   );
 }

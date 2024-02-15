@@ -4,6 +4,9 @@ const BookSchema = mongoose.Schema({
   author: {
     type: String,
   },
+  file:{
+   type:String
+  },
   image: {
     type: String,
   },

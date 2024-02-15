@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import './NewArticle.css'
 import {
   getDownloadURL,
   getStorage,
@@ -127,9 +128,10 @@ setPublishError('Somthing went wrong')
   }
 }
   return (
-    <div>
+    <div className='new-article'>
       <h1>New Articles</h1>
       <form onSubmit={handleSubmit}>
+      <div className='img-info'>
         <label htmlFor="uploadBanner">
           <input
             id="uploadBanner"
@@ -138,52 +140,66 @@ setPublishError('Somthing went wrong')
             onChange={(e) => setImage(e.target.files[0])}
           />
         </label>
-        <button
+       
+        {imageUploadError && (
+          <MessageBox variant="danger">{imageUploadError}</MessageBox>
+        )}
+        {formData.image && <img src={formData.image} alt="upload" />}
+      
+       <Button
           type="button"
           onClick={handleFileInput}
           disabled={imageUploadProgress}
         >
           {imageUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
-        </button>
-        {imageUploadError && (
-          <MessageBox variant="danger">{imageUploadError}</MessageBox>
-        )}
-        {formData.image && <img src={formData.image} alt="upload" />}
+        </Button>
+      </div>
+    <div className='author-info'>
+        <div>
         <label>Title</label>
         <input
           type="text"
           id="title"
           name="title"
-          placeholder='article title ...'
+          placeholder='write article title...'
           onChange={(e) => setFormData({...formData, title:e.target.value})}
         />
+        </div>
+       <div>
         <label>Author Name</label>
         <input
           type="text"
           id="authorName"
           name="authorName"
-          placeholder="author name..."
+          placeholder="write author name..."
           onChange={(e) => setFormData({...formData, authorName:e.target.value})}
         />
- <label>Author Title</label>
+       </div>
+   <div>
+      <label>Author Title</label>
         <input
           type="text"
           id="authorTitle"
           name="authorTitle"
-          placeholder="author title..."
+          placeholder="write author title..."
           onChange={(e) => setFormData({...formData, authorTitle:e.target.value})}
         />
+</div>
+    </div>
         <ReactQuill theme="snow" 
+        className='react-quill'
         onChange={(value)=>{
           setFormData({...formData, content:value})
         }}
-        placeholder="write something" />
+        placeholder="write article content" />
 
   <ReactQuill theme="snow" 
+  className='react-quill'
         onChange={(value)=>{
           setFormData({...formData, overView:value})
         }}
-        placeholder="write over veiw..." />
+        placeholder="write article over veiw..." />
+        <div className='img-info'>
   <label htmlFor="profilePicture:">
           <input
             id="profilePicture:"
@@ -192,19 +208,20 @@ setPublishError('Somthing went wrong')
             onChange={(e) => setProfilePicture(e.target.files[0])}
           />
         </label>
-        <button
+        
+        {profilePictureUploadError && (
+          <MessageBox variant="danger">{profilePictureUploadError}</MessageBox>
+        )}
+        {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
+  <Button
           type="button"
           onClick={handleProfilePictureInput}
           disabled={profilePictureUploadProgress}
         >
           {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
-        </button>
-        {profilePictureUploadError && (
-          <MessageBox variant="danger">{profilePictureUploadError}</MessageBox>
-        )}
-        {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
+        </Button>
 
-
+        </div>
         <Button type="submit">Submit</Button>
         {publishError && (
           <MessageBox variant="danger">{publishError}</MessageBox>

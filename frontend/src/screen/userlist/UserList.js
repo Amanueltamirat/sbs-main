@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { Store } from '../../Store'
+import { useNavigate, useNavigation } from 'react-router-dom'
 
 const UserList =()=> {
 const [showModal, setShowModal] = useState(false)
@@ -9,6 +10,8 @@ const [usersList, setUsersList] = useState([])
 const [currentId, setCurrentId] = useState(null)
 const {state} = useContext(Store)
 const {userInfo} = state
+
+const navigate = useNavigate()
 useEffect(() => {
     try {
       const fetchData = async () => {
@@ -23,7 +26,6 @@ useEffect(() => {
     }
   }, []);
 
-console.log(currentId)
 
 const handleDeleteUser = async()=>{
 setShowModal(false)
@@ -36,15 +38,18 @@ window.location.reload()
 console.log(currentId)
 }
 
-  return (
+
+ return (
     <div>
         <table className='table'>
 <thead>
     <tr>
+    
     <th>ID</th>
     <th>NAME</th>
     <th>Email</th>
     <th>ACTIONS</th>
+  
     </tr>
 </thead>
 <tbody>
@@ -55,7 +60,7 @@ console.log(currentId)
                 <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                {userInfo.isAdmin && <div>
+                {userInfo.isAdmin && <div className='btns'>
                     <Button >Edit</Button>
                     <Button onClick={()=>setShowModal(true)} variant='danger'>Delete</Button>
                     </div>}
@@ -67,7 +72,7 @@ console.log(currentId)
         </table>
 {showModal && <div onClick={()=>setShowModal(false)}>
     <h3>Are you sure you want to delete this acount?</h3>
-<div className='flex justify-center'>
+<div className='flex justify-center  btns'>
     <Button variant='danger' onClick={handleDeleteUser}>Yes, I'm sure</Button>
     <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
 </div>

@@ -34,6 +34,7 @@
 }
 
 
+
 .author-info{
     display: flex;
     align-items: center;
@@ -63,4 +64,9 @@ border-radius: 50%;
 }
 .article-title p, .author-info {
   padding: 0 10px;
+}
+.email-btn{
+  position: absolute;
+  left: 1rem;
+  top: -1rem;
 }

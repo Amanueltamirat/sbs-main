@@ -7,6 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* background-color: lightgray; */
+   background-color: rgb(249, 246, 246);
 }
 
 .site-container {
@@ -35,9 +36,19 @@ body {
   color: gray;
   transition: 0.3s all;
 }
-.link:hover {
+.link:hover, .isActiveLink:hover {
   color: rgb(167, 156, 156);
   border-bottom: 2px solid gray;
+}
+.isNotActiveLink{
+  color: gray;
+}
+.isActiveLink{
+   text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgb(108, 102, 102);
+   border-bottom: 2px solid gray;
 }
 .homescreen {
   display: flex;

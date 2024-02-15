@@ -1,6 +1,5 @@
 import './App.css';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import BookScreen from './screen/BookScreen';
+import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import ArticleScreen from './screen/articlesScreen/ArticleScreen';
 import ArticleDetail from './screen/articlesScreen/ArticleDetail';
 import AboutScreen from './screen/AboutScreen';
@@ -23,6 +22,17 @@ import NewAricles from './components/NewAricles';
 import UpdateArticle from './screen/articlesScreen/UpdateArticle';
 import UserList from './screen/userlist/UserList';
 import SermonsScreen from './screen/sermonsScreen/SermonsScreen';
+import SignOutScren from './screen/SignOutScren';
+import CreateSermonsScreen from './screen/sermonsScreen/CreateSermonsScreen';
+import SermonDetail from './screen/sermonsScreen/SermonDetail';
+import UpdateSermon from './components/UpdateSermon';
+import BookScreen from './screen/bookScreen/BookScreen';
+import CreateBook from './screen/bookScreen/CreateBook';
+import BookDetail from './screen/bookScreen/BookDetail';
+import ReadBook from './screen/bookScreen/ReadBook';
+import SampleBook from './screen/bookScreen/SampleBook';
+// import UpdateSermon from './screen/sermonsScreen/UpdateSermon';
+
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
 
@@ -31,6 +41,7 @@ function App() {
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
+    
   };
 
   return (
@@ -44,18 +55,18 @@ function App() {
                 <Navbar.Brand className="text-primary">SBC</Navbar.Brand>
               </LinkContainer>
               <div className="d-flex justify-content-between navlink ">
-                <Link className="link" to="about">
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
                   About
-                </Link>
-                <Link className="link" to="articles">
+                </NavLink>
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="articles">
                   Articles
-                </Link>
-                <Link to="books" className="link">
+                </NavLink>
+                <NavLink to="books" className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'}>
                   Books
-                </Link>
-                <Link className="link" to="sermons">
+                </NavLink>
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
                   Sermons
-                </Link>
+                </NavLink>
                 {userInfo ? (
                   <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
                     {userInfo.isAdmin && <LinkContainer to="/dashboared">
@@ -67,7 +78,7 @@ function App() {
                     <NavDropdown.Divider />
                     <Link
                       className="dropdown-item"
-                      to="/signout"
+                      to="/"
                       onClick={signoutHandler}
                     >
                       Sign Out
@@ -86,11 +97,18 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/books" element={<BookScreen />} />
+          <Route path="/createbook" element={<CreateBook />} />
+           {/* <Route path="/createbook" element={<SampleBook />} /> */}
+          <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="/readbook" element={<ReadBook />} />
           <Route path="/sermons" element={<SermonsScreen />} />
+          <Route path="/createsermons" element={<CreateSermonsScreen />} />
+          <Route path="/sermon/:id" element={<SermonDetail />} />
+          <Route path="/updatesermon/:id" element={<UpdateSermon />} />
           <Route path="/articles" element={<ArticleScreen />} />
           <Route path="/newarticles" element={<NewAricles />} />
           <Route path="/articles/:id" element={<ArticleDetail />} />
-                    <Route path="/article/:id" element={<ArticleDetail />} />
+          <Route path="/article/:id" element={<ArticleDetail />} />
           <Route path="/updatearticle/:id" element={<UpdateArticle />} />
           <Route path="/about" element={<AboutScreen />} />
           <Route path="/dashboared" element={<UserList />} />

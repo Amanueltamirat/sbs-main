@@ -67,6 +67,15 @@ UserRoute.get('/updateUser/:id', async(req,res)=>{
   const updatingUser = await User.findById({_id:id})
   res.json(updatingUser)
 })
+
+// let userEmai;
+// UserRoute.get('/getallusers', async(req, res)=>{
+//   const email = req.body.email
+//   const usersList = await User.find()
+//   res.send(usersList)
+// })
+
+
 // UserRoute.post(
 //   '/forget-password',
 //   expressAsyncHandler(async (req, res) => {

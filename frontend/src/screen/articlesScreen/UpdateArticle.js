@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ReactQuill from'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
-
+import './UpdateArticle.css'
 import {
   getDownloadURL,
   getStorage,
@@ -65,7 +65,8 @@ const handleProfilePictureInput = async(e)=>{
       }
       setPropfilePictureUploadError(null);
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + '-' + profilePicture.name;
+      // const fileName = new Date().getTime() + '-' + profilePicture.name;
+      const fileName = `image/${Date.now()}-${profilePicture.name}`
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, profilePicture);
 
@@ -136,7 +137,7 @@ const handleProfilePictureInput = async(e)=>{
       };
   
       return (
-        <div>
+        <div className='new-article' >
             <Helmet>
                 <title>
                     Update-Article
@@ -144,6 +145,7 @@ const handleProfilePictureInput = async(e)=>{
             </Helmet>
           <h1>Update Article</h1>
           <form onSubmit={handleUpdate}>
+          <div className='img-info'>
             <label htmlFor="uploadBanner">
               <input
                 id="image"
@@ -154,18 +156,24 @@ const handleProfilePictureInput = async(e)=>{
                 onChange={(e) => setImage(e.target.files[0])}
               />
             </label>
-            <button
+           
+            {imageUploadError && (
+              <MessageBox variant="danger">{imageUploadError}</MessageBox>
+            )}
+            {formData.image && <img src={formData.image} alt="upload" />}
+             <Button
               type="button"
               onClick={handleFileInput}
               disabled={imageUploadProgress}
             >
               {imageUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
-            </button>
-            {imageUploadError && (
-              <MessageBox variant="danger">{imageUploadError}</MessageBox>
-            )}
-            {formData.image && <img src={formData.image} alt="upload" />}
-            <label>Title</label>
+            </Button>
+          </div>
+
+          <div className='author-info'>
+
+          <div>
+          <label>Title</label>
             <input
               type="text"
               id="title"
@@ -173,6 +181,8 @@ const handleProfilePictureInput = async(e)=>{
               value={formData.title}
               onChange={(e) => setFormData({...formData, title:e.target.value})}
             />
+          </div>
+            <div>
             <label>Author</label>
             <input
             value={formData?.authorName? formData.authorName:''}
@@ -183,6 +193,8 @@ const handleProfilePictureInput = async(e)=>{
               placeholder="author name..."
               onChange={(e) => setFormData({...formData, authorName:e.target.value})}
             />
+            </div>
+           <div>
             <input
             value={formData?.authorTitle? formData.authorTitle:''}
               type="text"
@@ -191,21 +203,25 @@ const handleProfilePictureInput = async(e)=>{
               placeholder="author title..."
               onChange={(e) => setFormData({...formData, authorTitle:e.target.value})}
             />
+           </div>
+          </div>
             <ReactQuill theme="snow" 
+             className='react-quill'
             value={formData.content}
             onChange={(value)=>{
               setFormData({...formData, content:value})
             }}
-            placeholder="write something" />
+            placeholder="Update article content" />
 
  <ReactQuill theme="snow" 
+  className='react-quill'
  value={formData.overView}
         onChange={(value)=>{
           setFormData({...formData, overView:value})
         }}
-        placeholder="write over veiw..." />
-
-              <label htmlFor="profilePicture:">
+        placeholder="Update article over veiw..." />
+    <div className='img-info'>
+          <label htmlFor="profilePicture:">
           <input
             id="profilePicture:"
             type="file"
@@ -213,17 +229,19 @@ const handleProfilePictureInput = async(e)=>{
             onChange={(e) => setProfilePicture(e.target.files[0])}
           />
         </label>
-        <button
+       
+        {profilePictureUploadError && (
+          <MessageBox variant="danger">{profilePictureUploadError}</MessageBox>
+        )}
+        {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
+     <Button
           type="button"
           onClick={handleProfilePictureInput}
           disabled={profilePictureUploadProgress}
         >
           {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
-        </button>
-        {profilePictureUploadError && (
-          <MessageBox variant="danger">{profilePictureUploadError}</MessageBox>
-        )}
-        {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
+        </Button>
+    </div>
             <Button type="submit">Update</Button>
             {publishError && (
               <MessageBox variant="danger">{publishError}</MessageBox>
