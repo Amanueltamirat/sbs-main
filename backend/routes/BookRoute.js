@@ -159,7 +159,7 @@ BookRoute.get('/file/:id', async (req, res) => {
       if (err) return res.status(400).json({ err :'Error'});
     return file
     })
-    res.json({file})
+    res.json({file});
     //  const readstream = gridFs.createReadStream(file.filename);
     // readstream.pipe(res);
   }  catch (err) {
@@ -168,7 +168,7 @@ BookRoute.get('/file/:id', async (req, res) => {
   });
 
 
-BookRoute.get('/document/:id', async (req, res) => {
+BookRoute.get('/document/:filename', async (req, res) => {
   const filename = req.params.filename
   const id = req.params.id
   const _id = new mongoose.Types.ObjectId(id);
@@ -176,16 +176,16 @@ BookRoute.get('/document/:id', async (req, res) => {
   // const fileId = new Types.ObjectId(id)
   //  if (!id || id === 'undefined') return res.status(400).send('no file id');
  try{
-    let file = await gridFs.files.find({_id}).toArray((err, file)=>{
+    let file = await gridFs.files.find({filename}).toArray((err, file)=>{
       if (err) return res.status(400).json({ err :'Error'});
     return file
     })
   const readstream = gfs.openDownloadStream(file[0]._id);
-  
+  // const readstream = gfs.openDownloadStream(file[0].filename);
     readstream.pipe(res);
 
   }  catch (err) {
-       res.json({err:err.message})
+       res.json({err:err.message});
    }
   });
 

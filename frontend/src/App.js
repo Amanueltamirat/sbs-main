@@ -117,7 +117,7 @@ function App() {
              <Route path="/about/doctrine" element={<Doctrine />} />
           <Route path="/books" element={<BookScreen />} />
           {/* <Route path="/book/:id" element={<ReadBook />} /> */}
-          <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="/book/:filename" element={<BookDetail />} />
           <Route path="/createbook" element={<CreateBook />} />
            {/* <Route path="/createbook" element={<SampleBook />} /> */}
           <Route path="/readbook" element={<ReadBook />} />
