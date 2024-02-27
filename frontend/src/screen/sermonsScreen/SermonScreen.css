@@ -67,8 +67,9 @@ border-radius: 50%;
 
 .sermon-detail{
   /* widths */
-  margin:0 auto;
+  margin:5rem auto;
   width: 100%;
+
 }
 .audio-content{
   background-color: black;

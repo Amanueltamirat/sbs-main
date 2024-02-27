@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { Store } from '../../Store'
 import { useNavigate, useNavigation } from 'react-router-dom'
-
+import './USerList.css'
 const UserList =()=> {
 const [showModal, setShowModal] = useState(false)
 const [usersList, setUsersList] = useState([])
@@ -40,43 +40,43 @@ console.log(currentId)
 
 
  return (
-    <div>
+    <div className='user-list'>
         <table className='table'>
-<thead>
-    <tr>
-    
-    <th>ID</th>
-    <th>NAME</th>
-    <th>Email</th>
-    <th>ACTIONS</th>
-  
-    </tr>
-</thead>
-<tbody>
-    {
-        usersList.map((user)=>{
-            return(
-              <tr key={user._id} onClick={()=>setCurrentId(user._id)}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                {userInfo.isAdmin && <div className='btns'>
-                    <Button >Edit</Button>
-                    <Button onClick={()=>setShowModal(true)} variant='danger'>Delete</Button>
-                    </div>}
-              </tr>  
-            )
-        })
-    }
-</tbody>
-        </table>
-{showModal && <div onClick={()=>setShowModal(false)}>
-    <h3>Are you sure you want to delete this acount?</h3>
-<div className='flex justify-center  btns'>
-    <Button variant='danger' onClick={handleDeleteUser}>Yes, I'm sure</Button>
-    <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
-</div>
-</div>}
+           <thead>
+              <tr>
+              
+              <th>ID</th>
+              <th>NAME</th>
+              <th>Email</th>
+              <th>ACTIONS</th>
+            
+              </tr>
+           </thead>
+    <tbody>
+        {
+            usersList.map((user)=>{
+                return(
+                  <tr key={user._id} onClick={()=>setCurrentId(user._id)}>
+                    <td>{user._id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    {userInfo.isAdmin && <div className='btns'>
+                        <Button >Edit</Button>
+                        <Button onClick={()=>setShowModal(true)} variant='danger'>Delete</Button>
+                        </div>}
+                  </tr>  
+                )
+            })
+        }
+    </tbody>
+            </table>
+    {showModal && <div onClick={()=>setShowModal(false)}>
+        <h3>Are you sure you want to delete this acount?</h3>
+    <div className='flex justify-center  btns'>
+        <Button variant='danger' onClick={handleDeleteUser}>Yes, I'm sure</Button>
+        <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
+    </div>
+    </div>}
     </div>
   )
 }

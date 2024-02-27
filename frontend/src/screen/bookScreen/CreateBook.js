@@ -10,11 +10,12 @@ import {
 } from 'firebase/storage';
 import { app } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import './Book.css'
 
+  // "proxy": "http://localhost:4000",
 
 
 function CreateBook() {
-
 const [file, setFile] = useState('')
 const [formData, setFormData] = useState([])
 const [fileUploadingProgress, setFileUploadingProgress] = useState('')
@@ -23,21 +24,52 @@ const navigate = useNavigate()
 
 
 const submitHandler = async(e)=>{
-e.preventDefault()
-const formData = new FormData()
-formData.append('file', file)
-try{
-const res = await axios.post(`http://localhost:4000/api/books/createbook`,
-formData,
-)
-const data = await res.json()
-console.log(data)
-navigate('/books')
-}catch(err){
-  console.log(err)
-}
-}
 
+       e.preventDefault()
+        const formData = new FormData()
+        formData.append('file', file)
+      try{
+           const {data} = await axios.post(`http://localhost:4000/api/books/createbook`,formData
+            )
+          console.log(data)
+          navigate('/books')
+      } catch(err){
+        console.log(err)
+      }
+}
+// const submitHandler = async(e)=>{
+
+//        e.preventDefault()
+//         const formData = new FormData()
+//         formData.append('file', file)
+//         try{
+//         const response = await fetch(`http://localhost:4000/api/books/createbook`,{
+//             method: 'POST',
+//               mode: 'cors',
+//               headers: {
+//                   'Content-Type': 'application/json',
+//               },
+//            body: formData         
+//         }
+//           )
+//         const data = await response.json()
+//         console.log(data)
+//         navigate('/books')
+//         }catch(err){
+//           console.log(err)
+//         }
+// }
+  
+
+
+  // const response = await fetch(`https://localhost:8000/users/signup`, {
+  //                   method: 'POST',
+  //                   mode: 'cors',
+  //                   headers: {
+  //                       'Content-Type': 'application/json',
+  //                   },
+  //                   body: JSON.stringify()
+  //               })
 //////////////////////////////
 
 const bookData = {
@@ -96,10 +128,10 @@ const handleFileInput = async(e)=>{
       console.log(err);
     }
 }
-  return (
-    <div>CreateBook
-    
 
+  return (
+    <div className='create-book'>
+      <h2>CreateBook</h2>
     <input type='file' accept='application/*' name='file' id='file' onChange={(e)=>setFile(e.target.files[0])} />
     {/* <Button type='button' disabled={fileUploadingProgress}>Submit book</Button> */}
         <Button type='button' onClick={submitHandler} >Save Book</Button>

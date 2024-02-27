@@ -27,15 +27,16 @@ function ImageSlider({ images }) {
       <button onClick={goToPreviousSlide}>
         <i className="fas fa-chevron-left"></i>
       </button>
+      
       <img
         src={`${images[currentImageIndex]}`}
         alt={`Slide${currentImageIndex + 1}`}
         className="img"
       />
+      <div className="banner_fadebottom"></div>
       <button onClick={goToNextSlide}>
         <i className="fas fa-chevron-right"></i>
       </button>
-      <div className="banner_fadebottom"></div>
     </div>
   );
 }

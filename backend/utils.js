@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
-
+import mongoose from 'mongoose'
+import Grid from 'gridfs-stream'
+import { MongoClient }  from 'mongodb';
+import { GridFSBucket }  from 'mongodb';
 export const baseUrl = () => {
   process.env.BASE_URL
     ? process.env.BASE_URL
@@ -19,3 +22,11 @@ export const generateToken = (user) => {
     process.env.JWT_SECRET
   );
 };
+
+
+export let gridfs;
+mongoose.connection.once('open', function () {
+gridfs = Grid(mongoose.connection.db, mongoose.mongo);//If you are using mongoose
+gridfs.collection('uploads');
+ return gridfs
+ });

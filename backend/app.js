@@ -4,19 +4,24 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import nodemailer from 'nodemailer'
 import bodyParser from 'body-parser';
-
 import data from './data.js';
 import ArticleRoute from './routes/ArticleRoute.js';
 import SeedRoute from './routes/SeedRoute.js';
 import UserRoute from './routes/UserRoute.js';
 import SermonRoute from './routes/SermonRoute.js';
 import BookRoute from './routes/BookRoute.js';
+import multer from 'multer'
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:'https://localhost:5173',
+  methods:'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+  credentials:true
+}));
+// app.use(ExpressFormidable)
 // /////
 
 app.use(function(req, res, next) {
@@ -33,6 +38,8 @@ const port = process.env.port || 4000;
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
+    // useUnifiedTopology: true,
+    // useCreateIndex: true,
   })
   .then(() => {
     console.log('Db connected');
@@ -45,7 +52,6 @@ app.use('/api/seed', SeedRoute);
 app.use('/api/users', UserRoute);
 app.use('/api/sermons', SermonRoute);
 app.use('/api/books', BookRoute);
-
 app.get('/api/data', (req, res) => {
   res.send(data);
 });
@@ -82,7 +88,6 @@ app.post('/sendmail', (req, res)=>{
 app.get('/sendmail', (req, res)=>{
   sendEmail(req.query).then(response=>res.send(response.message)).catch(err=>res.send({message:err}))
 });
-
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });

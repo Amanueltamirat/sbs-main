@@ -1,0 +1,81 @@
+.about{
+  margin-top: 4.8rem;
+}
+.about-header{
+    background-image: url('../../../public/images/image1.JPG');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+}
+.about-header h2{
+ background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0, 0.4); 
+  color: lightblue;
+  margin-top: 10p;
+  font-weight: bold;
+  height: 100%;
+  padding: 30px 30px;
+  text-align: center;
+}
+.about-conents{
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    margin: 2rem 4rem;
+    gap: 4rem;
+
+}
+.about-links{
+    display: flex;
+    flex-direction: column;
+    min-width: 170px;
+}
+.about-link{
+    font-size: 18px;
+}
+.about-link {
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 0;
+  font-weight: 500;
+  color: gray;
+  transition: 0.3s all;
+  /* min-width: 170px; */
+  display: flex;
+}
+
+.about-link:hover, .isActivelink:hover {
+  color: rgb(214, 204, 204);
+
+}
+.isNotActivelink{
+  color: gray;
+}
+.isActivelink{
+   text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: gray;
+  background-color:rgb(175, 167, 167);
+   border-bottom: 1px solid gray;
+   display: flex;
+}
+.mission p small{
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    margin-bottom: 10px;
+}
+.mission p span{
+font-style: italic;
+display: block;
+padding: 10px 0;
+}
+.history p span{
+display: block;
+padding: 10px 0;
+}

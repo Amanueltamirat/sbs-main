@@ -130,7 +130,7 @@ navigate('/articles');
         <div className="article">
           <h2>{article.title}</h2>
           <img src={article.image} alt={article.title}  />
-          <p>{htmlReactParcer(article?.content?article.content:'')}</p>
+          <p className='article-content'>{htmlReactParcer(article?.content?article.content:'')}</p>
           <div className='author-profile'>
           <div>
            <img className='profile-picture' 

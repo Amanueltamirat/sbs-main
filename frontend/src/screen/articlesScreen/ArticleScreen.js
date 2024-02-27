@@ -47,7 +47,7 @@ function ArticleScreen() {
   }, []);
 console.log(articles)
   return (
-    <div className="articles">
+    <div className="articles home-article">
       <Helmet>
         <title>SBC-Articles</title>
       </Helmet>
@@ -58,7 +58,6 @@ console.log(articles)
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <div className="articles-detail">
-
           {articles.map((article) => (
             <div key={article._id} className="aricle">
             <div className='upper-part'>

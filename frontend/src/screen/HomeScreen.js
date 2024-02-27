@@ -25,25 +25,18 @@ function HomeScreen() {
         </Helmet>
       </div>
       <div className="homescreen">
-        <div>
-          <div>
+        <div className="upper-homesreen">
             <ImageSlider images={images} />
-          </div>
-          <div>
-            <i className="fas fa-sharp fa-solid fa-quotes"></i>
             <i className="fas fa-quotes">
               <p>
                 እኛም በክርስቶስ ፍጹም የሚሆን ሰውን ሁሉ እናቀርብ ዘንድ ሰውን ሁሉ እየገሠጽን ሰውንም ሁሉ በጥበብ
                 ሁሉ እያስተማርን የምንሰብከው እርሱ ነው። (ቆላስይስ 1፤28)
               </p>
             </i>
-          </div>
         </div>
         <div className="recent">
-          <p>Recent</p>
-          <div>
+          <p className="recent-things" >Recent</p>
             <ArticleScreen />
-          </div>
         </div>
       </div>
     </>

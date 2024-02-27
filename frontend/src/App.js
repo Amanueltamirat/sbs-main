@@ -2,8 +2,6 @@ import './App.css';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import ArticleScreen from './screen/articlesScreen/ArticleScreen';
 import ArticleDetail from './screen/articlesScreen/ArticleDetail';
-import AboutScreen from './screen/AboutScreen';
-
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,6 +29,11 @@ import CreateBook from './screen/bookScreen/CreateBook';
 import BookDetail from './screen/bookScreen/BookDetail';
 import ReadBook from './screen/bookScreen/ReadBook';
 import SampleBook from './screen/bookScreen/SampleBook';
+import Footer from './components/footer/Footer';
+import AboutScreen from './screen/about/AboutScreen';
+import Mission from './screen/about/Mission';
+import History from './screen/about/History';
+import Doctrine from './screen/about/Doctrine';
 // import UpdateSermon from './screen/sermonsScreen/UpdateSermon';
 
 function App() {
@@ -55,9 +58,22 @@ function App() {
                 <Navbar.Brand className="text-primary">SBC</Navbar.Brand>
               </LinkContainer>
               <div className="d-flex justify-content-between navlink ">
-                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
+                <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
                   About
-                </NavLink>
+                </NavLink>} id="basic-nav-dropdown">
+                    <LinkContainer to="/about/mission">
+                      <NavDropdown.Item>Mission</NavDropdown.Item>
+                    </LinkContainer>
+                     <LinkContainer to="/about/history">
+                      <NavDropdown.Item>Our History</NavDropdown.Item>
+                    </LinkContainer>
+                     <LinkContainer to="/about/doctrine">
+                      <NavDropdown.Item>Doctrinal Statement</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                  </NavDropdown>
+
+
                 <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="articles">
                   Articles
                 </NavLink>
@@ -96,10 +112,14 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomeScreen />} />
+           <Route path="/about/mission" element={<Mission />} />
+            <Route path="/about/history" element={<History />} />
+             <Route path="/about/doctrine" element={<Doctrine />} />
           <Route path="/books" element={<BookScreen />} />
+          {/* <Route path="/book/:id" element={<ReadBook />} /> */}
+          <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/createbook" element={<CreateBook />} />
            {/* <Route path="/createbook" element={<SampleBook />} /> */}
-          <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/readbook" element={<ReadBook />} />
           <Route path="/sermons" element={<SermonsScreen />} />
           <Route path="/createsermons" element={<CreateSermonsScreen />} />
@@ -122,6 +142,7 @@ function App() {
           />
         </Routes>
       </div>
+      <Footer/>
     </BrowserRouter>
   );
 }

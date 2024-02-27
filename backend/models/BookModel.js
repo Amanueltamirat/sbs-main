@@ -5,7 +5,8 @@ const BookSchema = mongoose.Schema({
     type: String,
   },
   file:{
-   type:String
+  type:String 
+
   },
   image: {
     type: String,
