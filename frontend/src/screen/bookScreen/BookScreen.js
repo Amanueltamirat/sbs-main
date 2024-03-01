@@ -49,7 +49,7 @@ bookData()
           books?.map((book, i)=>{
             return (
               
-      <Button onClick={()=>navigate(`/book/${book.filename}`)} >Book Number {i +1}</Button>
+      <Button key={book._id} onClick={()=>navigate(`/book/${book.filename}`)} >{book.filename }</Button>
             )
           })
       }

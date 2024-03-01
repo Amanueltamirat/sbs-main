@@ -14,8 +14,10 @@ import multer from 'multer'
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json({limit:'50mb'}));
+app.use(bodyParser.json({limit: '100mb'}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
 app.use(cors({
   origin:'https://localhost:5173',
   methods:'GET, POST, OPTIONS, PUT, PATCH, DELETE',
@@ -96,3 +98,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log('Your app litening on port:' + port);
 });
+// npm install mongodb@5.9.1
+//  "mongodb": "^6.3.0",

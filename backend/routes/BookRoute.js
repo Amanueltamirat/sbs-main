@@ -32,12 +32,12 @@ const conn = mongoose.createConnection(mongoURI, {
   useUnifiedTopology: true,
 });
 
-let gfs,gridFs;
+let gfs, gridFs;
 conn.once('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     bucketName: 'uploads',
   });
-  gridFs= new Grid(conn.db, mongoose.mongo);
+  gridFs= new Grid(mongoose.connection.db, mongoose.mongo);
   gridFs.collection('uploads');
   return gfs,gridFs;
 });
@@ -50,12 +50,14 @@ var storage = new GridFsStorage({
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
-          return reject(err);
+          return reject(err.message);
         }
         const filename = buf.toString('hex') + path.extname(file.originalname);
+        const originalname = file.originalname;
         const fileInfo = {
           filename: filename,
           bucketName: 'uploads',
+          originalname:originalname
         };
         resolve(fileInfo);
       });
@@ -64,10 +66,11 @@ var storage = new GridFsStorage({
 });
 
 const upload = multer({ storage: storage, 
-limits: { fileSize: 40000000 },
-fileFilter:function(req, file, cb){
-  checkFileType(file, cb)
-} })
+// limits: { fileSize: 40000000 },
+// fileFilter:function(req, file, cb){
+//   checkFileType(file, cb)
+// }
+ })
 
 function checkFileType(file, cb){
   const filetypes = /pdf|epub|xml/;
@@ -78,8 +81,11 @@ function checkFileType(file, cb){
 }
 
 const uploadMiddleware = (req, res, next)=>{
-  const uploads = upload.single('file');
+  // const uploads = upload.single('file');
+   const uploads = upload.fields([{name:'file', maxCount:1},{name:'coverimage', maxCount:1}])
 uploads(req, res, function(err){
+  try{
+
   if(err instanceof multer.MulterError){
     return res.status(404).send('file too large')
   } else if (err){
@@ -87,7 +93,12 @@ uploads(req, res, function(err){
     return res.sendStatus(500)
   }
   next()
-})
+}
+ catch(err){
+    res.json({err:err.message})
+  }
+  }
+)
 };
  export const deleteFile = (filename) => {
 gfs.files.find({ filename }).toArray((err, files) => {
@@ -110,9 +121,17 @@ gfs.files.find({ filename }).toArray((err, files) => {
 
 BookRoute.post("/createbook",uploadMiddleware, async (req, res) => {
 const {file} = req;
-// const {id} = file
-console.log(file);
+
+try{
+//   const newBook = new Books({
+//   ...req.body
+// })
+// const books = await  newBook.save()
+// console.log(books)
 res.send(file);
+} catch(err){
+res.json({err:err.message})
+}
 })
 
 //////////////////////////
@@ -139,9 +158,15 @@ BookRoute.get("/files", async (req, res) => {
     console.log({files});
     return files
   });
+  const newBook = new Books({
+    ...files
+  })
+  const books = await newBook.save()
+  console.log(books)
+  // res.json({books})
        res.json({files})
    } catch (err) {
-       res.json({err})
+       res.json({err:err.message})
    }
 });
 
@@ -172,16 +197,16 @@ BookRoute.get('/document/:filename', async (req, res) => {
   const filename = req.params.filename
   const id = req.params.id
   const _id = new mongoose.Types.ObjectId(id);
-  // const fileId = new ObjectId(id);
-  // const fileId = new Types.ObjectId(id)
-  //  if (!id || id === 'undefined') return res.status(400).send('no file id');
  try{
-    let file = await gridFs.files.find({filename}).toArray((err, file)=>{
+
+ let file = await gridFs.files.find({filename:filename}).toArray((err, file)=>{
       if (err) return res.status(400).json({ err :'Error'});
-    return file
+    return file;
+    
     })
+    // res.send(file)
+    //  const _id = new ObjectId(file._id);
   const readstream = gfs.openDownloadStream(file[0]._id);
-  // const readstream = gfs.openDownloadStream(file[0].filename);
     readstream.pipe(res);
 
   }  catch (err) {

@@ -111,7 +111,6 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<HomeScreen />} />
            <Route path="/about/mission" element={<Mission />} />
             <Route path="/about/history" element={<History />} />
              <Route path="/about/doctrine" element={<Doctrine />} />
@@ -134,6 +133,7 @@ function App() {
           <Route path="/dashboared" element={<UserList />} />
           <Route path="/signin" element={<SigninScreen />} />
           <Route path="/signup" element={<SignupScreen />} />
+          <Route path="/" element={<HomeScreen />} />
           <Route path="/forget-password" element={<ForgetpasswordScreen />} />
 
           <Route

@@ -17,6 +17,7 @@ import './Book.css'
 
 function CreateBook() {
 const [file, setFile] = useState('')
+const [coverImage, setCoverImage] = useState('')
 const [formData, setFormData] = useState([])
 const [fileUploadingProgress, setFileUploadingProgress] = useState('')
 const navigate = useNavigate()
@@ -28,9 +29,12 @@ const submitHandler = async(e)=>{
        e.preventDefault()
         const formData = new FormData()
         formData.append('file', file)
+        formData.append('coverimage', coverImage)
       try{
-           const {data} = await axios.post(`http://localhost:4000/api/books/createbook`,formData
-            )
+           const {data} = await axios.post(`http://localhost:4000/api/books/createbook`,
+           formData,
+
+           )
           console.log(data)
           navigate('/books')
       } catch(err){
@@ -75,18 +79,7 @@ const submitHandler = async(e)=>{
 const bookData = {
   file:file
 }
- const createBook= async (e) => {
-    e.preventDefault();
-    const {data} = await axios.post(
-      `http://localhost:4000/api/books/createbook`,
-      { 
-  ...bookData
-      }
-    );
-    // const data = await res.json()
-    console.log(data)
-    navigate(`/books`);
-  };
+
 ///////////////////////
 const handleFileInput = async(e)=>{
     try {
@@ -133,10 +126,11 @@ const handleFileInput = async(e)=>{
     <div className='create-book'>
       <h2>CreateBook</h2>
     <input type='file' accept='application/*' name='file' id='file' onChange={(e)=>setFile(e.target.files[0])} />
+    {/* <input type='file' accept='image/*' name='coverimage' id='coverimage' onChange={(e)=>setCoverImage(e.target.files[0])}/> */}
     {/* <Button type='button' disabled={fileUploadingProgress}>Submit book</Button> */}
         <Button type='button' onClick={submitHandler} >Save Book</Button>
     </div>
-  )
+  );
 }
 
 export default CreateBook

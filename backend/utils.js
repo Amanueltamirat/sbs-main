@@ -25,8 +25,8 @@ export const generateToken = (user) => {
 
 
 export let gridfs;
-mongoose.connection.once('open', function () {
-gridfs = Grid(mongoose.connection.db, mongoose.mongo);//If you are using mongoose
-gridfs.collection('uploads');
+      mongoose.connection.once('open', function () {
+      gridfs = Grid(mongoose.connection.db, mongoose.mongo);//If you are using mongoose
+      gridfs.collection('uploads');
  return gridfs
  });

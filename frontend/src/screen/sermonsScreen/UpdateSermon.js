@@ -105,7 +105,9 @@ const deleteFileObject = (url, isImage)=>{
 
 const saveSermon = async()=>{
   const {data} = await axios.put(`http://localhost:4000/api/sermons/updateSermon/${formData._id}`, {
-    formData
+    formData,
+    mode: 'cors',
+
   })
    navigate('/sermons')
   console.log(data)
