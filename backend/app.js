@@ -11,6 +11,8 @@ import UserRoute from './routes/UserRoute.js';
 import SermonRoute from './routes/SermonRoute.js';
 import BookRoute from './routes/BookRoute.js';
 import multer from 'multer'
+import BookCoverImageRoute from './routes/BookCoverImageRoute.js';
+import AuthorRoute from './routes/AuthorRoute.js';
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -54,6 +56,8 @@ app.use('/api/seed', SeedRoute);
 app.use('/api/users', UserRoute);
 app.use('/api/sermons', SermonRoute);
 app.use('/api/books', BookRoute);
+app.use('/api/bookCover', BookCoverImageRoute);
+app.use('/api/authors', AuthorRoute);
 app.get('/api/data', (req, res) => {
   res.send(data);
 });

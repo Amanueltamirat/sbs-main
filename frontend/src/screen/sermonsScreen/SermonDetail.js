@@ -101,7 +101,7 @@ const handleAudio = (e)=>{
           <h2>{sermon.title}</h2>
           <p>{sermon?.createdAt?.substring(0, 10) }</p>
 
-            {userInfo.isAdmin && <div className='btns'>
+            {userInfo?.isAdmin && <div className='btns'>
                 <Button onClick={()=>navigate(`/updatesermon/${sermon._id}`)}>Edit sermon</Button>
                 <Button variant='danger' onClick={()=>{
                   setShowModal(true)
@@ -124,7 +124,7 @@ const handleAudio = (e)=>{
         </div>
       )}
       {
-        userInfo.isAdmin &&
+        userInfo?.isAdmin &&
       <Link className='create-btn' to="/createsermons">Create New sermon</Link>
       }
     </div>

@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
 import HomeScreen from './screen/HomeScreen';
 import SigninScreen from './screen/SigninScreen';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Store } from './Store';
 import SignupScreen from './screen/SignupScreen';
 import ForgetpasswordScreen from './screen/ForgetpasswordScreen';
@@ -34,12 +34,37 @@ import AboutScreen from './screen/about/AboutScreen';
 import Mission from './screen/about/Mission';
 import History from './screen/about/History';
 import Doctrine from './screen/about/Doctrine';
+import Togglebutton from './screen/toggleButton/ToggleButton';
+import {motion} from 'framer-motion'
 // import UpdateSermon from './screen/sermonsScreen/UpdateSermon';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-
   const { userInfo } = state;
+
+const  [open, setOpen] = useState(false)
+ const variants = {
+    open:{
+      clipPath:'circle(1200px at 50px 50px)',
+      transition:{
+        type:'spring',
+        stiffness:20,
+      }
+    },
+    closed:{
+      clipPath:'circle(30px at 50px 50px)',
+      transition:{
+        delay:0.1,
+        type:'spring',
+        stiffness:400,
+        damping:40
+      }
+    }
+ }
+
+
+
+
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
@@ -47,6 +72,10 @@ function App() {
     
   };
 
+// if(window.location.pathname = "/book/:filename"){
+//  return <BookDetail />
+// }
+ 
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
@@ -57,6 +86,7 @@ function App() {
               <LinkContainer to="/">
                 <Navbar.Brand className="text-primary">SBC</Navbar.Brand>
               </LinkContainer>
+              <div className='hidde-content'>
               <div className="d-flex justify-content-between navlink ">
                 <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
                   About
@@ -106,19 +136,72 @@ function App() {
                   </Link>
                 )}
               </div>
+              </div>
+            <motion.div animate={open ? 'open':'closed'} className='motion-box'>
+             <Togglebutton open={open} setOpen={setOpen}/>
+              { open &&
+              <div className="hidde">
+                <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
+                  About
+                </NavLink>} id="basic-nav-dropdown">
+                    <LinkContainer to="/about/mission">
+                      <NavDropdown.Item>Mission</NavDropdown.Item>
+                    </LinkContainer>
+                     <LinkContainer to="/about/history">
+                      <NavDropdown.Item>Our History</NavDropdown.Item>
+                    </LinkContainer>
+                     <LinkContainer to="/about/doctrine">
+                      <NavDropdown.Item>Doctrinal Statement</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                  </NavDropdown>
+
+
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="articles">
+                  Articles
+                </NavLink>
+                <NavLink to="books" className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'}>
+                  Books
+                </NavLink>
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
+                  Sermons
+                </NavLink>
+                {userInfo ? (
+                  <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                    {userInfo.isAdmin && <LinkContainer to="/dashboared">
+                      <NavDropdown.Item>Dashboared</NavDropdown.Item>
+                    </LinkContainer>}
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>User Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <Link
+                      className="dropdown-item"
+                      to="/"
+                      onClick={signoutHandler}
+                    >
+                      Sign Out
+                    </Link>
+                  </NavDropdown>
+                ) : (
+                  <Link className="nav-link" to="/signin">
+                    Sign In
+                  </Link>
+                )}
+              </div>
+            }
+            </motion.div>
             </Container>
           </Navbar>
         </header>
 
         <Routes>
-           <Route path="/about/mission" element={<Mission />} />
-            <Route path="/about/history" element={<History />} />
-             <Route path="/about/doctrine" element={<Doctrine />} />
+          <Route path="/about/mission" element={<Mission />} />
+          <Route path="/about/history" element={<History />} />
+          <Route path="/about/doctrine" element={<Doctrine />} />
           <Route path="/books" element={<BookScreen />} />
-          {/* <Route path="/book/:id" element={<ReadBook />} /> */}
           <Route path="/book/:filename" element={<BookDetail />} />
           <Route path="/createbook" element={<CreateBook />} />
-           {/* <Route path="/createbook" element={<SampleBook />} /> */}
           <Route path="/readbook" element={<ReadBook />} />
           <Route path="/sermons" element={<SermonsScreen />} />
           <Route path="/createsermons" element={<CreateSermonsScreen />} />

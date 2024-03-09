@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import expressAsyncHandler from 'express-async-handler'
-import Books from '../models/BookModel.js'
+import BookCover from '../models/BookCoverModel.js'
 import mongoose from 'mongoose'
 import Grid from 'gridfs-stream'
 import crypto from 'crypto'
@@ -11,22 +11,14 @@ import {GridFsStorage} from 'multer-gridfs-storage';
 import mongodb from 'mongodb'
 import {ObjectId} from 'mongodb'
 import {Types} from 'mongoose'
-const BookRoute  = express.Router()
 import { MongoClient }  from 'mongodb';
 import { GridFSBucket }  from 'mongodb';
 import { gridfs } from '../utils.js'
+const BookCoverImageRoute  = express.Router()
 
 //////////////////////////////////////////////////////
 
 const mongoURI = 'mongodb://localhost:27017';
-// const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-// const db = client.db('sbc');
-// const bucket = new mongodb.GridFSBucket(db, {
-//     bucketName: 'uploads',
-//   });
-
-///////Multer gridfs /////////
-// const mongoURI = 'mongodb://0.0.0.0:27017/sbc';
 const conn = mongoose.createConnection(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -35,10 +27,10 @@ const conn = mongoose.createConnection(mongoURI, {
 let gfs, gridFs;
 conn.once('open', () => {
   gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    bucketName: 'uploads',
+    bucketName: 'coverImage',
   });
   gridFs= new Grid(mongoose.connection.db, mongoose.mongo);
-  gridFs.collection('uploads');
+  gridFs.collection('coverImage');
   return gfs,gridFs;
 });
 /////////////////////////////////////////////////////
@@ -56,7 +48,7 @@ var storage = new GridFsStorage({
         const originalname = file.originalname;
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads',
+          bucketName: 'coverImage',
           originalname:originalname
         };
         resolve(fileInfo);
@@ -66,7 +58,7 @@ var storage = new GridFsStorage({
 });
 
 const upload = multer({ storage: storage, 
-// limits: { fileSize: 40000000 },
+limits: { fileSize: 40000000 },
 // fileFilter:function(req, file, cb){
 //   checkFileType(file, cb)
 // }
@@ -82,7 +74,7 @@ function checkFileType(file, cb){
 
 const uploadMiddleware = (req, res, next)=>{
   // const uploads = upload.single('file');
-   const uploads = upload.fields([{name:'file', maxCount:2},{name:'coverimage', maxCount:1}])
+   const uploads = upload.single('coverimage')
 uploads(req, res, function(err){
   try{
 
@@ -119,34 +111,43 @@ gfs.files.find({ filename }).toArray((err, files) => {
 
 // const objId = new ObjectId()
 
-BookRoute.post("/createbook",uploadMiddleware, async (req, res) => {
+BookCoverImageRoute.post("/creatcoverimage",upload.single('image'), async (req, res) => {
 const {file} = req;
- const originalName = req.files.file[0].originalname
+//  const originalName = file
+//  console.log(originalName)
+const bookName = file.filename
+console.log(bookName)
 try{
 
-const bookName = req.files.file[0].originalname
-const book = new Books({
-  file:bookName,
+const book = new BookCover({
+  image:bookName,
+
 })
 const savedBook = await book.save()
+console.log(savedBook)
 res.send(savedBook);
 } catch(err){
 res.json({err:err.message})
 }
-})
+});
 
-BookRoute.post('/bookinfo', async(req, res)=>{
-  const bookInfo = new Books({
-      author:req.body.author,
-      title:req.body.title,
-      overView:req.body.overView
-  })
+//////////////////////////
+// Create Read Stream //
+// fs.createReadStream('./myFile').
+//      pipe(bucket.openUploadStream('myFile',//chunkSizeBytes
+     
+//      ));
+    //  , {
+    //      chunkSizeBytes: 1048576,
+    //      metadata: { field: 'myField', value: 'myValue' }
+    //  }
+////////////////////////
 
-  const newIfon = await bookInfo.save()
-  res.send(newIfon)
-})
 
-BookRoute.get("/files", async (req, res) => {
+
+
+
+BookCoverImageRoute.get("/image", async (req, res) => {
   
    try {
        let files = await gridFs.files.find().toArray((err, files) => {
@@ -166,7 +167,7 @@ BookRoute.get("/files", async (req, res) => {
    }
 });
 
-BookRoute.get('/file/:id', async (req, res) => {
+BookCoverImageRoute.get('/file/:id', async (req, res) => {
   const filename = req.params.filename;
   const id = req.params.id
   // const fileId = new ObjectId(id);
@@ -188,40 +189,17 @@ BookRoute.get('/file/:id', async (req, res) => {
    }
   });
 
-
-BookRoute.get('/bookdata', async(req, res)=>{
-  const booksName = await Books.find({})
+BookCoverImageRoute.get('/bookNames', async(req, res)=>{
+  const booksName = await BookCover.find({})
   if(!booksName) {
-    return
+    console.log('No Book cover');
 
   }
   res.send(booksName)
 })
 
 
-BookRoute.get('/bookNames', async(req, res)=>{
-  const booksName = await Books.find({})
-  try{
-    const books =   booksName.map((book)=>{
-      if(book.file===undefined) {
-    console.log('No Book Name');
-    // res.json('No file') 
-    return '';
-  } else{
-     return book
-  }
- 
-    })
-   res.send(books)
-  } catch(err){
-res.json({err:err.message})
-  }
- 
-});
-
-
-
-BookRoute.get('/document/:filename', async (req, res) => {
+BookCoverImageRoute.get('/image/:filename', async (req, res) => {
   const filename = req.params.filename
   const id = req.params.id
   const _id = new mongoose.Types.ObjectId(id);
@@ -242,60 +220,4 @@ BookRoute.get('/document/:filename', async (req, res) => {
    }
   });
 
-BookRoute.get('/alldata', async(req, res)=>{
-  const allData = await Books.find({})
-  res.json(allData)
-});
-
-BookRoute.get('/bookName/:id', async(req, res)=>{
-  const id = req.params
-  const _id = new mongoose.Types.ObjectId(id);
-
-try{
-  const booksName = await Books.findById({_id})
-  if(booksName.file=== undefined) {
-    res.json('There is no file')
-  }
-  // res.send(booksName) 
-} catch(err){
-  res.json({err:err.message})
-}
-
-
-})
-
-// BookRoute.delete('/files/:filename', async (req, res) => {
-//   const filename = req.params.filename;
-
-//  try{
-//     let file = await gridFs.files.find({ filename:filename }).toArray((err, file)=>{
-//       if (err) return res.status(400).json({ err });
-//     return file
-//     })
-//     const fileId = file[0]._id;
-//        gridFs.remove({ _id: fileId }, (err) => {
-//       if (err) {
-//         console.log('Error deleting file:', err);
-//         return;
-//       }
-//       console.log('File deleted successfully');
-//     });
-//   }  catch (err) {
-//        res.json({err})
-//    }
-//   res.send('deleted')
-//   });
-
-
-// BookRoute.get('/files/:id',  ({params: {id}},res)=>{ 
-// if(!id || id === 'undefined') return res.status(400).send('no file id');
-// const _id = new mongoose.Types.ObjectId(id);
-
-// gridFs.find({_id}).toArray((err, files)=>{
-//   if(!files || files.length === 0)
-//     return res.status(400).send('mo files exist');
-//   gridFs.openDownloadStream(_id).pipe(res)
-// })
-
-// })
-export default BookRoute
+export default BookCoverImageRoute

@@ -8,12 +8,6 @@ import expressAsyncHandler from 'express-async-handler';
 import { baseUrl, generateToken } from '../utils.js';
 const UserRoute = express.Router();
 
-
-UserRoute.get('/', async(req, res)=>{
-  const usersList = await User.find({})
-  res.send(usersList)
-})
-
 UserRoute.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {
@@ -52,6 +46,11 @@ UserRoute.post(
     });
   })
 );
+
+UserRoute.get('/', async(req, res)=>{
+  const usersList = await User.find({})
+  res.send(usersList)
+})
 
 UserRoute.delete('/deleteUser/:id', async(req, res)=>{
   const id = req.params.id
