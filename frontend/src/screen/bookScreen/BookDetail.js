@@ -1,55 +1,68 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { TransferCoveImage } from './BookScreen'
 
-function BookDetail() {
-const [book, setBook] = useState([])
-const {filename} = useParams()
+let imageUrl;
 
-useEffect(()=>{
-  try{
-const bookData = async()=>{
-  const {data} = await axios.get(`http://localhost:4000/api/books/document/${filename}`,{
-      headers: {
-        'Content-type': 'application/pdf',
-      },
-      responseType: 'blob' 
-    },
-   )
-  // const len =  data.length;
-  // let bytes = new Uint8Array( len );
-  //   for (let i = 0; i < len; i++){
-  //      bytes[i] =  data.charCodeAt(i);
-  //   }
-  //    const renderPdf = bytes.buffer
-    
-  //    console.log(renderPdf)
- console.log(data)
-
-// const uintArr = new Uint8Array(renderPdf);
-// const uintArr = new Uint8Array(renderPdf);
-// const regularArr = Array.from(uintArr);
-// console.log(uintArr)
-//  window.open(url);
-const url = window.URL.createObjectURL(new Blob([data], {type: "application/pdf"}))
-console.log(url)
-  setBook(url)
+export const ImageAddress = async(image)=>{
+  imageUrl = image
+  console.log(imageUrl)
 }
 
+function BookDetail() {
+const [book, setBook] = useState()
+const [imageAddress, setImageAddress] = useState(imageUrl)
 
-bookData();
-  } catch(err){
-    console.log(err)
-  }
+const {filename} = useParams()
+const navigate = useNavigate()
 
+const getImageAddress = (image)=>{
+  // ImageAddress()
+}
+getImageAddress()
+
+
+useEffect(()=>{
+const fetchData = async()=>{
+    const {data} = await axios.get(`http://localhost:4000/api/books/bookdata/${filename}`)
+    setBook(data)
+}
+fetchData()
 },[])
 
+// const getImage = async()=>{
+//   const {data} = await axios.get(`http://localhost:4000/api/bookCover/image/${imageAddress}`)
+//   console.log(data)
+// }
+// getImage()
+
+console.log(imageAddress)
+
   return (
-<div className='book-detail' >
-      <iframe src={`${book}`} width="100%" height="500" frameBorder='0'></iframe>
-</div>
-  
-  ); 
+    <div className='book-detail book'>
+      <div className='read'>
+        {
+          imageAddress && 
+        <img  className="cover-image" alt="hello"  src={`http://localhost:4000/api/bookCover/image/${imageAddress}`}/>
+        }
+        <button onClick={()=>navigate(`/book/${filename}`)}>Read Book</button>
+      </div>
+      <div className='book-information'>
+        { book &&
+          book.map((data)=>{ return (
+            <>
+            <h2>{data.title}</h2>
+            <p>{data.overView}</p>
+            <h3>by {data.author}</h3>
+            </>
+          )
+          })
+        }
+        
+      </div>
+    </div>
+  )
 }
 
 export default BookDetail

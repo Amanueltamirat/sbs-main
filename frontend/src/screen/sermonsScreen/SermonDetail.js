@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import './SermonScreen.css'
-import htmlReactParcer from 'html-react-parser'
+import ReactPlayer from 'react-player'
 import Button from 'react-bootstrap/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Store } from '../../Store';
@@ -32,6 +32,8 @@ function SermonDetail() {
 
   const [showModal, setShowModal] = useState(false)
   const [deleteId, setDeleteId] = useState('')
+  const [videoOpen, setVideoOpen] = useState(false)
+
   const {state} = useContext(Store)
   const {userInfo} = state
 const navigate = useNavigate()
@@ -46,6 +48,7 @@ const navigate = useNavigate()
         );
     
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
+         
       };
       fetchData();
     } catch (err) {
@@ -71,17 +74,7 @@ console.log(err)
   }
 
 }
-
-const handleAudio = (e)=>{
-
-//  <button onclick="document.getElementById('player').play()">Play</button> 
-
-//   <button onclick="document.getElementById('player').pause()">Pause</button> 
-//   <button onclick="document.getElementById('player').volume += 0.1">Vol +</button> 
-//   <button onclick="document.getElementById('player').volume -= 0.1">Vol -</button> 
-
-}
-  // console.log(article.author.name);
+console.log(sermon.audioUrl)
   return (
     <div className='sermon-detail'>
       <Helmet>
@@ -94,8 +87,13 @@ const handleAudio = (e)=>{
       ) : (
       <div className="">
         <div  className='audio-content'>
-        <audio src={sermon?.audioUrl} className='audio-tag' controls/>
-    <Link target='_blank' className='video-link' to={sermon.videoUrl} >Watch Video <PlayCircleIcon className='video-icon'/></Link>
+          <div className='audio'>
+        <a  target='_blank' href={`${sermon.audioUrl}`}>Listen Audio</a>
+     <Link  className='video-link' hrefLang='video' onClick={()=>setVideoOpen(!videoOpen)} >{videoOpen ? 'Close Video' :'Watch Video' }</Link>
+          </div>
+   {videoOpen &&  <div className='youtube-video' id='video'>
+     <ReactPlayer controls={true} className='youtube' url={sermon.videoUrl} />
+    </div>}
         </div>
         <div className='sermon-content' >
           <h2>{sermon.title}</h2>

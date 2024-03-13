@@ -20,20 +20,16 @@ app.use(express.json());
 // app.use(express.json({limit:'50mb'}));
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
-app.use(cors({
-  origin:'https://localhost:5173',
-  methods:'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-  credentials:true
-}));
+app.use(cors());
 // app.use(ExpressFormidable)
 // /////
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 /////
 
 

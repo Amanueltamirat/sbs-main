@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomeScreen.css";
 import data from "../data";
 import ImageSlider from "../components/ImageSlider";
@@ -7,10 +7,8 @@ import { Helmet } from "react-helmet-async";
 import {motion} from 'framer-motion'
 
 function HomeScreen() {
-  // console.log(data);
   const { articles, books, sermons } = data;
-
-  return (
+return (
     <>
       <div className="homescreen">
       <div id="top-div">

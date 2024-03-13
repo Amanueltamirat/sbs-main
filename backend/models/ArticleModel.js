@@ -31,6 +31,10 @@ const ArticleSchema = new mongoose.Schema(
     content: {
       type: String,
     },
+     category: {
+      type: String,
+      default: 'articles',
+    },
     userId:{
       type:String
     },

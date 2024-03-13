@@ -22,10 +22,8 @@ function ImageSlider({ images }) {
   return (
     <div className="imageslider">
               <motion.div className='sliding-text-container' variants={sliderVariants} initial='initial' animate='animate' >
-                እኛም በክርስቶስ ፍጹም የሚሆን ሰውን ሁሉ እናቀርብ ዘንድ ሰውን ሁሉ እየገሠጽን ሰውንም ሁሉ በጥበብ
-                ሁሉ እያስተማርን የምንሰብከው እርሱ ነው። (ቆላስይስ 1፤28)
-              </motion.div    >
-           
+                God chose the lowly things of this world and the despised things and the things that are not—to nullify the things that are, (1 Corinthians 1:28)
+              </motion.div>       
     </div>
   );
 }

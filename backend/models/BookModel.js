@@ -8,8 +8,10 @@ const BookSchema = mongoose.Schema({
   },
   file:{
   type:String 
-
   },
+   filename:{
+  type:String
+ },
   image: {
     type: String,
   },
@@ -33,6 +35,11 @@ const BookSchema = mongoose.Schema({
       type: String,
     },
   },
+   category: {
+      type: String,
+      default: 'books',
+    },
+  
   description: {
     type: String,
   },

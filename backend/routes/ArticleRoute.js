@@ -1,8 +1,5 @@
 import express from 'express';
 import Article from '../models/ArticleModel.js';
-import data from '../data.js';
-import fs from 'fs';
-import multer from 'multer';
 const ArticleRoute = express.Router();
 
 
@@ -21,6 +18,51 @@ ArticleRoute.get('/newarticles', async (req, res) => {
   const newArticle = await Article.find();
   res.send(newArticle);
 });
+
+
+ArticleRoute.get('/getallarticles', async(req, res)=>{
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 2;
+    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  try {
+    const articles = await Article.find({
+        ...(req.query.userId && { userId: req.query.userId }),
+       ...(req.query.category && { category: req.query.category }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+        ],
+      }),
+    })
+      .sort({ updatedAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalArticles = await Article.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthArticles = await Article.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      articles,
+      totalArticles,
+      lastMonthArticles,
+    });
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 ArticleRoute.post('/newarticles', async (req, res, next) => {
         const newArticles = new Article({
         ...req.body,
@@ -59,6 +101,7 @@ ArticleRoute.get('/getArticle/:id', async(req, res)=>{
   const updatedArticle = await Article.findById({_id:id})
   res.json(updatedArticle)
 })
+
 ArticleRoute.put('/updateArticle/:id', async(req, res)=>{
   const id = req.params.id;
   try{
@@ -82,8 +125,6 @@ ArticleRoute.put('/updateArticle/:id', async(req, res)=>{
   }
  
   })
-
-  
 
 
 

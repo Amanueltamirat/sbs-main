@@ -2,14 +2,6 @@
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react'
-import {
-  getDownloadURL,
-  deleteObject,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import './Book.css'
 
@@ -34,9 +26,12 @@ const submitHandler = async(e)=>{
        e.preventDefault()
         const formData = new FormData()
         formData.append('file', file)
+        formData.append('title', title)
+        formData.append('author', author)
+        formData.append('overView', overView)
       try{
            const {data} = await axios.post(`http://localhost:4000/api/books/createbook`,
-           formData,
+          formData,
            )
           console.log(data)    
       } catch(err){

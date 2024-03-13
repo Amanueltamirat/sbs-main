@@ -41,9 +41,10 @@ const SermonSchema = new mongoose.Schema(
     content:{
         type:String
     },
-    category:{
-         type:String
-    }
+     category: {
+      type: String,
+      default: 'sermons',
+    },
   },
   { timestamps: true }
 );

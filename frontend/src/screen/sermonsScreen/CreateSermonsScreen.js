@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import {motion} from 'framer-motion'
+import './SermonScreen.css'
 // import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
@@ -69,7 +70,7 @@ const deleteFileObject = (url, isImage)=>{
   const deleteRef = ref(storage, url);
   deleteObject(deleteRef).then(()=>{
     setImageUrl(null)
-    setAudioUrl(null)
+    // setAudioUrl(null)
     setIsImageLoading(false)
     setIsAudioLoading(false)
   })
@@ -104,18 +105,16 @@ const saveProfilePicture = async()=>{
 }
 
   return (
-    <div>
+    <div className='create-sermon'>
     <Helmet>
         <title>SBC-Sermons</title>
       </Helmet>
-  {/* < motion.div>
-    <input type='text' placeholder='seach sermon' value={sermonFilter} onChange={(e)   =>setSermonFilter(e.target.value)}/>
- </ motion.div> */}
-  <div>
-    <input type='text' placeholder='Type sermon title...' value={sermonTitle} onChange={(e)=>setSermonTitle(e.target.value)} name='title' id='title'/>
-    <input id='preacherName' name='preacherName' type='text' placeholder='Type preacher name...' value={preacherName} onChange={(e)=>setPreacherName(e.target.value)}/>
-      <input name='preacherTitle' id='preacherTitle' type='text' placeholder='Type preacher title...' value={preacherTitle} onChange={(e)=>setPreacherTitle(e.target.value)}/>
-       <input name='videoUrl' id='videoUrl' type='text' placeholder='video Url...' value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)}/>
+  <div className='sermon-inputs'>
+    <input type='text' placeholder='Insert sermon title...' value={sermonTitle} onChange={(e)=>setSermonTitle(e.target.value)} name='title' id='title'/>
+    <input id='preacherName' name='preacherName' type='text' placeholder='Insert preacher name...' value={preacherName} onChange={(e)=>setPreacherName(e.target.value)}/>
+      <input name='preacherTitle' id='preacherTitle' type='text' placeholder='Insert preacher title...' value={preacherTitle} onChange={(e)=>setPreacherTitle(e.target.value)}/>
+       <input name='videoUrl' id='videoUrl' type='text' placeholder='Insert video Url...' value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)}/>
+         <input name='audioUrl' id='audioUrl' type='text' placeholder='Insert audio Url...' value={audioUrl} onChange={(e)=>setAudioUrl(e.target.value)}/>
       <ReactQuill theme="snow" 
         className='react-quill'
         onChange={(value)=>{
@@ -123,96 +122,95 @@ const saveProfilePicture = async()=>{
         }}
         placeholder="write article content" />
   </div>
-  <div>
-  <p onClick={()=>setFilterManu(!filterManu)}>{!filterName? 'Categorys':filterName}</p>
+  <div className='file-uploader'>
 
-    {
-      filterManu && <motion.div initial={{opacity: 0, y:50}}
-      animate={{opacity:1, y:0}}
-      exit={{opacity:0, y:50}}
-      >
-    {filters.map(data=><p onClick={()=>updateFilterButton(data.name)} key={data.id}>{data.name}</p>)
-    }
-    </motion.div>
-    }
+        <div>
+        <p onClick={()=>setFilterManu(!filterManu)}>{!filterName? 'Categorys':filterName}</p>
 
-  
-<div>
-      {isImageLoading && <div>
-        <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
-      </div>}
-      {!isImageLoading && (
-        <>
-            {!imageUrl ? (<FileUploader updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>):<div>
-            <img src={imageUrl} alt='image'/>
-            <button type='button' onClick={()=>deleteFileObject(imageUrl, true)} >Delete image</button>
+          {
+            filterManu && <motion.div initial={{opacity: 0, y:50}}
+            animate={{opacity:1, y:0}}
+            exit={{opacity:0, y:50}}
+            >
+          {filters.map(data=><p onClick={()=>updateFilterButton(data.name)} key={data.id}>{data.name}</p>)
+          }
+          </motion.div>
+          }
+
+        
+      <div>
+            {isImageLoading && <div>
+              <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
             </div>}
-        </>
-      )}
-</div>
-
- <div>
-          {isAudioLoading && <div>
-            <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
-          </div>}
-          {!isAudioLoading && (
-                  <>
-                  {!audioUrl? (<FileUploader updateState = {setAudioUrl} setProgress = {setAudioUrlUploadingProgress} isLoading={setIsAudioLoading} isImage={false}/>):<div>
-                    <audio src={audioUrl} controls/>
-                  <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
-                  </div>}
-                  </>
-          )}
-  </div>
-
-
- 
- 
-
- </div>
-
-  <div>
-  {
-        isImageLoading || isAudioLoading ? (
-        <DisabledButton/>) :(
-          <button onClick={()=>{
-            saveSermon()
-            navigate('/sermons')
-            }} >Save</button>
-        )
-  }
-  </div>
-
-<div>
-
- <div>
-        {isProfilePictureLoading && <div>
-          <p>{Math.round(profilePictureUploadingProgress) > 0 && <>{`${Math.round(profilePictureUploadingProgress)}%`}</>}</p>
-        </div>}
-        {!isProfilePictureLoading && (
+            {!isImageLoading && (
               <>
-              {!imageUrl ? (<FileUploader updateState = {setProfilePicture} setProgress = {setProfilePictureUploadingProgress} isLoading={setIsProfilePictureLoading} isImage={true}/>):<div>
-              <img src={profilePicture} alt='image'/>
-              <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
-              </div>}
+                  {!imageUrl ? (<FileUploader updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>):<div>
+                  <img src={imageUrl} alt='image'/>
+                  <button type='button' onClick={()=>deleteFileObject(imageUrl, true)} >Delete image</button>
+                  </div>}
               </>
-        )}
+            )}
+      </div>
+
+      {/* <div>
+                {isAudioLoading && <div>
+                  <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
+                </div>}
+                {!isAudioLoading && (
+                        <>
+                        {!audioUrl? (<FileUploader updateState = {setAudioUrl} setProgress = {setAudioUrlUploadingProgress} isLoading={setIsAudioLoading} isImage={false}/>):<div>
+                          <audio src={audioUrl} controls/>
+                        <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
+                        </div>}
+                        </>
+                )}
+        </div> */}
+
+      </div>
+
+        <div>
+        {
+              isImageLoading || isAudioLoading ? (
+              <DisabledButton/>) :(
+                <button onClick={()=>{
+                  saveSermon()
+                  navigate('/sermons')
+                  }} >Save</button>
+              )
+        }
+        </div>
+
+      <div>
+
+      <div>
+              {isProfilePictureLoading && <div>
+                <p>{Math.round(profilePictureUploadingProgress) > 0 && <>{`${Math.round(profilePictureUploadingProgress)}%`}</>}</p>
+              </div>}
+              {!isProfilePictureLoading && (
+                    <>
+                    {!imageUrl ? (<Profilepicture updateState = {setProfilePicture} setProgress = {setProfilePictureUploadingProgress} isLoading={setIsProfilePictureLoading} />):<div>
+                    <img src={profilePicture} alt='image'/>
+                    <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
+                    </div>}
+                    </>
+              )}
+        </div>
+
+      <div>
+        {
+              isProfilePictureLoading ? (
+              <DisabledButton/>) :(
+                <Button onClick={()=>{
+                  saveProfilePicture()
+                  navigate('/sermons')
+                  }} >Save</Button>
+              )
+        }
+        </div>
+
+      </div>
+
   </div>
-
- <div>
-  {
-        isProfilePictureLoading ? (
-        <DisabledButton/>) :(
-          <Button onClick={()=>{
-            saveProfilePicture()
-            navigate('/sermons')
-            }} >Save</Button>
-        )
-  }
-  </div>
-
-</div>
-
 </div>
   )
 }
@@ -238,7 +236,7 @@ export const FileUploader = ({updateState,setProgress, isLoading, isImage })=>{
   const uploadedFile = e.target.files[0]
   const storage = getStorage(app);
   const storageRef = ref(
-    storage, `${isImage ? "image":"audio"}/${Date.now()}-${uploadedFile.name}`
+    storage, `image/${Date.now()}-${uploadedFile.name}`
   )
 const uploadTask = uploadBytesResumable(storageRef, uploadedFile)
 
@@ -261,16 +259,63 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
  
  
   return (
-  <label>
+  <label className='label'>
       <div>
             <div>
-            <p>Click to upload {isImage ? 'an image':'an audio'}</p>
+            <strong>Click to upload Cover image</strong>
             </div>
       </div>
       <input
       type='file'
       name='upload-file'
-      accept={`${isImage ? 'image/*':'audio/*'}`}
+      accept='image/*'
+      onChange={uploadFile}
+      />
+  </label>
+  )
+}
+////////// PP ////////////////////
+
+export const Profilepicture = ({updateState,setProgress, isLoading})=>{
+ 
+ const uploadFile = (e)=>{
+  isLoading(true)
+  const uploadedFile = e.target.files[0]
+  const storage = getStorage(app);
+  const storageRef = ref(
+    storage, `profilepicture/${Date.now()}-${uploadedFile.name}`
+  )
+const uploadTask = uploadBytesResumable(storageRef, uploadedFile)
+
+uploadTask.on(
+  'state_changed',
+  (snapshot)=>{
+setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
+  },
+  (error)=>{
+    console.log(error)
+  },
+()=>{
+  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=>{
+    updateState(downloadURL);
+    isLoading(false)
+  })
+}
+)
+ }
+ 
+ 
+  return (
+  <label className='label'>
+      <div>
+            <div>
+            <strong>Click to upload Profile Picture</strong>
+            </div>
+      </div>
+      <input
+      type='file'
+      name='upload-file'
+      accept='image/*'
       onChange={uploadFile}
       />
   </label>

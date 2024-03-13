@@ -38,6 +38,7 @@ const navigate = useNavigate()
       try {
         const { data } = await axios.get(`http://localhost:4000/api/sermons/getAllSermons`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
+       
      
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });

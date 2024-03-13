@@ -100,33 +100,41 @@ uploads(req, res, function(err){
   }
 )
 };
- export const deleteFile = (filename) => {
-gfs.files.find({ filename }).toArray((err, files) => {
-    if (!files || files.length === 0) {
-      console.log('File not found');
-      return;
-    }
+//  export const deleteFile = (filename) => {
+// gfs.files.find({ filename }).toArray((err, files) => {
+//     if (!files || files.length === 0) {
+//       console.log('File not found');
+//       return;
+//     }
 
-    gfs.remove({ _id: files[0]._id }, (err) => {
-      if (err) {
-        console.error('Error deleting file:', err);
-        return;
-      }
-      console.log('File deleted successfully');
-    });
-  });
-};
+//     gfs.remove({ _id: files[0]._id }, (err) => {
+//       if (err) {
+//         console.error('Error deleting file:', err);
+//         return;
+//       }
+//       console.log('File deleted successfully');
+//     });
+//   });
+// };
 
 // const objId = new ObjectId()
 
 BookRoute.post("/createbook",uploadMiddleware, async (req, res) => {
-const {file} = req;
- const originalName = req.files.file[0].originalname
+// const {file} = req;
+ const file = req.files.file[0].filename
+//  console.log(file)
 try{
 
 const bookName = req.files.file[0].originalname
+const author = req.body.author
+const title = req.body.title
+const overView = req.body.overView
 const book = new Books({
+  author:author,
+  title:title,
+  overView:overView,
   file:bookName,
+  filename:file
 })
 const savedBook = await book.save()
 res.send(savedBook);
@@ -135,69 +143,87 @@ res.json({err:err.message})
 }
 })
 
-BookRoute.post('/bookinfo', async(req, res)=>{
-  const bookInfo = new Books({
-      author:req.body.author,
-      title:req.body.title,
-      overView:req.body.overView
-  })
+// BookRoute.post('/bookinfo', async(req, res)=>{
+//   const bookInfo = new Books({
+//       author:req.body.author,
+//       title:req.body.title,
+//       overView:req.body.overView
+//   })
 
-  const newIfon = await bookInfo.save()
-  res.send(newIfon)
+//   const newIfon = await bookInfo.save()
+//   res.send(newIfon)
+// })
+
+
+BookRoute.get('/getallbooks', async(req, res)=>{
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 2;
+    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  try {
+    const books = await Books.find({
+        // ...(req.query.userId && { userId: req.query.userId }),
+      //  ...(req.query.category && { category: req.query.category }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+        ],
+      }),
+    })
+      .sort({ updatedAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalBooks = await Books.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthBooks = await Books.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      books,
+      totalBooks,
+      lastMonthBooks,
+    });
+  } catch (error) {
+    console.log(error)
+  }
 })
+
+
+
 
 BookRoute.get("/files", async (req, res) => {
   
    try {
        let files = await gridFs.files.find().toArray((err, files) => {
     if (err) return res.status(400).json({ err });
-    // console.log({files});
     return files
   });
-  // const newBook = new Books({
-  //   ...files
-  // })
-  // const books = await newBook.save()
-  // console.log(books)
-  // res.json({books})
        res.json({files})
    } catch (err) {
        res.json({err:err.message})
    }
 });
 
-BookRoute.get('/file/:id', async (req, res) => {
-  const filename = req.params.filename;
-  const id = req.params.id
-  // const fileId = new ObjectId(id);
-  const fileId = new Types.ObjectId(id)
- if (!id || id === 'undefined') return res.status(400).send('no file id');
-  // if there is an id string, cast it to mongoose's objectId type
-  // const _id = new mongoose.Types.ObjectId(id);
-  // console.log(_id)
- try{
-    let file = await gridFs.files.find({ _id:fileId}).toArray((err, file)=>{
-      if (err) return res.status(400).json({ err :'Error'});
-    return file
-    })
-    res.json({file});
-    //  const readstream = gridFs.createReadStream(file.filename);
-    // readstream.pipe(res);
-  }  catch (err) {
-       res.json({err:err.message})
-   }
-  });
-
-
 BookRoute.get('/bookdata', async(req, res)=>{
   const booksName = await Books.find({})
-  if(!booksName) {
-    return
-
-  }
   res.send(booksName)
 })
 
+BookRoute.get('/bookdata/:filename', async(req, res)=>{
+  const filename = req.params.filename
+  const booksName = await Books.find({filename})
+  res.send(booksName)
+})
 
 BookRoute.get('/bookNames', async(req, res)=>{
   const booksName = await Books.find({})
@@ -247,55 +273,41 @@ BookRoute.get('/alldata', async(req, res)=>{
   res.json(allData)
 });
 
-BookRoute.get('/bookName/:id', async(req, res)=>{
-  const id = req.params
-  const _id = new mongoose.Types.ObjectId(id);
+// ArticleRoute.delete('/deleteArticle/:id', async(req, res)=>{
+//           try{
+//           await Article.findByIdAndDelete(req.params.id)
+//           res.status(200).json('the post has been deleted')
+//           } catch(err){
+//           console.log(err)
+//           }
+// })
 
+
+
+BookRoute.delete('/bookname/:filename', async(req, res)=>{
+  const filename = req.params.filename
 try{
-  const booksName = await Books.findById({_id})
-  if(booksName.file=== undefined) {
-    res.json('There is no file')
-  }
-  // res.send(booksName) 
+  await Books.findOneAndDelete({filename})
+    res.json('file delete')
+  
 } catch(err){
   res.json({err:err.message})
 }
-
-
 })
 
-// BookRoute.delete('/files/:filename', async (req, res) => {
-//   const filename = req.params.filename;
+BookRoute.delete('/files/:filename', async (req, res) => {
+  const filename = req.params.filename;
+ try{
+    let file = await gridFs.files.find({ filename:filename }).toArray((err, file)=>{
+      if (err) return res.status(400).json({ err });
+    return file
+    })
+    const fileId = file[0]._id;
+     await gfs.delete(fileId);
+  }  catch (err) {
+       console.log(`${err}`)
+   }
+  res.send('deleted');
+  });
 
-//  try{
-//     let file = await gridFs.files.find({ filename:filename }).toArray((err, file)=>{
-//       if (err) return res.status(400).json({ err });
-//     return file
-//     })
-//     const fileId = file[0]._id;
-//        gridFs.remove({ _id: fileId }, (err) => {
-//       if (err) {
-//         console.log('Error deleting file:', err);
-//         return;
-//       }
-//       console.log('File deleted successfully');
-//     });
-//   }  catch (err) {
-//        res.json({err})
-//    }
-//   res.send('deleted')
-//   });
-
-
-// BookRoute.get('/files/:id',  ({params: {id}},res)=>{ 
-// if(!id || id === 'undefined') return res.status(400).send('no file id');
-// const _id = new mongoose.Types.ObjectId(id);
-
-// gridFs.find({_id}).toArray((err, files)=>{
-//   if(!files || files.length === 0)
-//     return res.status(400).send('mo files exist');
-//   gridFs.openDownloadStream(_id).pipe(res)
-// })
-
-// })
 export default BookRoute

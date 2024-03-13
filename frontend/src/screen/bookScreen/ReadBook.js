@@ -1,51 +1,55 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'
 
-function ReadBook() {
-const [book, setBook] = useState('')
-const {id} = useParams();
-
+function BookDetail() {
+const [book, setBook] = useState([])
+const {filename} = useParams()
 
 useEffect(()=>{
+  try{
 const bookData = async()=>{
-  const {data} = await axios.get(`http://localhost:4000/api/books/document/${id}`)
-  // console.log(data)
-  // const fileData =  file[0].filename.blob()
-  //  const fileData =  data.blob()
-  // const url = URL.createObjectURL(data)
-  setBook(data)
+  const {data} = await axios.get(`http://localhost:4000/api/books/document/${filename}`,{
+      headers: {
+        'Content-type': 'application/pdf',
+      },
+      responseType: 'blob' 
+    },
+   )
+  // const len =  data.length;
+  // let bytes = new Uint8Array( len );
+  //   for (let i = 0; i < len; i++){
+  //      bytes[i] =  data.charCodeAt(i);
+  //   }
+  //    const renderPdf = bytes.buffer
+    
+  //    console.log(renderPdf)
+ console.log(data)
+
+// const uintArr = new Uint8Array(renderPdf);
+// const uintArr = new Uint8Array(renderPdf);
+// const regularArr = Array.from(uintArr);
+// console.log(uintArr)
+//  window.open(url);
+const url = window.URL.createObjectURL(new Blob([data], {type: "application/pdf"}))
+console.log(url)
+  setBook(url)
 }
-bookData()
+
+
+bookData();
+  } catch(err){
+    console.log(err)
+  }
+
 },[])
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
-
-
-    return (
-   <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>Section #1</Text>
-      </View>
-      <View style={styles.section}>
-        <Text>Section #2</Text>
-      </View>
-    </Page>
-  </Document>
-  );
+  return (
+<div className='bookdetail' >
+      <iframe src={`${book}`} width="100%" height="500" frameBorder='0'></iframe>
+</div>
+  
+  ); 
 }
 
-export default ReadBook
+export default BookDetail

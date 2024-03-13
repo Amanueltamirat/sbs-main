@@ -3,6 +3,53 @@ import Sermons from '../models/SermonModel.js'
 const SermonRoute = express.Router()
 
 
+
+SermonRoute.get('/allsermons', async(req, res)=>{
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 2;
+    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  try {
+    const sermons = await Sermons.find({
+        // ...(req.query.userId && { userId: req.query.userId }),
+       ...(req.query.category && { category: req.query.category }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+        ],
+      }),
+    })
+      .sort({ updatedAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalSermons = await Sermons.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthSermons = await Sermons.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      sermons,
+      totalSermons,
+      lastMonthSermons,
+    });
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+
+
 SermonRoute.post("/newSermons", async (req, res) => {
  const newSermon =  new Sermons({
     title: req.body.title,
@@ -33,6 +80,9 @@ const options ={
 const data = await Sermons.find({})
 res.send(data)
 });
+
+
+
 
 SermonRoute.get('/:id', async (req, res) => {
     const id = req.params.id

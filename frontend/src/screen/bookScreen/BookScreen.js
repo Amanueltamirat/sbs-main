@@ -3,29 +3,22 @@ import { pdfjs } from 'react-pdf';
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 import './Book.css'
 import { Store } from "../../Store";
+import { ImageAddress } from "./BookDetail";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
 ).toString();
 
 
-
-const BookItem = ({ book, onDelete }) => {
-  return (
-    <div>
-      <button onClick={() => onDelete(book.id)}>Delete</button>
-    </div>
-  );
+ 
+export const TransferCoveImage =  (coverimage) => {
+  const imageAddress = coverimage
+  return imageAddress
 };
 
-// let files, coverImage, originalName;
-// const initialData = [
-//   files='',
-//     coverImage = '',
-//     originalName = '',
-// ]
 
 function BookScreen() {
 const [books, setBooks] = useState([])
@@ -37,44 +30,23 @@ const navigate = useNavigate()
   const {state} = useContext(Store)
   const {userInfo} = state
 
+
 useEffect(()=>{
-const bookData = async()=>{
-const {data:{files}} = await axios.get('http://localhost:4000/api/books/files')
-setBooks(files)
-// bookItems.files = files
-// setBookItems((prevState)=>({
-//   ...prevState,
-//   files:files
-// }))
-} 
-bookData()
+  const bookData = async()=>{
+    const {data} = await axios.get(`http://localhost:4000/api/books/alldata`)
+    setBookItems(data)
+  }
+  bookData()
 },[])
 
 useEffect(()=>{
 const booksName = async ()=>{
-  const {data} = await axios.get('http://localhost:4000/api/bookCover/bookNames')
-  setCoverImage(data)
-//   /setBookItems((prevState)=>({
-//   ...prevState,
-//   coverImage:data
-// }))
+  const {data:{files}} = await axios.get('http://localhost:4000/api/bookCover/image')
+  setCoverImage(files)
 }
 booksName()
 },[])
 
-useEffect(()=>{
-
-const booksName = async ()=>{
-  const {data} = await axios.get('http://localhost:4000/api/books/bookNames')
-  const result  =  data.filter((item) => item.file !== undefined);
-  setOriginalName(result)
-//   setBookItems((prevState)=>({
-//   ...prevState,
-//   originalName:result
-// }))
-}
-booksName()
-},[])
 let bookDatas = [
   { id:0,
     files:[],
@@ -153,23 +125,77 @@ let bookDatas = [
   }
 ]
 /////////////////////////////////////////////////////////////
+
+
 coverImage.map((image,i)=>{
-  bookDatas[i].coverImage.push(image.image)
+  bookDatas[i].coverImage.push(image.filename)
 })
 
-books.map((book,i)=>{
+bookItems.map((book,i)=>{
 bookDatas[i].files.push(book.filename)
+bookDatas[i].orignalName.push(book.title)
 })
 
-originalName.map((name,i)=>{
-const result =  name.file.slice(0,-4).replace(/_/g, ' ')
-bookDatas[i].orignalName.push(result)
-})
-
-let updatedItems
-const handleDelete = (id) => {
-  updatedItems = bookDatas.filter(book => book.id !== id); 
+const deleteOriginalName = async(name) => {
+  
+  try{
+  await axios.delete(`http://localhost:4000/api/books/bookname/${name}`)
+  console.log('success')
+  } catch(err){
+    console.log(err)
+  }
   };
+
+const deleteCoverImage = async(coverImage) => {
+  
+  try{
+  await axios.delete(`http://localhost:4000/api/bookCover/coverimage/${coverImage}`)
+  console.log('success')
+  } catch(err){
+    console.log(err)
+  }
+  };
+
+const deleteCoverImageFromDb = async(coverImage) => {
+  
+  try{
+  await axios.delete(`http://localhost:4000/api/bookCover/bookname/${coverImage}`)
+  console.log('success')
+  } catch(err){
+    console.log(err)
+  }
+  };
+
+const deleteBookFromDb = async(filename) => {
+  try{
+  await axios.delete(`http://localhost:4000/api/books/bookname/${filename}`)
+  console.log('success')
+    window.location.reload()
+  } catch(err){
+    console.log(err)
+  }
+  };
+
+
+const handleDelete = async(filename, coverImage, name) => {
+  deleteCoverImage(coverImage)
+  deleteOriginalName(name)
+  deleteBookFromDb(filename)
+  deleteCoverImageFromDb(coverImage)
+  try{
+  await axios.delete(`http://localhost:4000/api/books/files/${filename}`)
+  console.log('success')
+    window.location.reload()
+  } catch(err){
+    console.log(err)
+  }
+  };
+  console.log((bookDatas))
+
+const coverimage = (coverImage)=>{
+// TransferCoveImage(coverImage)
+ImageAddress(coverImage)
+}
 
   return (
     <div className="book-screen">
@@ -183,15 +209,15 @@ const handleDelete = (id) => {
       {
           bookDatas?.map((book, i)=>{
             // && book.orignalName.length > 0
-            return ( book.files.length > 0  && <div className="book-info" key={i}>
+            return ( book.files.length > 0  && <div className="book-info" key={i} onClick={()=>coverimage(book.coverImage)} >
 
-      <img  className="cover-image" alt="hello" onClick={()=>navigate(`/book/${book.files}`)} src={`http://localhost:4000/api/bookCover//image/${book.coverImage}`}/>
+      <img  className="cover-image" alt="hello" onClick={()=>navigate(`/books/${book.files}`)} src={`http://localhost:4000/api/bookCover/image/${book.coverImage}`}/>
          {/* book.orignalName.length >0 &&  */}
-         <p>{book.orignalName}</p>
+         <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
          {
           userInfo?.isAdmin
         &&
-          <BookItem  book={book} onDelete={handleDelete} />
+          <Button variant="danger" book={book} onClick={()=>handleDelete(book.files, book.coverImage, book.orignalName)}>Delete</Button>
          }
             </div>
             )

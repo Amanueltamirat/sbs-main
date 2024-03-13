@@ -1,5 +1,5 @@
-.book-screen,.create-book{
-    margin-top: 7rem;
+.book-screen,.create-book, .book-detail{
+    margin-top: 8rem;
 
     flex-wrap: nowrap;
     position: relative;
@@ -23,11 +23,15 @@
 .new-book{
     position: absolute;
     right: 2rem;
-    top: 0;
+    top: -2.5rem;
     text-decoration: none;
     color: rgb(32, 32, 180);
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 500;
+ 
+}
+.new-book:hover{
+    color: rgb(72, 72, 241);
 }
 .book-detail{
     margin-top: 5rem;
@@ -58,7 +62,7 @@ transition:  all .2s;
     transition:  transform 10s;
 }
 .book-info img {
-    /* box-shadow:  0 0 5px rgba(0,0,0,0.5); */
+    
     padding-bottom: 2px;
     border-bottom: 4px solid black;
 }
@@ -70,4 +74,42 @@ transition:  all .2s;
    font-size: 18px;
    margin-top: 10px;
 }
-
+.book{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    margin: 10rem auto ;
+    gap: 100px;
+    align-items: center;
+}
+.book-information{
+   min-height: 300px;
+   border-left: 1px solid gray;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 100%;
+   padding: 10px 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.book-information h2{
+    font-size: 18px;
+}.book-information h3{
+    font-size: 16px;
+}
+.read{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    align-items: center;
+     min-height: 300px;
+     width: 60%;
+}
+.read button{
+    background-color: rgb(206, 206, 222);
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 20px;
+    color: black;
+}

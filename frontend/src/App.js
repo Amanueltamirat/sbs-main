@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import ArticleScreen from './screen/articlesScreen/ArticleScreen';
 import ArticleDetail from './screen/articlesScreen/ArticleDetail';
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
 import HomeScreen from './screen/HomeScreen';
 import SigninScreen from './screen/SigninScreen';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Store } from './Store';
 import SignupScreen from './screen/SignupScreen';
 import ForgetpasswordScreen from './screen/ForgetpasswordScreen';
@@ -28,7 +28,6 @@ import BookScreen from './screen/bookScreen/BookScreen';
 import CreateBook from './screen/bookScreen/CreateBook';
 import BookDetail from './screen/bookScreen/BookDetail';
 import ReadBook from './screen/bookScreen/ReadBook';
-import SampleBook from './screen/bookScreen/SampleBook';
 import Footer from './components/footer/Footer';
 import AboutScreen from './screen/about/AboutScreen';
 import Mission from './screen/about/Mission';
@@ -36,13 +35,15 @@ import History from './screen/about/History';
 import Doctrine from './screen/about/Doctrine';
 import Togglebutton from './screen/toggleButton/ToggleButton';
 import {motion} from 'framer-motion'
+import Search from './components/Search';
+import SearchInput from './components/SearchInput';
 // import UpdateSermon from './screen/sermonsScreen/UpdateSermon';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-
 const  [open, setOpen] = useState(false)
+
  const variants = {
     open:{
       clipPath:'circle(1200px at 50px 50px)',
@@ -62,19 +63,11 @@ const  [open, setOpen] = useState(false)
     }
  }
 
-
-
-
-
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
     
   };
-
-// if(window.location.pathname = "/book/:filename"){
-//  return <BookDetail />
-// }
  
   return (
     <BrowserRouter>
@@ -86,6 +79,7 @@ const  [open, setOpen] = useState(false)
               <LinkContainer to="/">
                 <Navbar.Brand className="text-primary">SBC</Navbar.Brand>
               </LinkContainer>
+               <SearchInput/>
               <div className='hidde-content'>
               <div className="d-flex justify-content-between navlink ">
                 <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
@@ -196,11 +190,13 @@ const  [open, setOpen] = useState(false)
         </header>
 
         <Routes>
+           <Route path="/search" element={<Search />} />
           <Route path="/about/mission" element={<Mission />} />
           <Route path="/about/history" element={<History />} />
           <Route path="/about/doctrine" element={<Doctrine />} />
           <Route path="/books" element={<BookScreen />} />
-          <Route path="/book/:filename" element={<BookDetail />} />
+          <Route path="/book/:filename" element={<ReadBook />} />
+          <Route path="/books/:filename" element={<BookDetail />} />
           <Route path="/createbook" element={<CreateBook />} />
           <Route path="/readbook" element={<ReadBook />} />
           <Route path="/sermons" element={<SermonsScreen />} />

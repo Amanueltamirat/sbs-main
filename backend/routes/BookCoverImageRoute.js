@@ -92,31 +92,12 @@ uploads(req, res, function(err){
   }
 )
 };
- export const deleteFile = (filename) => {
-gfs.files.find({ filename }).toArray((err, files) => {
-    if (!files || files.length === 0) {
-      console.log('File not found');
-      return;
-    }
-
-    gfs.remove({ _id: files[0]._id }, (err) => {
-      if (err) {
-        console.error('Error deleting file:', err);
-        return;
-      }
-      console.log('File deleted successfully');
-    });
-  });
-};
-
-// const objId = new ObjectId()
-
 BookCoverImageRoute.post("/creatcoverimage",upload.single('image'), async (req, res) => {
 const {file} = req;
 //  const originalName = file
 //  console.log(originalName)
 const bookName = file.filename
-console.log(bookName)
+// console.log(bookName)
 try{
 
 const book = new BookCover({
@@ -124,7 +105,7 @@ const book = new BookCover({
 
 })
 const savedBook = await book.save()
-console.log(savedBook)
+// console.log(savedBook)
 res.send(savedBook);
 } catch(err){
 res.json({err:err.message})
@@ -197,6 +178,10 @@ BookCoverImageRoute.get('/bookNames', async(req, res)=>{
   }
   res.send(booksName)
 })
+// BookCoverImageRoute.get('/booksnames', async(req, res)=>{
+//   const booksName = await BookCover.find({})
+//   res.send(booksName)
+// })
 
 
 BookCoverImageRoute.get('/image/:filename', async (req, res) => {
@@ -211,13 +196,60 @@ BookCoverImageRoute.get('/image/:filename', async (req, res) => {
     
     })
     // res.send(file)
+    // console.log(file)
     //  const _id = new ObjectId(file._id);
-  const readstream = gfs.openDownloadStream(file[0]._id);
+     const readstream = gfs.openDownloadStream(file[0]._id);
+  // const readstream = gfs.openDownloadStream(file[0].filename);
     readstream.pipe(res);
 
   }  catch (err) {
        res.json({err:err.message});
    }
   });
+
+BookCoverImageRoute.get('/bookname/:image', async(req, res)=>{
+  const image = req.params.image
+try{
+  const bookcover = await BookCover.find({image})
+    res.json(bookcover)
+  
+} catch(err){
+  res.json({err:err.message})
+}
+})
+
+BookCoverImageRoute.delete('/bookname/:image', async(req, res)=>{
+  const image = req.params.image
+try{
+  await BookCover.findOneAndDelete({image})
+    res.json('file delete')
+  
+} catch(err){
+  res.json({err:err.message})
+}
+})
+
+
+BookCoverImageRoute.delete('/coverimage/:filename', async (req, res) => {
+  const filename = req.params.filename;
+  console.log(filename)
+
+ try{
+    let file = await gridFs.files.find({ filename:filename }).toArray((err, file)=>{
+      if (err) console.log(`${err.message}`)
+      // return res.status(400).json({ err });
+    return file
+    })
+    console.log(file)
+    const fileId = file[0]._id
+    console.log(fileId)
+     await gfs.delete(fileId);
+  }  catch (err) {
+       console.log(`${err}`)
+   }
+  res.send('deleted');
+    // res.redirect('/books');
+  });
+
 
 export default BookCoverImageRoute
