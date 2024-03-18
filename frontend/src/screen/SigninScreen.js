@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
 import { Store } from "../Store";
-import { getError } from "../utils";
+import { BASE_URL, getError } from "../utils";
 import { toast } from "react-toastify";
 
 function SigninScreen() {
@@ -23,12 +23,12 @@ function SigninScreen() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/users/signin",
+        `${BASE_URL}/api/users/signin`,
         { email, password }
       );
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      console.log(data);
+      // console.log(data);
       navigate(redirect || "/");
     } catch (err) {
       toast.error(getError(err));
@@ -44,8 +44,8 @@ function SigninScreen() {
       <Helmet>
         <title>Sign In</title>
       </Helmet>
-      <h1 className="mb-3">Sign In</h1>
-      <Form onSubmit={submitHandler}>
+      <h1 className="signin-header">Sign In</h1>
+      <Form onSubmit={submitHandler} className="signin-form">
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -64,11 +64,11 @@ function SigninScreen() {
         </Form.Group>
 
         <div className="mb-3">
-          <Button type="submit">Sign In</Button>
+          <Button style={{color:'black'}} type="submit">Sign In</Button>
         </div>
         <div className="mb-3">
           New Customer?{" "}
-          <Link to={`/signup?redirect=${redirect}`}>Create Your Account</Link>
+          <Link className="singup-link" to={`/signup?redirect=${redirect}`}>Create Your Account</Link>
         </div>
       </Form>
     </Container>

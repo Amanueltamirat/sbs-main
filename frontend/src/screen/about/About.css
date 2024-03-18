@@ -1,5 +1,6 @@
 .about{
   margin-top: 4.8rem;
+  margin-bottom: 10rem;
 }
 .about-header{
     background-image: url('../../../public/images/image1.JPG');
@@ -13,9 +14,9 @@
 }
 .about-header h2{
  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0, 0.4); 
-  color: lightblue;
-  margin-top: 10p;
+  background-color: rgba(0,0,0, 0.6); 
+  color: rgb(63, 194, 238);
+  /* margin-top: 10px; */
   font-weight: bold;
   height: 100%;
   padding: 30px 30px;
@@ -78,4 +79,230 @@ padding: 10px 0;
 .history p span{
 display: block;
 padding: 10px 0;
+}
+
+
+.info-box .info div strong, .info-box .info div p{
+  font-size: 18px;
+  }
+.popup-box{
+  background-color: blue;
+}
+.popup-text{
+  color: blue;
+}
+.formContainer form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+} .formContainer form div input:first-child{
+   margin-right: 10px;
+}
+.formContainer form div input{
+  width: 49%;
+  padding: 10px;
+  border: 1px solid gray;
+  outline: none;
+  border-radius: 5px;
+  /* margin: 10px; */
+}
+.formContainer form textarea{
+    padding: 10px;
+  border: 1px solid gray;
+  outline: none;
+  border-radius: 5px;
+  max-height: 150px;
+}
+.formContainer form button{
+  font-size: 20px;
+  background: rgb(234, 231, 231);
+  color: black;
+  max-width: 120px;
+  text-align: center;
+  margin-left: 40%;
+  padding: 6px 15px;
+  border-radius: 10px;
+}
+.formContainer form button:hover{
+   background: rgb(193, 189, 189);
+}
+
+.loaction{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: rgb(206, 204, 204);
+  padding: 10px;
+  gap: 50px;
+}
+.info-box{
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgba(64, 62, 62, 0.787);
+}
+
+.info-box h2{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+
+}
+
+.info-box .info div{
+  display: flex;
+  padding: 20px 0;
+
+}
+
+.contact-box{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+/* media quey */
+@media (max-width:360px){
+  .about{
+  margin-top: 5rem;
+  
+}
+  .about-conents{
+     flex-direction: column;
+    margin: 1rem 0px;
+    gap: 2rem;
+
+}
+.about-header h2{
+  height: 100%;
+  padding: 20% 30px 0px 30px;
+  text-align: center;
+  font-size: 20px;
+
+}
+ .about-links{
+  flex-direction: row;
+  gap: 20px;
+  padding: 0 10px;
+ }
+ .about-links .about-link{
+  font-size: 12px;
+  flex-direction: row;
+  padding: 5px;
+ }
+ .about-conents P{
+  padding: 15px;
+ }
+ .loaction{
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100vw;
+   padding: 0;
+  gap: 5px;
+ }
+ .contact-box{
+    /* max-width: 100vw; */
+    gap: 10px;
+ }
+ .info-box .info div{
+ max-width: 100%;
+  padding: 10px 5px;
+}
+.info-box{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgba(64, 62, 62, 0.787);
+}
+.info-box .info div strong, .info-box .info div p{
+  font-size: 12px;
+  }
+  .info-box h2{
+  margin-bottom: 10px;
+ 
+
+}
+.map-box{
+  overflow: hidden;
+}
+.leafletmap{
+  width: 100px;
+}
+.formContainer form div{
+   padding: 10px;
+}
+.formContainer form div input{
+  width: 100%;
+  padding: 10px;
+ 
+
+}
+.formContainer form textarea{
+  padding: 10px;
+  max-height: 100px;
+  margin: 10px;
+}
+.formContainer form button{
+  margin-left: 30%;
+  margin-bottom: 1rem;
+  
+}
+}
+@media (max-width:768px){
+    .about-conents{
+     flex-direction: column;
+    margin: 1rem 0px;
+    gap: 2rem;
+
+}
+ .about-links{
+  flex-direction: row;
+  gap: 20px;
+  padding: 0 10px;
+ }
+ .about-links .about-link{
+  font-size: 18px;
+  flex-direction: row;
+  padding: 5px;
+ }
+  .loaction{
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100vw;
+   padding: 0;
+  gap: 5px;
+ }
+ .map{
+  display: flex;
+justify-content: center;
+ }
+ .info-box{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgba(64, 62, 62, 0.787);
+}
+.info-box .info div {
+  padding: 20px;
+}
+.info-box .info div strong, .info-box .info div p{
+  font-size: 18px;
+  }
+  .formContainer form div{
+    display: flex;
+    flex-direction: column;
+   padding: 10px;
+   width: 100%;
+   gap: 10px;
+}
+.formContainer form div input{
+  width: 97%;
+}
+.formContainer form textarea{
+  width: 94%;
+  margin: 10px;
+}
 }

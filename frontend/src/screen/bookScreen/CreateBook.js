@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Book.css'
-
-
-  // "proxy": "http://localhost:4000",
-
+import { Helmet } from 'react-helmet-async';
+import { toast } from 'react-toastify';
+import { BASE_URL, getError } from '../../utils';
+import LoadingBox from '../../components/LoadingBox';
+import MessageBox from '../../components/MessageBox';
 
 function CreateBook() {
 const [file, setFile] = useState('')
@@ -17,6 +18,8 @@ const [author, setAuthor] = useState('')
 const [overView, setOverView] = useState('')
 const [formData, setFormData] = useState([])
 const [fileUploadingProgress, setFileUploadingProgress] = useState('')
+const [loading, setLoading] = useState(false)
+const [error, setError] = useState(null)
 const navigate = useNavigate()
 
 
@@ -30,12 +33,15 @@ const submitHandler = async(e)=>{
         formData.append('author', author)
         formData.append('overView', overView)
       try{
-           const {data} = await axios.post(`http://localhost:4000/api/books/createbook`,
+        setLoading(true)
+           const {data} = await axios.post(`${BASE_URL}/api/books/createbook`,
           formData,
            )
-          console.log(data)    
+          setLoading(false)
+          toast.success('Book Created Successfully')    
       } catch(err){
-        console.log(err)
+       toast.error(getError(err))
+       setError(err)
       }
 }
 const bookCoverHandler = async(e)=>{
@@ -43,12 +49,11 @@ const bookCoverHandler = async(e)=>{
         const formData = new FormData()
         formData.append('image', coverImage)
       try{
-           const {data} = await axios.post(`http://localhost:4000/api/bookCover/creatcoverimage`,
+           const {data} = await axios.post(`${BASE_URL}/api/bookCover/creatcoverimage`,
        formData
            )
-          console.log(data)
       } catch(err){
-        console.log(err)
+        toast.error(getError(err))
       }
 }
 
@@ -60,7 +65,7 @@ const handleInput = async(e)=>{
           overView
         }
       try{
-           const {data} = await axios.post(`http://localhost:4000/api/authors/author`,
+           const {data} = await axios.post(`${BASE_URL}/api/authors/author`,
           { 
             mode:'cors',
             headers: {
@@ -70,12 +75,10 @@ const handleInput = async(e)=>{
            }
 
            )
-          console.log(data)
       } catch(err){
-        console.log(err)
+        toast.error(getError(err))
       }
 }
-// console.log(title)
 const submitBookDatas = async(e)=>{
   e.preventDefault()
       bookCoverHandler(e)
@@ -86,21 +89,23 @@ const submitBookDatas = async(e)=>{
 
   return (
     <div className='create-book'>
+       <Helmet>
+        <title>Creat-Book</title>
+      </Helmet>
       <h2>CreateBook</h2>
-      
+      {loading ? <LoadingBox/> : error ? <MessageBox variant='danger'>{error}</MessageBox>: <>
       <input type='text' name='author' id='author' required placeholder='Enter Author Name...' onChange={(e)=>setAuthor(e.target.value)}/>
       <input type='text' name='title' id='title' required placeholder='Enter Book Title...' onChange={(e)=>setTitle(e.target.value)} />
       <input type='text' name='overView' id='overView' required placeholder='Write over view...' onChange={(e)=>setOverView(e.target.value)} />
    <label htmlFor='file'><strong>Book in PDF format</strong>
     <input type='file' required accept='application/*' name='file' id='file' placeholder='choose book' onChange={(e)=>setFile(e.target.files[0])} />
    </label>
-        {/* <Button type='button' onClick={submitHandler} >Save Book</Button> */}
     <label htmlFor='image'><strong>Cover Image</strong>
     <input type='file' required accept='image/*' name='image' placeholder='choose cover image' id='image' onChange={(e)=>setCoverImage(e.target.files[0])}/>
     </label>
-     <Button className='book-btn' type='submit'  onClick={submitBookDatas} >Save Book Data</Button>
-      
-    {/* <Button type='button' disabled={fileUploadingProgress}>Submit book</Button> */}
+     <Button style={{color:'black'}} className='book-btn' type='submit'  onClick={submitBookDatas} >{loading ? 'Saving Book Data':'Save Book Data'}</Button>
+    </>
+}
     </div>
   );
 }

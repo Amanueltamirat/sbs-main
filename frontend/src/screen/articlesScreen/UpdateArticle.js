@@ -14,6 +14,9 @@ import {
 import { app } from '../../firebase'
 import MessageBox from '../../components/MessageBox';
 import { Helmet } from 'react-helmet-async';
+import { toast } from 'react-toastify';
+import { BASE_URL, getError } from '../../utils';
+import LoadingBox from '../../components/LoadingBox';
 const UpdateArticle = ()=> {
      const navigate = useNavigate();
       const [profilePicture, setProfilePicture] = useState(null)
@@ -23,26 +26,26 @@ const UpdateArticle = ()=> {
       const [imageUploadProgress, setImageUploadProgress] = useState(null);
       const [imageUploadError, setImageUploadError] = useState(null);
       const [formData, setFormData] = useState({});
+      const [loading, setLoding] = useState(false);
+      const [error, setError] = useState(null)
      const [publishError, setPublishError] = useState(null)
      const {id} = useParams()
 
-     
-
    useEffect(()=>{
     const fetchData = async()=>{
-        const res = await fetch(`http://localhost:4000/api/articles/getArticle/${id}`)
+        const res = await fetch(`${BASE_URL}/api/articles/getArticle/${id}`)
         const data = await res.json()
-        // console.log(data)
         setFormData(data)
-        // console.log(formData)
     }
     fetchData()
    },[])
 
    const handleUpdate= async (e) => {
     e.preventDefault();
+    try{
+   setLoding(true)
     const res = await fetch(
-      `http://localhost:4000/api/articles/updateArticle/${formData._id}`,
+      `${BASE_URL}/api/articles/updateArticle/${formData._id}`,
       { method:"PUT",
       headers:{
         'Content-Type':'application/json',
@@ -52,10 +55,15 @@ const UpdateArticle = ()=> {
     );
     const data = await res.json()
     setFormData(data)
-    console.log(data)
+    setLoding(false)
+    toast.success('Article Updated Successfully')
     navigate(`/articles/${formData._id}`);
+    } catch(err){
+     toast.error(getError(err))
+     setError(err)
+    }
   };
-// console.log(formData._id)
+
 
 const handleProfilePictureInput = async(e)=>{
     try {
@@ -65,7 +73,6 @@ const handleProfilePictureInput = async(e)=>{
       }
       setPropfilePictureUploadError(null);
       const storage = getStorage(app);
-      // const fileName = new Date().getTime() + '-' + profilePicture.name;
       const fileName = `image/${Date.now()}-${profilePicture.name}`
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, profilePicture);
@@ -144,6 +151,7 @@ const handleProfilePictureInput = async(e)=>{
                 </title>
             </Helmet>
           <h1>Update Article</h1>
+          { loading ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox>:
           <form onSubmit={handleUpdate}>
           <div className='img-info'>
             <label htmlFor="uploadBanner">
@@ -162,6 +170,7 @@ const handleProfilePictureInput = async(e)=>{
             )}
             {formData.image && <img src={formData.image} alt="upload" />}
              <Button
+             style={{color:'black', padding:'10px'}}
               type="button"
               onClick={handleFileInput}
               disabled={imageUploadProgress}
@@ -235,6 +244,7 @@ const handleProfilePictureInput = async(e)=>{
         )}
         {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
      <Button
+     style={{color:'black', padding:'10px'}}
           type="button"
           onClick={handleProfilePictureInput}
           disabled={profilePictureUploadProgress}
@@ -242,12 +252,13 @@ const handleProfilePictureInput = async(e)=>{
           {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
         </Button>
     </div>
-            <Button type="submit">Update</Button>
+            <Button style={{color:'black'}} type="submit">{loading ? 'Updating':'Update Article'}</Button>
             {publishError && (
               <MessageBox variant="danger">{publishError}</MessageBox>
             )}
 
           </form>
+}
         </div>
       );
     }

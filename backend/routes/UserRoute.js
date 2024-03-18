@@ -67,6 +67,31 @@ UserRoute.get('/updateUser/:id', async(req,res)=>{
   res.json(updatingUser)
 })
 
+UserRoute.get('/allUsers', async(req, res)=>{
+try{
+
+const totalUsers = await User.countDocuments();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      totalUsers,
+      lastMonthUsers
+    });  
+}catch(err){
+  console.log(error)
+}
+})
+
 // let userEmai;
 // UserRoute.get('/getallusers', async(req, res)=>{
 //   const email = req.body.email

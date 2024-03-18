@@ -1,3 +1,17 @@
 .user-list{
-    margin-top: 5rem;
+    margin: 5rem;
+    margin-top: 6rem;
+    margin-bottom: 10rem;
+}
+@media (max-width:360px){
+    .id-class{
+        display: none;
+        
+    }
+    .user-list{
+        margin-left: 5px;
+    }
+    .user-info{
+        font-size: 12px;
+    }
 }

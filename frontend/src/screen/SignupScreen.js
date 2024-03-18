@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import { Store } from '../Store';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getError } from '../utils';
+import { BASE_URL, getError } from '../utils';
 
 function SignupScreen() {
   const navigate = useNavigate();
@@ -28,13 +28,12 @@ function SignupScreen() {
     }
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/users/signup',
+        `${BASE_URL}/api/users/signup`,
         { name, email, password }
       );
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate(redirect || '/');
-      // console.log(data);
     } catch (err) {
       toast.error(getError(err));
     }
@@ -47,12 +46,12 @@ function SignupScreen() {
   }, [userInfo, redirect, navigate]);
 
   return (
-    <Container className="small-container">
+    <Container className="small-container sign-up">
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
-      <h1 className="my-3">Sign Up</h1>
-      <Form onSubmit={submitHandler}>
+      <h1 className="signup-header">Sign Up</h1>
+      <Form onSubmit={submitHandler} className='singup-form'>
         <Form.Group className="mb-3" controld="name">
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -86,15 +85,15 @@ function SignupScreen() {
           />
         </Form.Group>
         <div className="mb-3">
-          <Button type="submit">Sign Up</Button>
+          <Button style={{color:'black'}} type="submit">Sign Up</Button>
         </div>
         <div className="mb-3">
           Already have an account?{' '}
-          <Link to={`/signin?redirect=${redirect}`}>Sign-In</Link>
+          <Link className='singup-link' to={`/signin?redirect=${redirect}`}>Sign-In</Link>
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           Forget password? <Link to={`/forget-password`}>Reset password</Link>
-        </div>
+        </div> */}
       </Form>
     </Container>
   );

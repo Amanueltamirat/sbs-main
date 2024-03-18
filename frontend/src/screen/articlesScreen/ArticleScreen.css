@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
    margin-top: 2rem;
+   margin-bottom: 5rem;
 }
 .articles-detail {
   display: flex;
@@ -11,7 +12,6 @@
 
 }
 .articles-detail .aricle {
-  /* background-color: rgb(235, 234, 234); */
   background-color: rgb(67, 59, 59);
   display: flex;
   flex-direction: column;
@@ -23,7 +23,6 @@
 .article-img {
   padding: 10px;
   cursor: pointer;
-  /* height: 300px; */
   
 }
 .articles .articles-detail .aricle:hover {
@@ -64,4 +63,20 @@ border-radius: 50%;
 }
 .home-article{
   margin-top: -1rem;
+}
+@media (max-width:360px){
+  .email-btn{
+  left: 5px;
+  font-size: 14px;
+}
+.article h2{
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+.article img{
+ width: 90%;
+}
+.article .article-content{
+  min-width: 90%;
+}
 }

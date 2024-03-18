@@ -2,6 +2,11 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TransferCoveImage } from './BookScreen'
+import { toast } from 'react-toastify';
+import { BASE_URL, getError } from '../../utils';
+import { Helmet } from 'react-helmet-async';
+import LoadingBox from '../../components/LoadingBox';
+import MessageBox from '../../components/MessageBox';
 
 let imageUrl;
 
@@ -13,55 +18,62 @@ export const ImageAddress = async(image)=>{
 function BookDetail() {
 const [book, setBook] = useState()
 const [imageAddress, setImageAddress] = useState(imageUrl)
-
+const [loading, setLoading] = useState(false)
+const [error, sedtError] = useState(null)
 const {filename} = useParams()
 const navigate = useNavigate()
-
-const getImageAddress = (image)=>{
-  // ImageAddress()
-}
-getImageAddress()
 
 
 useEffect(()=>{
 const fetchData = async()=>{
-    const {data} = await axios.get(`http://localhost:4000/api/books/bookdata/${filename}`)
+  try{
+    setLoading(true)
+    const {data} = await axios.get(`${BASE_URL}/api/books/bookdata/${filename}`)
     setBook(data)
+    setLoading(false)
+  } catch(err){
+   toast.error(getError(err))
+   sedtError(err)
+  }
 }
 fetchData()
 },[])
 
-// const getImage = async()=>{
-//   const {data} = await axios.get(`http://localhost:4000/api/bookCover/image/${imageAddress}`)
-//   console.log(data)
-// }
-// getImage()
-
-console.log(imageAddress)
-
   return (
     <div className='book-detail book'>
-      <div className='read'>
-        {
-          imageAddress && 
-        <img  className="cover-image" alt="hello"  src={`http://localhost:4000/api/bookCover/image/${imageAddress}`}/>
-        }
-        <button onClick={()=>navigate(`/book/${filename}`)}>Read Book</button>
-      </div>
-      <div className='book-information'>
-        { book &&
-          book.map((data)=>{ return (
-            <>
-            <h2>{data.title}</h2>
-            <p>{data.overView}</p>
-            <h3>by {data.author}</h3>
-            </>
-          )
-          })
-        }
+        { loading ? (<LoadingBox/> ): error ? (
+          <MessageBox variant='danger'>{error}</MessageBox>
+        ): 
+        <>
+        <div className='read'>
+          {
+            imageAddress && 
+          <img  className="cover-image" alt="hello"  src={`${BASE_URL}/api/bookCover/image/${imageAddress}`}/>
+          }
+          <button onClick={()=>navigate(`/book/${filename}`)}>Read Book</button>
+        </div>
+        <div className='book-information'>
+          { book &&
+            book.map((data)=>{ return (
+              <>
+              <Helmet>
+          <title>{data.title}</title>
+        </Helmet>
+              <h2>{data.title}</h2>
+              <p>{data.overView}</p>
+              <h3>by {data.author}</h3>
+              </>
+            )
+            })
+          }
+          
         
-      </div>
+    
+        </div>
+        </>
+        }
     </div>
+
   )
 }
 

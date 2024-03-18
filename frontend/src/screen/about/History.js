@@ -14,14 +14,14 @@ function History() {
   </div>
   <div className="about-conents history">
   <div className="about-links">
-  {/* <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} 
-  to="/"> About </NavLink> */}
    <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
   to="/about/mission">Mission</NavLink>
    <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink about-link'} 
   to="/about/history">Our History</NavLink>
-   <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
+   <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink about-link'} 
   to="/about/doctrine">Doctrinal Statement</NavLink>
+   <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
+  to="/about/contact">Contact </NavLink>
   </div>
     <p>
    The church is of living God built on the foundation of the apostles and prophets. Jesus Christ himself being the cornerstone

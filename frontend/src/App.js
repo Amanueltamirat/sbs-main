@@ -37,7 +37,11 @@ import Togglebutton from './screen/toggleButton/ToggleButton';
 import {motion} from 'framer-motion'
 import Search from './components/Search';
 import SearchInput from './components/SearchInput';
-// import UpdateSermon from './screen/sermonsScreen/UpdateSermon';
+import Support from './components/Support';
+import Contact from './screen/about/Contact';
+import Nopage from './components/Nopage';
+import Analysis from './components/Analysis';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -69,7 +73,7 @@ const  [open, setOpen] = useState(false)
     
   };
  
-  return (
+  return (<div className='app'>
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
         <ToastContainer position="bottom-center" limit={1} />
@@ -94,6 +98,9 @@ const  [open, setOpen] = useState(false)
                      <LinkContainer to="/about/doctrine">
                       <NavDropdown.Item>Doctrinal Statement</NavDropdown.Item>
                     </LinkContainer>
+                     <LinkContainer to="/about/contact">
+                      <NavDropdown.Item>Contact</NavDropdown.Item>
+                    </LinkContainer>
                     <NavDropdown.Divider />
                   </NavDropdown>
 
@@ -107,15 +114,22 @@ const  [open, setOpen] = useState(false)
                 <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
                   Sermons
                 </NavLink>
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="support">
+                  Support Us
+                </NavLink>
                 {userInfo ? (
-                  <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
-                    {userInfo.isAdmin && <LinkContainer to="/dashboared">
-                      <NavDropdown.Item>Dashboared</NavDropdown.Item>
-                    </LinkContainer>}
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>User Profile</NavDropdown.Item>
+                  <NavDropdown className='nav-drop' title={userInfo.name} id="basic-nav-dropdown">
+                    {userInfo.isAdmin && <LinkContainer to="/userslist">
+                      <NavDropdown.Item>Users</NavDropdown.Item>
+                    </LinkContainer>}{
+                        userInfo.isAdmin &&
+                        <>
+                    <LinkContainer to="/analysis">
+                      <NavDropdown.Item>Analysis</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
+                        </>
+                    }
                     <Link
                       className="dropdown-item"
                       to="/"
@@ -147,6 +161,9 @@ const  [open, setOpen] = useState(false)
                      <LinkContainer to="/about/doctrine">
                       <NavDropdown.Item>Doctrinal Statement</NavDropdown.Item>
                     </LinkContainer>
+                      <LinkContainer to="/about/contact">
+                      <NavDropdown.Item>Contact</NavDropdown.Item>
+                    </LinkContainer>
                     <NavDropdown.Divider />
                   </NavDropdown>
 
@@ -160,15 +177,21 @@ const  [open, setOpen] = useState(false)
                 <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
                   Sermons
                 </NavLink>
+                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="support">
+                  Support Us
+                </NavLink>
                 {userInfo ? (
-                  <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
-                    {userInfo.isAdmin && <LinkContainer to="/dashboared">
+                  <NavDropdown className='nav-drop'  title={userInfo.name} id="basic-nav-dropdown">
+                    {userInfo.isAdmin && <LinkContainer to="/userslist">
                       <NavDropdown.Item>Dashboared</NavDropdown.Item>
                     </LinkContainer>}
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>User Profile</NavDropdown.Item>
+                    { userInfo.isAdmin &&<>
+                    <LinkContainer to="/analysis">
+                      <NavDropdown.Item>Analysis</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
+                    </>
+                    }
                     <Link
                       className="dropdown-item"
                       to="/"
@@ -190,31 +213,36 @@ const  [open, setOpen] = useState(false)
         </header>
 
         <Routes>
+          <Route path="/*" element={<Nopage/>} />
            <Route path="/search" element={<Search />} />
           <Route path="/about/mission" element={<Mission />} />
           <Route path="/about/history" element={<History />} />
           <Route path="/about/doctrine" element={<Doctrine />} />
+          <Route path="/about/contact" element={<Contact />} />
           <Route path="/books" element={<BookScreen />} />
           <Route path="/book/:filename" element={<ReadBook />} />
           <Route path="/books/:filename" element={<BookDetail />} />
-          <Route path="/createbook" element={<CreateBook />} />
+          <Route path="/createbook" element={<AdminRoute>
+            <CreateBook />
+          </AdminRoute>} />
           <Route path="/readbook" element={<ReadBook />} />
           <Route path="/sermons" element={<SermonsScreen />} />
-          <Route path="/createsermons" element={<CreateSermonsScreen />} />
+          <Route path="/createsermons" element={<AdminRoute><CreateSermonsScreen /></AdminRoute>} />
           <Route path="/sermon/:id" element={<SermonDetail />} />
-          <Route path="/updatesermon/:id" element={<UpdateSermon />} />
+          <Route path="/updatesermon/:id" element={<AdminRoute><UpdateSermon /></AdminRoute>} />
           <Route path="/articles" element={<ArticleScreen />} />
-          <Route path="/newarticles" element={<NewAricles />} />
+          <Route path="/newarticles" element={<AdminRoute><NewAricles /></AdminRoute>} />
           <Route path="/articles/:id" element={<ArticleDetail />} />
           <Route path="/article/:id" element={<ArticleDetail />} />
-          <Route path="/updatearticle/:id" element={<UpdateArticle />} />
+          <Route path="/updatearticle/:id" element={<AdminRoute><UpdateArticle /></AdminRoute>} />
           <Route path="/about" element={<AboutScreen />} />
-          <Route path="/dashboared" element={<UserList />} />
+          <Route path="/userslist" element={<AdminRoute><UserList /></AdminRoute>} />
+          <Route path="/analysis" element={<AdminRoute><Analysis /></AdminRoute>} />
           <Route path="/signin" element={<SigninScreen />} />
           <Route path="/signup" element={<SignupScreen />} />
           <Route path="/" element={<HomeScreen />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/forget-password" element={<ForgetpasswordScreen />} />
-
           <Route
             path="/reset-password/:token"
             element={<ResetpasswordScreen />}
@@ -222,7 +250,9 @@ const  [open, setOpen] = useState(false)
         </Routes>
       </div>
       <Footer/>
+      
     </BrowserRouter>
+    </div>
   );
 }
 

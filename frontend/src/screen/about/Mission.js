@@ -14,14 +14,14 @@ function Mission() {
   </div>
   <div className="about-conents mission">
   <div className="about-links">
-  {/* <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} 
-  to="/"> About </NavLink> */}
    <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
-  to="/about/mission">Mission</NavLink>
+      to="/about/mission">Mission</NavLink>
    <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink about-link'} 
-  to="/about/history">Our History</NavLink>
+      to="/about/history">Our History</NavLink>
    <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
-  to="/about/doctrine">Doctrinal Statement</NavLink>
+       to="/about/doctrine">Doctrinal Statement</NavLink>
+     <NavLink className={({isActive})=>isActive ? 'isActivelink':'isNotActivelink  about-link'} 
+       to="/about/contact">Contact </NavLink>
   </div>
     <p>
     <small>

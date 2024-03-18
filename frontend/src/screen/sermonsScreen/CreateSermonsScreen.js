@@ -17,21 +17,13 @@ import {
 import { app } from '../../firebase';
 import MessageBox from '../../components/MessageBox';
 import ReactQuill from 'react-quill';
-
-const filters = [
-  {id:2, name:'Loveing God', value:'Topical Series'},
-  {id:3, name:'Romans', value:'Bible Book Series'},
-  {id:4, name:'Holy God', value:'Topical'}
-]
-
+import { toast } from 'react-toastify';
+import { BASE_URL, getError } from '../../utils';
+import LoadingBox from '../../components/LoadingBox';
 
 function CreateSermonsScreen() {
 
-
-
 const [filterName, setFilterName] = useState('')
-const [filterManu, setFilterManu] = useState(false)
-const [sermonFilter, setSermonFilter] = useState('')
 const [sermonTitle, setSermonTitle] = useState('')
 var [content, setContent] = useState('')
 const [preacherName, setPreacherName] = useState('')
@@ -39,6 +31,12 @@ const [preacherTitle, setPreacherTitle] = useState('')
 const [progress, setProgess] = useState(null)
 const [imageUrl, setImageUrl] = useState('')
 const [isImageLoading, setIsImageLoading] = useState(false)
+const [loading, setLoading] = useState(false)
+const [error, setError] = useState(null)
+
+const [coverImga,setCoverImage] = useState()
+const [ppIMage, setPpImage]  = useState()
+
 
 const [profilePicture, setProfilePicture] = useState('')
 const [profilePictureUploadingProgress, setProfilePictureUploadingProgress] = useState(0)
@@ -47,19 +45,8 @@ const [isProfilePictureLoading, setIsProfilePictureLoading] = useState(false)
 const [audioUrl, setAudioUrl] = useState('')
 const [audioUrlUploadingProgress, setAudioUrlUploadingProgress] = useState(0)
 const [isAudioLoading, setIsAudioLoading] = useState(false)
-
-
 const [videoUrl, setVideoUrl] = useState('')
 const navigate = useNavigate()
-
-
-  //   overView: req.body.overView,
-  //   content:req.body.content,
-  //   category: req.body.category,
-const updateFilterButton = (name)=>{
-  setFilterManu(false)
-  setFilterName(name)
-}
 
 const deleteFileObject = (url, isImage)=>{
   if(isImage){
@@ -90,7 +77,7 @@ const sermonData  = {
 }
 
 const saveSermon = async()=>{
-  const {data} = await axios.post(`http://localhost:4000/api/sermons/newSermons`, {
+  const {data} = await axios.post(`${BASE_URL}/api/sermons/newSermons`, {
     ...sermonData
   })
   console.log(data)
@@ -98,87 +85,70 @@ const saveSermon = async()=>{
 
 
 const saveProfilePicture = async()=>{
-   const {data} = await axios.post(`http://localhost:4000/api/sermons/newSermons`, {
+  try{
+  setLoading(true)
+   const {data} = await axios.post(`${BASE_URL}/api/sermons/newSermons`, {
     ...sermonData
   })
-  console.log(data)
+    saveSermon()
+    setLoading(false)
+    toast.success('Sermon Created Successfully')
+  } catch(err){
+    setError(err)
+    toast.error(getError(err))
+  }
 }
 
   return (
     <div className='create-sermon'>
     <Helmet>
-        <title>SBC-Sermons</title>
+        <title>Create-Sermons</title>
       </Helmet>
+      { loading ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox> : <>
   <div className='sermon-inputs'>
     <input type='text' placeholder='Insert sermon title...' value={sermonTitle} onChange={(e)=>setSermonTitle(e.target.value)} name='title' id='title'/>
     <input id='preacherName' name='preacherName' type='text' placeholder='Insert preacher name...' value={preacherName} onChange={(e)=>setPreacherName(e.target.value)}/>
       <input name='preacherTitle' id='preacherTitle' type='text' placeholder='Insert preacher title...' value={preacherTitle} onChange={(e)=>setPreacherTitle(e.target.value)}/>
        <input name='videoUrl' id='videoUrl' type='text' placeholder='Insert video Url...' value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)}/>
          <input name='audioUrl' id='audioUrl' type='text' placeholder='Insert audio Url...' value={audioUrl} onChange={(e)=>setAudioUrl(e.target.value)}/>
-      <ReactQuill theme="snow" 
+      {/* <ReactQuill theme="snow" 
         className='react-quill'
         onChange={(value)=>{
           setContent(content = value)
         }}
-        placeholder="write article content" />
+        placeholder="write article content" /> */}
   </div>
   <div className='file-uploader'>
 
-        <div>
-        <p onClick={()=>setFilterManu(!filterManu)}>{!filterName? 'Categorys':filterName}</p>
-
-          {
-            filterManu && <motion.div initial={{opacity: 0, y:50}}
-            animate={{opacity:1, y:0}}
-            exit={{opacity:0, y:50}}
-            >
-          {filters.map(data=><p onClick={()=>updateFilterButton(data.name)} key={data.id}>{data.name}</p>)
-          }
-          </motion.div>
-          }
-
-        
+        <div> 
       <div>
             {isImageLoading && <div>
               <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
             </div>}
             {!isImageLoading && (
               <>
-                  {!imageUrl ? (<FileUploader updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>):<div>
+                  {!imageUrl ? (<FileUploader coverImga={coverImga} setCoverImage={setCoverImage} isImageLoading={isImageLoading} updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>):<div>
                   <img src={imageUrl} alt='image'/>
                   <button type='button' onClick={()=>deleteFileObject(imageUrl, true)} >Delete image</button>
                   </div>}
               </>
             )}
       </div>
-
-      {/* <div>
-                {isAudioLoading && <div>
-                  <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
-                </div>}
-                {!isAudioLoading && (
-                        <>
-                        {!audioUrl? (<FileUploader updateState = {setAudioUrl} setProgress = {setAudioUrlUploadingProgress} isLoading={setIsAudioLoading} isImage={false}/>):<div>
-                          <audio src={audioUrl} controls/>
-                        <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
-                        </div>}
-                        </>
-                )}
-        </div> */}
-
       </div>
 
         <div>
         {
-              isImageLoading || isAudioLoading ? (
-              <DisabledButton/>) :(
-                <button onClick={()=>{
-                  saveSermon()
-                  navigate('/sermons')
-                  }} >Save</button>
-              )
+              isImageLoading || isAudioLoading && (
+              <DisabledButton/>) 
         }
         </div>
+
+<ReactQuill theme="snow" 
+        className='react-quill'
+        onChange={(value)=>{
+          setContent(content = value)
+        }}
+        placeholder="write article content" />
 
       <div>
 
@@ -188,7 +158,7 @@ const saveProfilePicture = async()=>{
               </div>}
               {!isProfilePictureLoading && (
                     <>
-                    {!imageUrl ? (<Profilepicture updateState = {setProfilePicture} setProgress = {setProfilePictureUploadingProgress} isLoading={setIsProfilePictureLoading} />):<div>
+                    {!profilePicture ? (<Profilepicture ppIMage={ppIMage} setPpImage={setPpImage} isProfilePictureLoading={isProfilePictureLoading} updateState = {setProfilePicture} setProgress = {setProfilePictureUploadingProgress} isLoading={setIsProfilePictureLoading} />):<div>
                     <img src={profilePicture} alt='image'/>
                     <button type='button' onClick={()=>deleteFileObject(profilePicture, true)} >Delete image</button>
                     </div>}
@@ -200,10 +170,10 @@ const saveProfilePicture = async()=>{
         {
               isProfilePictureLoading ? (
               <DisabledButton/>) :(
-                <Button onClick={()=>{
+                <Button style={{color:'black'}} onClick={()=>{
                   saveProfilePicture()
                   navigate('/sermons')
-                  }} >Save</Button>
+                  }} >{loading ? 'Saving Sermon':'Create Sermon'}</Button>
               )
         }
         </div>
@@ -211,6 +181,8 @@ const saveProfilePicture = async()=>{
       </div>
 
   </div>
+  </>
+}
 </div>
   )
 }
@@ -229,16 +201,16 @@ export const DisabledButton = ()=>{
   )
 }
 
-export const FileUploader = ({updateState,setProgress, isLoading, isImage })=>{
+export const FileUploader = ({setCoverImage,coverImga,isImageLoading,updateState,setProgress, isLoading, isImage })=>{
  
- const uploadFile = (e)=>{
+ const uploadFile = async(e)=>{
   isLoading(true)
-  const uploadedFile = e.target.files[0]
+  // `image/${Date.now()}-${coverImga.name}`
   const storage = getStorage(app);
   const storageRef = ref(
-    storage, `image/${Date.now()}-${uploadedFile.name}`
+    storage, new Date().getTime() + '-' + coverImga.name
   )
-const uploadTask = uploadBytesResumable(storageRef, uploadedFile)
+const uploadTask = uploadBytesResumable(storageRef, coverImga)
 
 uploadTask.on(
   'state_changed',
@@ -259,6 +231,7 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
  
  
   return (
+    <>
   <label className='label'>
       <div>
             <div>
@@ -269,23 +242,33 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
       type='file'
       name='upload-file'
       accept='image/*'
-      onChange={uploadFile}
+      onChange={(e)=>setCoverImage(e.target.files[0])}
       />
+   <Button
+       style={{color:'black'}}
+          type="button"
+          onClick={uploadFile}
+          disabled={isImageLoading}
+        >
+          {isImageLoading ? <div>Cover image Uploading</div> : 'Upload Cover image'}
+        </Button>
   </label>
+    </>
   )
 }
 ////////// PP ////////////////////
 
-export const Profilepicture = ({updateState,setProgress, isLoading})=>{
+export const Profilepicture = ({ppIMage,setPpImage,isProfilePictureLoading,updateState,setProgress, isLoading})=>{
  
  const uploadFile = (e)=>{
   isLoading(true)
-  const uploadedFile = e.target.files[0]
+  // const uploadedFile = ppIMage.files[0]
+   const fileName = new Date().getTime() + '-' + ppIMage.name;
   const storage = getStorage(app);
   const storageRef = ref(
-    storage, `profilepicture/${Date.now()}-${uploadedFile.name}`
+    storage, fileName
   )
-const uploadTask = uploadBytesResumable(storageRef, uploadedFile)
+const uploadTask = uploadBytesResumable(storageRef, ppIMage)
 
 uploadTask.on(
   'state_changed',
@@ -306,6 +289,7 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
  
  
   return (
+    <>
   <label className='label'>
       <div>
             <div>
@@ -316,9 +300,18 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
       type='file'
       name='upload-file'
       accept='image/*'
-      onChange={uploadFile}
+      onChange={(e)=>setPpImage(e.target.files[0])}
       />
+   <Button
+       style={{color:'black'}}
+          type="button"
+          onClick={uploadFile}
+          disabled={isProfilePictureLoading}
+        >
+          {isProfilePictureLoading? <div>Profile Picture is Uploading</div> : 'Upload Profile Picture'}
+        </Button>
   </label>
+    </>
   )
 }
 export default CreateSermonsScreen

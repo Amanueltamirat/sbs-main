@@ -13,11 +13,12 @@ import {
 } from 'firebase/storage';
 import { app } from '../firebase';
 import MessageBox from './MessageBox';
+import { toast } from 'react-toastify';
+import { BASE_URL, getError } from '../utils';
+import LoadingBox from './LoadingBox';
+import { Helmet } from 'react-helmet-async';
 function NewAricles() {
   const navigate = useNavigate();
-  // const [title, setTitle] = useState('');
-  // const [authorName, setAuthorName] = useState('');
-  // const [authorTitle, setAuthorTitle] = useState('');
   const [image, setImage] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null)
   const [profilePictureUploadProgress, setProfilePictureProgress] = useState(null);
@@ -26,6 +27,8 @@ function NewAricles() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
  const [publishError, setPublishError] = useState(null)
+const [loading, setLoding] = useState(false)
+const [error, setError]  = useState(null)
 
 const handleProfilePictureInput = async(e)=>{
     try {
@@ -105,13 +108,16 @@ const handleProfilePictureInput = async(e)=>{
 const handleSubmit = async (e)=>{
   e.preventDefault()
   try{
-    const res = await fetch(`http://localhost:4000/api/articles/newarticles`, {
+    setLoding(true)
+    const res = await fetch(`${BASE_URL}/api/articles/newarticles`, {
       method:'POST',
       headers:{
         'Content-Type':'application/json'
       },
       body:JSON.stringify(formData)
     })
+    setLoding(false)
+    toast.success('Article, created successfully')
     const data = await res.json()
     console.log(data)
     if(!res.ok){
@@ -125,10 +131,16 @@ const handleSubmit = async (e)=>{
 
   }catch(err){
 setPublishError('Somthing went wrong')
+setError(err)
+toast.error(getError(err))
   }
 }
   return (
     <div className='new-article'>
+       <Helmet>
+        <title>Create-Article</title>
+      </Helmet>
+      { loading ? <LoadingBox/> : error ? <MessageBox variant='danger'>{error}</MessageBox> :<>
       <h1>New Articles</h1>
       <form onSubmit={handleSubmit}>
       <div className='img-info'>
@@ -147,6 +159,7 @@ setPublishError('Somthing went wrong')
         {formData.image && <img src={formData.image} alt="upload" />}
       
        <Button
+       style={{color:'black'}}
           type="button"
           onClick={handleFileInput}
           disabled={imageUploadProgress}
@@ -214,6 +227,7 @@ setPublishError('Somthing went wrong')
         )}
         {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
   <Button
+  style={{color:'black'}}
           type="button"
           onClick={handleProfilePictureInput}
           disabled={profilePictureUploadProgress}
@@ -222,11 +236,13 @@ setPublishError('Somthing went wrong')
         </Button>
 
         </div>
-        <Button type="submit">Submit</Button>
+        <Button className='create-article-btn' style={{color:'black'}} type="submit">{loading ? 'Submiting':'Submit'}</Button>
         {publishError && (
           <MessageBox variant="danger">{publishError}</MessageBox>
         )}
       </form>
+      </>
+}
     </div>
   );
 }

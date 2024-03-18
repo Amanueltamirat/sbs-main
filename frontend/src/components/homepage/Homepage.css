@@ -1,0 +1,47 @@
+.sermons{
+    display: flex;
+      margin: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.sermons .aricle {
+  background-color: rgb(235, 234, 234);
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  transition: 0.3s all;
+  max-height: 690px;
+}
+
+.sermons .aricle .article-img {
+  padding: 10px;
+  cursor: pointer;
+  height: 200px;
+  
+}
+.sermons .aricle:hover {
+  transform: translateY(3px);
+}
+.author-info{
+    display: flex;
+    align-items: center;
+    gap: 5px;  
+}
+.upper-part{
+  flex: 1;
+}
+.profile-picture{
+max-width: 40px;
+height: 40px;
+border-radius: 50%;
+}
+.recent-sermons, .recent-articles{
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  font-style: italic;
+}

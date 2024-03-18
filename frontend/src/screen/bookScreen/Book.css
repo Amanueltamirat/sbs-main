@@ -1,22 +1,21 @@
 .book-screen,.create-book, .book-detail{
     margin-top: 8rem;
-
     flex-wrap: nowrap;
     position: relative;
+    margin-bottom: 5rem;
 }
 .create-book{
     display: flex;
     flex-direction: column;
-    /* max-width: 700px; */
     margin: 6rem auto;
     gap: 10px;
+    margin-bottom: 10rem;
    
 }
 .create-book input{
     padding: 10px;
 }
 .create-book .book-btn{
-    /* background-color: rgb(11, 11, 161); */
     color: white;
     max-width: 150px;
 }
@@ -36,24 +35,26 @@
 .book-detail{
     margin-top: 5rem;
 }
+.bookdetail{
+    z-index: 1001;
+    min-height: 100vh;
+}
+.bookdetail iframe{
+height: 100vh;
+ z-index: 1001;
+}
 .image-box{
     gap: 20px;
     display: flex;
-    flex-wrap: wrap;
-    
-  
-    
+    flex-wrap: wrap;  
 }
 .container{
     flex-wrap: nowrap;
-    /* flex-wrap: nowrap;
-    overflow: hidden; */
 }
 .cover-image{
     width: 250px;
     height: 200px;
      gap: 20px;
-     /* padding: 20px; */
     cursor: pointer;
 transition:  all .2s;
 }
@@ -112,4 +113,31 @@ transition:  all .2s;
     width: 100%;
     font-size: 20px;
     color: black;
+}
+@media (max-width:360px){
+    .read{
+     min-height: 300px;
+     width: 50%;
+     margin-left: 10px;
+}
+.book{
+   
+    margin: 10rem auto ;
+    gap: 20px;
+    align-items: center;
+}
+.book-information{
+    margin-right: 10px;
+}
+.read button{
+   
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 18px;
+    color: black;
+}
+.create-book{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
 }

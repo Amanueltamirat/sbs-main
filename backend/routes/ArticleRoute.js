@@ -52,11 +52,14 @@ ArticleRoute.get('/getallarticles', async(req, res)=>{
     const lastMonthArticles = await Article.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
-
+const lastMonthArticlesList = await Article.find({
+      createdAt: { $gte: oneMonthAgo },
+    });
     res.status(200).json({
       articles,
       totalArticles,
       lastMonthArticles,
+      lastMonthArticlesList
     });
   } catch (error) {
     console.log(error)

@@ -3,10 +3,11 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LoadingBox from '../../components/LoadingBox';
-import { getError } from '../../utils';
+import { BASE_URL, getError } from '../../utils';
 import MessageBox from '../../components/MessageBox';
 import htmlReactParcer from 'html-react-parser'
 import './ArticleScreen.css'
+import { toast } from 'react-toastify';
 
 
 
@@ -35,17 +36,17 @@ function ArticleScreen() {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const { data } = await axios.get(`http://localhost:4000/api/articles`);
+        const { data } = await axios.get(`${BASE_URL}/api/articles`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
      
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
-        console.log(err);
+      toast.error(getError(err))
       }
     };
     fetchData();
   }, []);
-console.log(articles)
+
   return (
     <div className="articles home-article">
       <Helmet>
@@ -69,7 +70,7 @@ console.log(articles)
               <div className='article-title'>
                 <h3>{article.title}</h3>
                 <p className='created-date'>{article.createdAt.substring(0, 10) }</p>
-                <p>{htmlReactParcer(article?.overView?article.overView:article.content)}</p>
+                <p>{htmlReactParcer(String(article?.overView?article.overView:article.content))}</p>
                </div>
            </div>
                 <div className='author-info'>

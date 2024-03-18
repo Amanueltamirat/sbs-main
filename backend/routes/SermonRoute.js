@@ -2,8 +2,6 @@ import express from 'express'
 import Sermons from '../models/SermonModel.js'
 const SermonRoute = express.Router()
 
-
-
 SermonRoute.get('/allsermons', async(req, res)=>{
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 2;
@@ -37,18 +35,19 @@ SermonRoute.get('/allsermons', async(req, res)=>{
       createdAt: { $gte: oneMonthAgo },
     });
 
+const lastMonthSermonsList = await Sermons.find({
+      createdAt: { $gte: oneMonthAgo },
+    });
     res.status(200).json({
       sermons,
       totalSermons,
       lastMonthSermons,
+      lastMonthSermonsList
     });
   } catch (error) {
     console.log(error)
   }
 })
-
-
-
 
 SermonRoute.post("/newSermons", async (req, res) => {
  const newSermon =  new Sermons({
@@ -80,8 +79,6 @@ const options ={
 const data = await Sermons.find({})
 res.send(data)
 });
-
-
 
 
 SermonRoute.get('/:id', async (req, res) => {

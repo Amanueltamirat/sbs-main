@@ -25,9 +25,9 @@ const handleSubmit = (e)=>{
 
 
   return (
-    <div>
+    <div className='search-input'>
         <form onSubmit={handleSubmit}>
-        <input  placeholder='Search...' className='search-input'  type='text' style={{width:'120%', height:'30px', backgroundColor:'lightgray'}} onChange={(e)=>setSearchTerm(e.target.value)}/>
+        <input  placeholder='Search...' className='search-input'  type='text' style={{width:'120%', height:'30px'}} onChange={(e)=>setSearchTerm(e.target.value)}/>
         </form>
     </div>
   )

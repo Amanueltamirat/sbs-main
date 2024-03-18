@@ -7,6 +7,10 @@ import Button from 'react-bootstrap/Button';
 import './Book.css'
 import { Store } from "../../Store";
 import { ImageAddress } from "./BookDetail";
+import { toast } from "react-toastify";
+import { BASE_URL, getError } from "../../utils";
+import LoadingBox from "../../components/LoadingBox";
+import MessageBox from "../../components/MessageBox";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
@@ -21,10 +25,13 @@ export const TransferCoveImage =  (coverimage) => {
 
 
 function BookScreen() {
+const [showModel, setShowModal] = useState(null)
 const [books, setBooks] = useState([])
 const [originalName, setOriginalName] = useState([])
 const [coverImage, setCoverImage] = useState([])
 const [bookItems, setBookItems] = useState([])
+const [loadingBook, setLoadingBookData] = useState(false)
+const [error, setError] = useState(null)
 const navigate = useNavigate()
 
   const {state} = useContext(Store)
@@ -33,7 +40,7 @@ const navigate = useNavigate()
 
 useEffect(()=>{
   const bookData = async()=>{
-    const {data} = await axios.get(`http://localhost:4000/api/books/alldata`)
+    const {data} = await axios.get(`${BASE_URL}/api/books/alldata`)
     setBookItems(data)
   }
   bookData()
@@ -41,8 +48,15 @@ useEffect(()=>{
 
 useEffect(()=>{
 const booksName = async ()=>{
-  const {data:{files}} = await axios.get('http://localhost:4000/api/bookCover/image')
+  try{
+    setLoadingBookData(true)
+  const {data:{files}} = await axios.get(`${BASE_URL}/api/bookCover/image`)
   setCoverImage(files)
+  setLoadingBookData(false)
+  } catch(err){
+    toast.error(getError(err))
+    setError(err)
+  }
 }
 booksName()
 },[])
@@ -137,42 +151,35 @@ bookDatas[i].orignalName.push(book.title)
 })
 
 const deleteOriginalName = async(name) => {
-  
   try{
-  await axios.delete(`http://localhost:4000/api/books/bookname/${name}`)
-  console.log('success')
+  await axios.delete(`${BASE_URL}/api/books/bookname/${name}`)
   } catch(err){
-    console.log(err)
+    toast.error(getError(err))
   }
   };
 
 const deleteCoverImage = async(coverImage) => {
-  
   try{
-  await axios.delete(`http://localhost:4000/api/bookCover/coverimage/${coverImage}`)
-  console.log('success')
+  await axios.delete(`${BASE_URL}/api/bookCover/coverimage/${coverImage}`)
   } catch(err){
-    console.log(err)
+    toast.error(getError(err))
   }
   };
 
 const deleteCoverImageFromDb = async(coverImage) => {
-  
   try{
-  await axios.delete(`http://localhost:4000/api/bookCover/bookname/${coverImage}`)
-  console.log('success')
+  await axios.delete(`${BASE_URL}/api/bookCover/bookname/${coverImage}`)
   } catch(err){
-    console.log(err)
+    toast.error(getError(err))
   }
   };
 
 const deleteBookFromDb = async(filename) => {
   try{
-  await axios.delete(`http://localhost:4000/api/books/bookname/${filename}`)
-  console.log('success')
+  await axios.delete(`${BASE_URL}/api/books/bookname/${filename}`)
     window.location.reload()
   } catch(err){
-    console.log(err)
+    toast.error(getError(err))
   }
   };
 
@@ -183,17 +190,15 @@ const handleDelete = async(filename, coverImage, name) => {
   deleteBookFromDb(filename)
   deleteCoverImageFromDb(coverImage)
   try{
-  await axios.delete(`http://localhost:4000/api/books/files/${filename}`)
-  console.log('success')
+  await axios.delete(`${BASE_URL}/api/books/files/${filename}`)
     window.location.reload()
   } catch(err){
-    console.log(err)
+    toast.error(getError(err))
   }
   };
-  console.log((bookDatas))
+
 
 const coverimage = (coverImage)=>{
-// TransferCoveImage(coverImage)
 ImageAddress(coverImage)
 }
 
@@ -202,33 +207,51 @@ ImageAddress(coverImage)
       <Helmet>
         <title>SBC-Books</title>
       </Helmet>
+      { loadingBook ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox>:
+      
+        <div className="container">
+            <div className="image-box"> 
+            {
+                bookDatas?.map((book, i)=>{
+                  // && book.orignalName.length > 0
+                  return ( book.files.length > 0  && <div className="book-info" key={i} onClick={()=>coverimage(book.coverImage)} >
 
-   
-      <div className="container">
-          <div className="image-box"> 
-      {
-          bookDatas?.map((book, i)=>{
-            // && book.orignalName.length > 0
-            return ( book.files.length > 0  && <div className="book-info" key={i} onClick={()=>coverimage(book.coverImage)} >
+            <img  className="cover-image" alt="hello" onClick={()=>navigate(`/books/${book.files}`)} src={`http://localhost:4000/api/bookCover/image/${book.coverImage}`}/>
+              {/* book.orignalName.length >0 &&  */}
+              <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
+              {
+                userInfo?.isAdmin
+              &&
+                <Button style={{color:'black'}} variant="danger" book={book} onClick={()=>
+                { 
+                setShowModal(true)
+                }
+                }>Delete Book</Button>
+              }
+                     {showModel && 
+            <div className='delete-btn'>
+              <div>
+                  <h3>Are you sure you want to delete this book?</h3>
+                <div className='flex justify-center btns'>
+                  <Button  className='' variant='danger' onClick={()=>handleDelete(book.files, book.coverImage, book.orignalName)}>Yes, I'm sure</Button>
+                  <Button  onClick={()=>setShowModal(false)}>No, cancel</Button>
+                </div>
 
-      <img  className="cover-image" alt="hello" onClick={()=>navigate(`/books/${book.files}`)} src={`http://localhost:4000/api/bookCover/image/${book.coverImage}`}/>
-         {/* book.orignalName.length >0 &&  */}
-         <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
-         {
-          userInfo?.isAdmin
-        &&
-          <Button variant="danger" book={book} onClick={()=>handleDelete(book.files, book.coverImage, book.orignalName)}>Delete</Button>
-         }
+              </div>
+
+            </div>}
+                  </div>
+                  )
+                })
+            }
             </div>
-            )
-          })
-      }
-          </div>
-      </div>{
-        userInfo?.isAdmin
-        &&
-      <Link className="new-book" to='/createbook'>Create New Book</Link>
-      }
+        </div>
+}
+        {
+          userInfo?.isAdmin
+          &&
+        <Link className="new-book" to='/createbook'>Create New Book</Link>
+        }
     </div>
   );
 }

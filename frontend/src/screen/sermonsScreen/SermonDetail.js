@@ -7,9 +7,10 @@ import ReactPlayer from 'react-player'
 import Button from 'react-bootstrap/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Store } from '../../Store';
-import { getError } from '../../utils';
+import { BASE_URL, getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
+import { toast } from 'react-toastify';
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -39,42 +40,36 @@ function SermonDetail() {
 const navigate = useNavigate()
   const params = useParams();
   const { id: articleId } = params;
+
   useEffect(() => {
     try {
       dispatch({ type: 'FETCH_REQUEST' });
       const fetchData = async () => {
         const { data } = await axios.get(
-          `http://localhost:4000/api/sermons/${articleId}`
+          `${BASE_URL}/api/sermons/${articleId}`
         );
-    
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
-         
+        dispatch({ type: 'FETCH_SUCCESS', payload: data }); 
       };
       fetchData();
     } catch (err) {
       dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
-      console.log(err);
+      toast.error(getError(err))
     }
   }, [articleId]);
 
 const handleDeleteSermon =async()=>{
-
-console.log('hello')
-
 setShowModal(false)
   try{
-    const res =  await fetch(`http://localhost:4000/api/sermons/deleteSermon/${deleteId}`, {
+    const res =  await fetch(`${BASE_URL}/api/sermons/deleteSermon/${deleteId}`, {
       method:'DELETE'
     })
-// window.location.reload()
 navigate('/sermons')
 const data = res.json()
   } catch(err){
-console.log(err)
+toast.error(getError(err))
   }
 
 }
-console.log(sermon.audioUrl)
   return (
     <div className='sermon-detail'>
       <Helmet>
@@ -100,8 +95,8 @@ console.log(sermon.audioUrl)
           <p>{sermon?.createdAt?.substring(0, 10) }</p>
 
             {userInfo?.isAdmin && <div className='btns'>
-                <Button onClick={()=>navigate(`/updatesermon/${sermon._id}`)}>Edit sermon</Button>
-                <Button variant='danger' onClick={()=>{
+                <Button style={{color:'black'}} onClick={()=>navigate(`/updatesermon/${sermon._id}`)}>Edit sermon</Button>
+                <Button style={{color:'black'}} variant='danger' onClick={()=>{
                   setShowModal(true)
                   setDeleteId(sermon._id)
                 }}>Delete Sermon</Button>
@@ -111,8 +106,8 @@ console.log(sermon.audioUrl)
               <div>
                   <h3>Are you sure you want to delete this sermon?</h3>
                 <div className='flex justify-center btns'>
-                  <Button className='' variant='danger' onClick={handleDeleteSermon}>Yes, I'm sure</Button>
-                  <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
+                  <Button  className='' variant='danger' onClick={handleDeleteSermon}>Yes, I'm sure</Button>
+                  <Button  onClick={()=>setShowModal(false)}>No, cancel</Button>
                 </div>
 
               </div>

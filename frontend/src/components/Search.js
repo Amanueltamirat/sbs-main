@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ArticleCard from './ArticleCard';
 import SermonCard from './SermonCard';
+import BookCard from './BookCard';
+import { BASE_URL } from '../utils';
 
 function Search() {
 
@@ -17,6 +19,8 @@ const [sermons, setSermons] = useState([])
 const [books, setBooks] = useState([])
 const [loading, setLoading] = useState(false);
 const [showMore, setShowMore] = useState(false);
+const [showMoreBooks, setShowMoreBooks] = useState(false);
+const [showMoreSermons, setShowMoreSermons] = useState(false);
 const location = useLocation();
 const navigate = useNavigate()
 
@@ -35,9 +39,8 @@ const sortFormUrl = urlParams.get('sort')
 const fetchArticles = async()=>{
     setLoading(true);
     const searchQuery = urlParams.toString()
-    const {data} = await axios.get(`http://localhost:4000/api/articles/getallarticles?${searchQuery}`);
+    const {data} = await axios.get(`${BASE_URL}/api/articles/getallarticles?${searchQuery}`);
         setArticles(data.articles);
-
         setLoading(false)
         if(data.articles.length === 2){
             setShowMore(true)
@@ -48,16 +51,28 @@ const fetchArticles = async()=>{
 const fetchSermons = async()=>{
     setLoading(true);
     const searchQuery = urlParams.toString()
-    const {data} = await axios.get(`http://localhost:4000/api/sermons/allsermons?${searchQuery}`);
+    const {data} = await axios.get(`${BASE_URL}/api/sermons/allsermons?${searchQuery}`);
         setSermons(data.sermons);
-        console.log(data)
         setLoading(false)
-        // if(data.articles.length === 2){
-        //     setShowMore(true)
-        // }else{
-        //     setShowMore(false)
-        // }
+        if(data.sermons.length === 2){
+            setShowMoreSermons(true)
+        }else{
+            setShowMoreSermons(false)
+        }
 }
+const fetchBooks = async()=>{
+    setLoading(true);
+    const searchQuery = urlParams.toString()
+    const {data} = await axios.get(`${BASE_URL}/api/books/getallbooks?${searchQuery}`);
+        setBooks(data.books)
+        setLoading(false)
+        if(data.books.length == 2){
+            setShowMoreBooks(true)
+        }else{
+            setShowMoreBooks(false)
+        }
+}
+fetchBooks()
 fetchSermons()
 fetchArticles()
 
@@ -82,7 +97,7 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('searchTerm', sideBarData.searchTerm);
     urlParams.set('sort', sideBarData.sort);
-    // urlParams.set('category', sideBarData.category);
+    urlParams.set('category', sideBarData.category);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
@@ -93,14 +108,14 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`http://localhost:4000/api/articles/getallarticles?${searchQuery}`);
+    const res = await fetch(`${BASE_URL}/api/articles/getallarticles?${searchQuery}`);
     if (!res.ok) {
       return;
     }
     if (res.ok) {
       const data = await res.json();
       setArticles([...articles, ...data.articles]);
-      if (data.articles.length === 9) {
+      if (data.articles.length === 5) {
         setShowMore(true);
       } else {
         setShowMore(false);
@@ -115,32 +130,56 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`http://localhost:4000/api/sermons/allsermons?${searchQuery}`);
+    const res = await fetch(`${BASE_URL}/api/sermons/allsermons?${searchQuery}`);
     if (!res.ok) {
       return;
     }
     if (res.ok) {
       const data = await res.json();
       setSermons([...sermons, ...data.sermons]);
-      if (data.sermons.length === 2) {
-        setShowMore(true);
+      if (data.sermons.length === 5) {
+        setShowMoreSermons(true);
       } else {
-        setShowMore(false);
+        setShowMoreSermons(false);
       }
     }
   };
 
 
-console.log(sermons)
-console.log(sideBarData.category)
+ const handleShowMoreBooks = async () => {
+    const numberOfPosts = articles.length;
+    const startIndex = numberOfPosts;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`${BASE_URL}/api/books/getallbooks?${searchQuery}`);
+    if (!res.ok) {
+      return;
+    }
+    if (res.ok) {
+      const data = await res.json();
+      setBooks([...books, ...data.books]);
+      if (data.books.length === 5) {
+        setShowMoreBooks(true);
+      } else {
+        setShowMoreBooks(false);
+      }
+    }
+  };
+
   return (
     <div className='search'>
         <form onSubmit={handleSubmit}>
+          <div>
+
             <label>Search Term:</label>
                 <input type='text' id='searchTerm' placeholder='search'
                 value={sideBarData.searchTerm}
                 onChange={handleChange}
                 />
+          </div>
+          <div>
+
             <label>Sort:</label>
                 <select 
                 value={sideBarData.sort}
@@ -148,6 +187,10 @@ console.log(sideBarData.category)
                 <option value='desc'>Latest</option>
                 <option value='asc'>Oldest</option>
                 </select>
+          </div>
+
+          <div>
+               <label>Category:</label>
                  <select
               onChange={handleChange}
               value={sideBarData.category}
@@ -157,6 +200,7 @@ console.log(sideBarData.category)
               <option value='books'>Books</option>
               <option value='sermons'>Sermons</option>
             </select>
+          </div>
             <Button type='submit'>
             Apply Filters
         </Button>
@@ -168,7 +212,7 @@ console.log(sideBarData.category)
         <div className='p-7 flex flex-wrap gap-4'>
           {sideBarData.category === 'articles'?<>
           {!loading && articles.length === 0 && (
-            <p className='text-xl text-gray-500'>No posts found.</p>
+            <p className='text-xl text-gray-500'>No Articles found.</p>
           )}
           {loading && <p className='text-xl text-gray-500'>Loading...</p>}
           {!loading &&
@@ -184,13 +228,13 @@ console.log(sideBarData.category)
           )}
           </>:sideBarData.category === 'sermons'?<>
            {!loading && sermons.length === 0 && (
-            <p className='text-xl text-gray-500'>No posts found.</p>
+            <p className='text-xl text-gray-500'>No Sermons found.</p>
           )}
           {loading && <p className='text-xl text-gray-500'>Loading...</p>}
           {!loading &&
             sermons &&
             sermons.map((sermon) => <SermonCard key={sermon._id} sermon={sermon} />)}
-          {showMore && (
+          {showMoreSermons && (
             <button
               onClick={handleShowMoreSermons}
               className='text-teal-500 text-lg hover:underline p-7 w-full'
@@ -198,7 +242,23 @@ console.log(sideBarData.category)
               Show More
             </button>
           )}
-          </>:<></>}
+          </>:<>
+           {!loading && books.length === 0 && (
+            <p className='text-xl text-gray-500'>No Books found.</p>
+          )}
+          {loading && <p className='text-xl text-gray-500'>Loading...</p>}
+          {!loading &&
+            books &&
+            books.map((book) => <BookCard key={book._id} book={book} />)}
+          {showMoreBooks && (
+            <button
+              onClick={handleShowMoreBooks}
+              className='text-teal-500 text-lg hover:underline p-7 w-full'
+            >
+              Show More
+            </button>
+          )}
+          </>}
           
         </div>
       </div>

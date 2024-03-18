@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./HomeScreen.css";
-import data from "../data";
 import ImageSlider from "../components/ImageSlider";
 import ArticleScreen from "./articlesScreen/ArticleScreen";
 import { Helmet } from "react-helmet-async";
-import {motion} from 'framer-motion'
+import Homepage from "../components/homepage/Homepage";
 
 function HomeScreen() {
-  const { articles, books, sermons } = data;
+
 return (
     <>
       <div className="homescreen">
@@ -20,8 +19,7 @@ return (
             <ImageSlider/>
         </div>
         <div className="recent">
-          <p className="recent-things" >Recent</p>
-            <ArticleScreen />
+           <Homepage/>
         </div>
       </div>
     </>

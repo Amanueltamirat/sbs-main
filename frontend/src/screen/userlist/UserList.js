@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import { Store } from '../../Store'
 import { useNavigate, useNavigation } from 'react-router-dom'
 import './USerList.css'
+import { BASE_URL } from '../../utils'
 const UserList =()=> {
 const [showModal, setShowModal] = useState(false)
 const [usersList, setUsersList] = useState([])
@@ -16,7 +17,7 @@ useEffect(() => {
     try {
       const fetchData = async () => {
         const { data } = await axios.get(
-          `http://localhost:4000/api/users`
+          `${BASE_URL}/api/users`
         );
         setUsersList(data)
       };
@@ -30,7 +31,7 @@ useEffect(() => {
 const handleDeleteUser = async()=>{
 setShowModal(false)
 try{
-const {data} = await axios.delete(`http://localhost:4000/api/users/deleteUser/${currentId}`)
+const {data} = await axios.delete(`${BASE_URL}/api/users/deleteUser/${currentId}`)
 window.location.reload()
 } catch (err){
     console.log(err)
@@ -45,10 +46,10 @@ console.log(currentId)
            <thead>
               <tr>
               
-              <th>ID</th>
+              <th className='id-class'>ID</th>
               <th>NAME</th>
               <th>Email</th>
-              <th>ACTIONS</th>
+              <th>ACTION</th>
             
               </tr>
            </thead>
@@ -57,12 +58,14 @@ console.log(currentId)
             usersList.map((user)=>{
                 return(
                   <tr key={user._id} onClick={()=>setCurrentId(user._id)}>
-                    <td>{user._id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    {userInfo.isAdmin && <div className='btns'>
-                        <Button >Edit</Button>
-                        <Button onClick={()=>setShowModal(true)} variant='danger'>Delete</Button>
+                    <td className='id-class'>{user._id}</td>
+                    <td className='user-info'>{user.name}</td>
+                    <td className='user-info'>{user.email}</td>
+                    {userInfo.isAdmin && 
+                    
+                    <div className='btns'>
+                        {/* <Button style={{color:'black'}} >Edit</Button> */}
+                        <Button style={{color:'black'}} onClick={()=>setShowModal(true)} variant='danger'>Delete</Button>
                         </div>}
                   </tr>  
                 )
@@ -70,11 +73,12 @@ console.log(currentId)
         }
     </tbody>
             </table>
-    {showModal && <div onClick={()=>setShowModal(false)}>
+    {showModal && 
+    <div onClick={()=>setShowModal(false)} className='delete-btn'>
         <h3>Are you sure you want to delete this acount?</h3>
     <div className='flex justify-center  btns'>
-        <Button variant='danger' onClick={handleDeleteUser}>Yes, I'm sure</Button>
-        <Button onClick={()=>setShowModal(false)}>No, cancel</Button>
+        <Button  variant='danger' onClick={handleDeleteUser}>Yes, I'm sure</Button>
+        <Button  onClick={()=>setShowModal(false)}>No, cancel</Button>
     </div>
     </div>}
     </div>

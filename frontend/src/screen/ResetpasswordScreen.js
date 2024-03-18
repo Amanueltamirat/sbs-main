@@ -63,7 +63,7 @@ function ResetpasswordScreen() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </Form.Group>
-        <Button type="submit">Submit</Button>
+        <Button style={{color:'black'}} type="submit">Submit</Button>
       </Form>
     </Container>
   );

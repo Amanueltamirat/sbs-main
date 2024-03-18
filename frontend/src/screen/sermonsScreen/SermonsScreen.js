@@ -6,7 +6,8 @@ import LoadingBox from '../../components/LoadingBox'
 import MessageBox from '../../components/MessageBox'
 import htmlReactParcer from 'html-react-parser'
 import './SermonScreen.css'
-import { getError } from '../../utils'
+import { BASE_URL, getError } from '../../utils'
+import { toast } from 'react-toastify'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -36,13 +37,11 @@ const navigate = useNavigate()
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const { data } = await axios.get(`http://localhost:4000/api/sermons/getAllSermons`);
+        const { data } = await axios.get(`${BASE_URL}/api/sermons/getAllSermons`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-       
-     
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
-        console.log(err);
+        toast.error(getError(err))
       }
     };
     fetchData();
@@ -51,7 +50,7 @@ const navigate = useNavigate()
 
   return (
     <div>
-     <div className="articles">
+     <div className="articles sermons">
       <Helmet>
         <title>SBC-Sermons</title>
       </Helmet>

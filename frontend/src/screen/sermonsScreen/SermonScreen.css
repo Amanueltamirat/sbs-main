@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 5rem;
+  margin-bottom: 6rem;
 }
 .articles .articles-detail {
   margin: 2rem;
@@ -26,24 +27,16 @@
   height: 200px;
   
 }
-.articles .articles-detail .aricle div {
-  /* padding: 5px; */
-}
 .articles .articles-detail .aricle:hover {
   transform: translateY(3px);
 }
-
-
 .author-info{
     display: flex;
     align-items: center;
-    gap: 5px;
-  
-   
+    gap: 5px;  
 }
 .upper-part{
   flex: 1;
-
 }
 .profile-picture{
 max-width: 40px;
@@ -66,15 +59,20 @@ border-radius: 50%;
 }
 
 .sermon-detail{
-  /* widths */
   margin:5rem auto;
   width: 100%;
+  margin-bottom: 10rem;
 
 }
 /* Create Sermon */
 .create-sermon{
   width: 800px;
 margin: 6rem auto;
+margin-bottom: 10rem;
+}
+.update-sermon{
+  margin-top: 5rem;
+  margin-bottom: 10rem;
 }
 .sermon-inputs{
 display: flex;
@@ -105,7 +103,9 @@ gap: 10px;
   transition: all 0.2s;
  
 }
-
+.sermons{
+  margin-bottom: 8rem;
+}
 
 .delete-btn{
   position: absolute;
@@ -176,4 +176,22 @@ height:200px;
   min-height: 80vh;
   min-width:80vw;
 
+}
+@media (max-width:360px){
+  .youtube{
+  max-width: 360px;
+
+}
+.create-sermon{
+  max-width: 360px;
+  padding: 10px;
+}
+}
+@media (max-width:768px){
+   .create-sermon{
+ max-width: 760px;
+    overflow: hidden;
+    margin-left: 1rem;
+    margin-right: 4rem;
+}
 }
