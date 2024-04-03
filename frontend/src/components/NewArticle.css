@@ -4,12 +4,12 @@
     align-items: center;
     margin-bottom: 10rem;
 }
-.img-info{
+/* .img-info{
     margin: 2rem 0;
     display: flex;
-    /* flex-direction: column; */
+
     align-items: center;
-}
+} */
 .img-info input{
     border: none;
     padding: 10px;
@@ -30,10 +30,10 @@
     font-size: 18px;
     max-height: 50px;
 }
-.author-info{
+/* .author-info{
     display: flex;
     margin-bottom: 1rem;    
-}
+} */
 
 
 
@@ -57,7 +57,10 @@
     margin: 1rem 0;
     max-width: 800px;
 }
-@media (max-width:360px){
+.new-article h1{
+    font-size: 20px;
+}
+@media (max-width:378px){
 .img-info{
     flex-direction: column;
     gap: 10px;
@@ -75,6 +78,7 @@
 max-width: 100%;
     overflow: none;
 }
+
 .new-article form{
     /* margin: 10px;
     margin-left: 2rem; */
@@ -91,11 +95,48 @@ max-width: 100%;
 }
 
 }
-@media (max-width:768px){
+@media (max-width:450px){
+.img-info{
+    flex-direction: column;
+    gap: 10px;
+}
+.author-info{
+    flex-direction: column;
+}
+.author-info div{
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+}
+.new-article{
+max-width: 100%;
+    overflow: none;
+}
+.new-article form{
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    
+}
+.react-quill{
+    width: 300px;
+}
+.create-article-btn{
+    margin-left: 40%;
+}
+
+}
+@media (min-width:450px) and (max-width:768px){
     .new-article{
-/* max-width: 100%; */
     overflow: hidden;
     margin-left: 1rem;
     margin-right: 1rem;
+}
+.img-info{
+    flex-direction: column;
+    gap: 10px;
+}
+.author-info{
+    flex-direction: column;
 }
 }

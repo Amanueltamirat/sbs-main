@@ -1,16 +1,16 @@
+footer{
+    z-index: 1;
+}
 .footer-box{
-    background-color: rgb(173, 164, 164);
+    background-color: rgb(212, 206, 206);
+    position:relative;
      display: flex;
     justify-content: center;
     align-items: center;
     gap: 30%;
     padding: 1rem;
-    z-index: 100;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
+    height: 40vh;
+    z-index: 1;
 }
 .footer{
    
@@ -31,8 +31,9 @@
     justify-content: center;
     align-items: center;
 }
+
 .social-media-links p{
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     font-style: italic;
 }

@@ -220,7 +220,7 @@ ImageAddress(coverImage)
               {/* book.orignalName.length >0 &&  */}
               <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
               {
-                userInfo?.isAdmin
+                userInfo.email === 'Perfecttesfa456@gmail.com'
               &&
                 <Button style={{color:'black'}} variant="danger" book={book} onClick={()=>
                 { 
@@ -248,7 +248,7 @@ ImageAddress(coverImage)
         </div>
 }
         {
-          userInfo?.isAdmin
+          userInfo.email === 'Perfecttesfa456@gmail.com'
           &&
         <Link className="new-book" to='/createbook'>Create New Book</Link>
         }

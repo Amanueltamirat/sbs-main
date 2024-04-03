@@ -12,7 +12,8 @@ const [lastMonthArticles, setLastMonthArticles] = useState()
 const [lastMonthSermons, setLastMonthSermons] = useState()
 const [totalArticles, setTotalArticles] = useState()
 const [totalSermons, setTotalSermons] = useState()
-const [loading, setLoading] = useState(false)
+const [ArticlesLoading, setArticlesLoading] = useState(false)
+const [sermonsLoading, setSermonsLoading] = useState(false)
 const [error, setError] = useState(null)
 const [randomNumber, setRandomNumber] = useState()
 
@@ -22,9 +23,9 @@ const navigate = useNavigate()
     useEffect(()=>{
 const allArticles = async()=>{
     try{
-        setLoading(true)
+        setArticlesLoading(true)
     const {data} = await axios.get(`${BASE_URL}/api/articles/getallarticles`);
-    setLoading(false)
+    setArticlesLoading(false)
     setLastMonthArticles(data.lastMonthArticlesList)
     setTotalArticles(data.lastMonthArticles)
     } catch(err){
@@ -34,9 +35,9 @@ const allArticles = async()=>{
 }
 const allSermons = async()=>{
     try{
-    setLoading(true)
+    setSermonsLoading(true)
     const {data} = await axios.get(`${BASE_URL}/api/sermons/allsermons`);
-      setLoading(false);
+      setSermonsLoading(false);
       setLastMonthSermons(data.lastMonthSermonsList);
       setTotalSermons(data.lastMonthSermons)
     }catch(err){
@@ -57,7 +58,7 @@ const randomNumber = Math.floor(Math.random()*2 + 1)
    ranNum.push(randomNumber)
 }
 
-console.log(ranNum)
+// console.log(lastMonthArticles);
 
   return (
  <div className="articles home-article">
@@ -65,7 +66,7 @@ console.log(ranNum)
         <title>SBC</title>
       </Helmet>
 
-      {loading ? (
+      {ArticlesLoading ? (
         <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
@@ -74,6 +75,11 @@ console.log(ranNum)
        <div className='recent-articles'>
             <h2>Recent Articles</h2>
           </div>
+          {ArticlesLoading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
         <div className="articles-detail">
           {lastMonthArticles?.map((article) => (
             <div key={article._id} className="aricle">
@@ -100,10 +106,16 @@ console.log(ranNum)
             </div>
           ))}
              </div>
+      )}
           <div className='recent-sermons'>
             <h2>Recent Sermons</h2>
           </div>
-          <div className='sermons'>
+          {sermonsLoading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+          <div className='sermons home-article'>
            {lastMonthSermons?.map((sermon) => (
             <div key={sermon._id} className="aricle">
             <div className='upper-part'>
@@ -129,6 +141,7 @@ console.log(ranNum)
             </div>
           ))}
      </div>
+      )}
   </div>
       )}
     </div>

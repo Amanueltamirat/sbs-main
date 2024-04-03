@@ -12,7 +12,7 @@ let imageUrl;
 
 export const ImageAddress = async(image)=>{
   imageUrl = image
-  console.log(imageUrl)
+
 }
 
 function BookDetail() {
@@ -44,7 +44,7 @@ fetchData()
         { loading ? (<LoadingBox/> ): error ? (
           <MessageBox variant='danger'>{error}</MessageBox>
         ): 
-        <>
+        <div className='about-book'>
         <div className='read'>
           {
             imageAddress && 
@@ -53,24 +53,21 @@ fetchData()
           <button onClick={()=>navigate(`/book/${filename}`)}>Read Book</button>
         </div>
         <div className='book-information'>
-          { book &&
-            book.map((data)=>{ return (
-              <>
-              <Helmet>
-          <title>{data.title}</title>
-        </Helmet>
-              <h2>{data.title}</h2>
-              <p>{data.overView}</p>
-              <h3>by {data.author}</h3>
-              </>
-            )
-            })
-          }
-          
-        
-    
+              { book &&
+                book.map((data)=>{ return (
+                  <>
+                  <Helmet>
+              <title>{data.title}</title>
+            </Helmet>
+                  <h2>{data.title}</h2>
+                  <p>{data.overView}</p>
+                  <h3>by {data.author}</h3>
+                  </>
+                )
+                })
+              }
         </div>
-        </>
+        </div>
         }
     </div>
 

@@ -3,6 +3,10 @@ import bycrpt from 'bcryptjs';
 import User from '../models/UserModel.js';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
+import data from "../data.js";
+const adminUser = data.users.map(user=>{
+  return user.email
+})
 
 import expressAsyncHandler from 'express-async-handler';
 import { baseUrl, generateToken } from '../utils.js';
@@ -10,15 +14,16 @@ const UserRoute = express.Router();
 
 UserRoute.post(
   '/signin',
+  // req.body.email
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: adminUser});
     if (user) {
       if (bycrpt.compareSync(req.body.password, user.password)) {
         res.send({
           _id: user._id,
           name: user.name,
           email: user.email,
-          isAdmin: user.isAdmin,
+          isAdmin: user.isAdmin == 'amanuel.tamirat22@gmail.com'? true:false,
           token: generateToken(user),
         });
         return;
@@ -41,7 +46,7 @@ UserRoute.post(
       _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
+      isAdmin: user.isAdmin == 'amanuel.tamirat22@gmail.com'? true:false,
       token: generateToken(user),
     });
   })

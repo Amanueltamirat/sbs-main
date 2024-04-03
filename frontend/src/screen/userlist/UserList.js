@@ -5,21 +5,25 @@ import { Store } from '../../Store'
 import { useNavigate, useNavigation } from 'react-router-dom'
 import './USerList.css'
 import { BASE_URL } from '../../utils'
+import LoadingBox from '../../components/LoadingBox'
 const UserList =()=> {
 const [showModal, setShowModal] = useState(false)
 const [usersList, setUsersList] = useState([])
 const [currentId, setCurrentId] = useState(null)
+const [loading, setLoading] = useState(false)
 const {state} = useContext(Store)
 const {userInfo} = state
-
 const navigate = useNavigate()
+
 useEffect(() => {
     try {
+      setLoading(true)
       const fetchData = async () => {
         const { data } = await axios.get(
           `${BASE_URL}/api/users`
         );
         setUsersList(data)
+        setLoading(false)
       };
       fetchData();
     } catch (err) {
@@ -33,35 +37,46 @@ setShowModal(false)
 try{
 const {data} = await axios.delete(`${BASE_URL}/api/users/deleteUser/${currentId}`)
 window.location.reload()
+removeUserHandler(data)
 } catch (err){
     console.log(err)
 }
-console.log(currentId)
+// console.log(currentId)
 }
 
-
+ const removeUserHandler = (user) => {
+    ctxDispatch({
+      type: "REMOVE_USER",
+      payload: user,
+    });
+  };
  return (
     <div className='user-list'>
+      { usersList === null ? <div className='no-user'><h2>There Is No User</h2> </div>:
+      loading ? <LoadingBox/>:
+      <>
         <table className='table'>
            <thead>
               <tr>
-              
               <th className='id-class'>ID</th>
               <th>NAME</th>
               <th>Email</th>
+              {
+             userInfo.email === 'Perfecttesfa456@gmail.com' &&
               <th>ACTION</th>
+              }
             
               </tr>
            </thead>
     <tbody>
-        {
+        { 
             usersList.map((user)=>{
                 return(
                   <tr key={user._id} onClick={()=>setCurrentId(user._id)}>
                     <td className='id-class'>{user._id}</td>
                     <td className='user-info'>{user.name}</td>
                     <td className='user-info'>{user.email}</td>
-                    {userInfo.isAdmin && 
+                    {userInfo.email === 'Perfecttesfa456@gmail.com'&& 
                     
                     <div className='btns'>
                         {/* <Button style={{color:'black'}} >Edit</Button> */}
@@ -81,6 +96,8 @@ console.log(currentId)
         <Button  onClick={()=>setShowModal(false)}>No, cancel</Button>
     </div>
     </div>}
+    </>
+    }
     </div>
   )
 }

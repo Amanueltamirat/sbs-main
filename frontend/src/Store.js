@@ -18,6 +18,13 @@ const reducer = (state, action) => {
         ...state,
         userInfo: null,
       };
+     case "REMOVE_USER": {
+      const users = state.userInfo.filter(
+        (user) => user._id !== action.payload._id
+      );
+      localStorage.setItem("userInfo", JSON.stringify(users));
+      return { ...state, userInfo:users};
+    }
     default:
       return state;
   }

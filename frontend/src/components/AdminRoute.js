@@ -5,7 +5,7 @@ import { Store } from "../Store";
 function AdminRoute({ children }) {
   const { state } = useContext(Store);
   const { userInfo } = state;
-  return userInfo && userInfo.isAdmin ? children : <Navigate to="/signin" />;
+  return userInfo && userInfo.email === 'Perfecttesfa456@gmail.com'? children : <Navigate to="/signin" />;
 }
 
 export default AdminRoute;

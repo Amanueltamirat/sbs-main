@@ -40,7 +40,7 @@ function SigninScreen() {
     }
   }, [userInfo, redirect, navigate]);
   return (
-    <Container className="small-container">
+    <div className="small-container">
       <Helmet>
         <title>Sign In</title>
       </Helmet>
@@ -71,7 +71,7 @@ function SigninScreen() {
           <Link className="singup-link" to={`/signup?redirect=${redirect}`}>Create Your Account</Link>
         </div>
       </Form>
-    </Container>
+    </div>
   );
 }
 

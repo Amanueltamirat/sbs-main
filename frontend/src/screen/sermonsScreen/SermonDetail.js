@@ -34,6 +34,7 @@ function SermonDetail() {
   const [showModal, setShowModal] = useState(false)
   const [deleteId, setDeleteId] = useState('')
   const [videoOpen, setVideoOpen] = useState(false)
+  const [loadingVideo, setLoadingVideo] = useState(false)
 
   const {state} = useContext(Store)
   const {userInfo} = state
@@ -45,10 +46,12 @@ const navigate = useNavigate()
     try {
       dispatch({ type: 'FETCH_REQUEST' });
       const fetchData = async () => {
+        setLoadingVideo(true)
         const { data } = await axios.get(
           `${BASE_URL}/api/sermons/${articleId}`
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: data }); 
+        setLoadingVideo(false)
       };
       fetchData();
     } catch (err) {
@@ -85,16 +88,18 @@ toast.error(getError(err))
           <div className='audio'>
         <a  target='_blank' href={`${sermon.audioUrl}`}>Listen Audio</a>
      <Link  className='video-link' hrefLang='video' onClick={()=>setVideoOpen(!videoOpen)} >{videoOpen ? 'Close Video' :'Watch Video' }</Link>
-          </div>
+          </div>{ loadingVideo ? <LoadingBox/>:<>
    {videoOpen &&  <div className='youtube-video' id='video'>
      <ReactPlayer controls={true} className='youtube' url={sermon.videoUrl} />
     </div>}
+    </>
+    } 
         </div>
         <div className='sermon-content' >
           <h2>{sermon.title}</h2>
           <p>{sermon?.createdAt?.substring(0, 10) }</p>
 
-            {userInfo?.isAdmin && <div className='btns'>
+            {userInfo.email === 'Perfecttesfa456@gmail.com' && <div className='btns'>
                 <Button style={{color:'black'}} onClick={()=>navigate(`/updatesermon/${sermon._id}`)}>Edit sermon</Button>
                 <Button style={{color:'black'}} variant='danger' onClick={()=>{
                   setShowModal(true)
@@ -116,10 +121,7 @@ toast.error(getError(err))
           </div>
         </div>
       )}
-      {
-        userInfo?.isAdmin &&
-      <Link className='create-btn' to="/createsermons">Create New sermon</Link>
-      }
+     
     </div>
   );
 }

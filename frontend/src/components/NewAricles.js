@@ -141,7 +141,7 @@ toast.error(getError(err))
         <title>Create-Article</title>
       </Helmet>
       { loading ? <LoadingBox/> : error ? <MessageBox variant='danger'>{error}</MessageBox> :<>
-      <h1>New Articles</h1>
+      <h1>New Article</h1>
       <form onSubmit={handleSubmit}>
       <div className='img-info'>
         <label htmlFor="uploadBanner">
@@ -164,7 +164,7 @@ toast.error(getError(err))
           onClick={handleFileInput}
           disabled={imageUploadProgress}
         >
-          {imageUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
+          {imageUploadProgress ? <div>Image Uploading</div> : 'Upload Cover Image'}
         </Button>
       </div>
     <div className='author-info'>
@@ -232,7 +232,7 @@ toast.error(getError(err))
           onClick={handleProfilePictureInput}
           disabled={profilePictureUploadProgress}
         >
-          {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
+          {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Author Image'}
         </Button>
 
         </div>

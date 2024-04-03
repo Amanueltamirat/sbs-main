@@ -42,10 +42,15 @@ import Contact from './screen/about/Contact';
 import Nopage from './components/Nopage';
 import Analysis from './components/Analysis';
 import AdminRoute from './components/AdminRoute';
-
+// import logoImg from './imges/result (3).png'
+// import logoImg from './imges/SBC Final Logo Design.jpg'
+import logoImg from './imges/SBC Logo-upper.jpg'
+import axios from 'axios';
+import { BASE_URL } from './utils';
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
+  console.log(userInfo)
 const  [open, setOpen] = useState(false)
 
  const variants = {
@@ -78,14 +83,18 @@ const  [open, setOpen] = useState(false)
       <div className="d-flex flex-column site-container">
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar variant="dark" expand="lg" className="navbar">
-            <Container>
+          <navbar className="navbar">
+            <div className='container'>
               <LinkContainer to="/">
-                <Navbar.Brand className="text-primary">SBC</Navbar.Brand>
+                <Navbar.Brand className="text-primary">
+                  <img alt='logo' src={logoImg}/>
+                </Navbar.Brand>
               </LinkContainer>
+
                <SearchInput/>
+               <div>
               <div className='hidde-content'>
-              <div className="d-flex justify-content-between navlink ">
+              <div className="navlink">
                 <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
                   About
                 </NavLink>} id="basic-nav-dropdown">
@@ -119,10 +128,10 @@ const  [open, setOpen] = useState(false)
                 </NavLink>
                 {userInfo ? (
                   <NavDropdown className='nav-drop' title={userInfo.name} id="basic-nav-dropdown">
-                    {userInfo.isAdmin && <LinkContainer to="/userslist">
+                    {userInfo.email === 'Perfecttesfa456@gmail.com' && <LinkContainer to="/userslist">
                       <NavDropdown.Item>Users</NavDropdown.Item>
                     </LinkContainer>}{
-                        userInfo.isAdmin &&
+                        userInfo.email === 'Perfecttesfa456@gmail.com' &&
                         <>
                     <LinkContainer to="/analysis">
                       <NavDropdown.Item>Analysis</NavDropdown.Item>
@@ -145,11 +154,11 @@ const  [open, setOpen] = useState(false)
                 )}
               </div>
               </div>
-            <motion.div animate={open ? 'open':'closed'} className='motion-box'>
+            <motion.div animate={open ? 'open':'closed'} className='motion-box hidde'>
              <Togglebutton open={open} setOpen={setOpen}/>
               { open &&
-              <div className="hidde">
-                <NavDropdown title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
+              <div className="hidde" >
+                <NavDropdown onClick={()=>setOpen(prev=>!prev)} title={<NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="about">
                   About
                 </NavLink>} id="basic-nav-dropdown">
                     <LinkContainer to="/about/mission">
@@ -168,25 +177,25 @@ const  [open, setOpen] = useState(false)
                   </NavDropdown>
 
 
-                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="articles">
+                <NavLink onClick={()=>setOpen(prev=>!prev)} className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="articles">
                   Articles
                 </NavLink>
-                <NavLink to="books" className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'}>
+                <NavLink onClick={()=>setOpen(prev=>!prev)} to="books" className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'}>
                   Books
                 </NavLink>
-                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
+                <NavLink onClick={()=>setOpen(prev=>!prev)} className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="sermons">
                   Sermons
                 </NavLink>
-                <NavLink className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="support">
+                <NavLink onClick={()=>setOpen(prev=>!prev)} className={({isActive})=>isActive ? 'isActiveLink':'isNotActiveLink link'} to="support">
                   Support Us
                 </NavLink>
                 {userInfo ? (
                   <NavDropdown className='nav-drop'  title={userInfo.name} id="basic-nav-dropdown">
-                    {userInfo.isAdmin && <LinkContainer to="/userslist">
+                    {userInfo.email === 'Perfecttesfa456@gmail.com' && <LinkContainer onClick={()=>setOpen(prev=>!prev)} to="/userslist">
                       <NavDropdown.Item>Dashboared</NavDropdown.Item>
                     </LinkContainer>}
-                    { userInfo.isAdmin &&<>
-                    <LinkContainer to="/analysis">
+                    { userInfo.email === 'Perfecttesfa456@gmail.com' &&<>
+                    <LinkContainer onClick={()=>setOpen(prev=>!prev)} to="/analysis">
                       <NavDropdown.Item>Analysis</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
@@ -195,21 +204,22 @@ const  [open, setOpen] = useState(false)
                     <Link
                       className="dropdown-item"
                       to="/"
-                      onClick={signoutHandler}
+                      onClick={(prev)=>{signoutHandler(), setOpen(prev=>!prev)}}
                     >
                       Sign Out
                     </Link>
                   </NavDropdown>
                 ) : (
-                  <Link className="nav-link" to="/signin">
+                  <Link onClick={()=>setOpen(prev=>!prev)} className="nav-link" to="/signin">
                     Sign In
                   </Link>
                 )}
               </div>
             }
             </motion.div>
-            </Container>
-          </Navbar>
+            </div>
+            </div>
+          </navbar>
         </header>
 
         <Routes>
@@ -250,7 +260,6 @@ const  [open, setOpen] = useState(false)
         </Routes>
       </div>
       <Footer/>
-      
     </BrowserRouter>
     </div>
   );

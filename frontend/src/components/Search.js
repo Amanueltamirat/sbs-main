@@ -201,7 +201,7 @@ fetchArticles()
               <option value='sermons'>Sermons</option>
             </select>
           </div>
-            <Button type='submit'>
+            <Button type='submit' className='apply-btn'>
             Apply Filters
         </Button>
         </form>
@@ -221,7 +221,7 @@ fetchArticles()
           {showMore && (
             <button
               onClick={handleShowMoreArticles}
-              className='text-teal-500 text-lg hover:underline p-7 w-full'
+              className='bottom-btn text-teal-500 text-lg hover:underline p-7 w-full'
             >
               Show More
             </button>

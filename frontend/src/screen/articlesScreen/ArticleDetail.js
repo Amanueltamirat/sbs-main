@@ -9,6 +9,7 @@ import htmlReactParcer from 'html-react-parser'
 import { Store } from '../../Store';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
+import './ArticleScreen.css'
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -141,7 +142,7 @@ navigate('/articles');
           </div>
           <p>{article?.createdAt?.substring(0, 10) }</p>
 
-            {userInfo?.isAdmin && <div className='btns'>
+            {userInfo.email === 'Perfecttesfa456@gmail.com' && <div className='btns'>
                 <Button style={{color:'black'}} onClick={()=>navigate(`/updatearticle/${article._id}`)}>Edit Article</Button>
                 <Button style={{color:'black'}} variant='danger' onClick={()=>{
                   setShowModal(true)
@@ -160,16 +161,11 @@ navigate('/articles');
               </div>
               }
               {
-                userInfo?.isAdmin &&
+                userInfo.email === 'Perfecttesfa456@gmail.com' &&
               <Button style={{color:'black'}} onClick={sendMail}  disabled={sendingEmail} className='email-btn' >{sendingEmail ? 'Seinding':'Send Article To Users'}</Button>
               }
         </div>
       )}
-      {
-        userInfo?.isAdmin &&
-
-      <Link className='new-btn' to="/newarticles">Create New Article</Link>
-      }
     </div>
   );
 }

@@ -29,8 +29,6 @@ var [isImageLoading, setIsImageLoading] = useState(false)
 var [profilePicture, setProfilePicture] = useState('')
 var [profilePictureUploadingProgress, setProfilePictureUploadingProgress] = useState('')
 var [isProfilePictureLoading, setIsProfilePictureLoading] = useState(false)
-
-
 var [isAudioLoading, setIsAudioLoading] = useState(false)
 var [formData, setFormData] = useState({})
 const navigate = useNavigate()
@@ -110,10 +108,10 @@ const handleProfilePictureInput = async (e) => {
 ///////////// cover image////////////////////////
 const handleImageUrlInput = (e)=>{
    try {
-          // if (!imageUrl) {
-          //   console.log('Please select an image');
-          //   return;
-          // }
+          if (!imageUrl) {
+            console.log('Please select an image');
+            return;
+          }
           // setImageUploadError(null);
           const storage = getStorage(app);
           const fileName = `image/${Date.now()}-${imageUrl.name}`
@@ -149,6 +147,7 @@ const handleImageUrlInput = (e)=>{
         <title>Update-Sermon</title>
       </Helmet>
       { loading ? <LoadingBox/> : error ? <MessageBox variant='danger'>{error}</MessageBox> : <>
+      <h1>Update Sermon</h1>
   <div className='input-data'>
     <input value={formData?.title} type='text' placeholder='Type sermon title...' onChange={(e) => setFormData({...formData, title:e.target.value})} name='title' id='title'/>
     <input value={formData?.preacherName} id='preacherName' name='preacherName' type='text' placeholder='Type preacher name...'  onChange={(e) => setFormData({...formData, preacherName:e.target.value})}/>

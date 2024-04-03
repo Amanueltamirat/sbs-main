@@ -46,7 +46,7 @@ function SignupScreen() {
   }, [userInfo, redirect, navigate]);
 
   return (
-    <Container className="small-container sign-up">
+    <div className="small-container sign-up">
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
@@ -95,7 +95,7 @@ function SignupScreen() {
           Forget password? <Link to={`/forget-password`}>Reset password</Link>
         </div> */}
       </Form>
-    </Container>
+    </div>
   );
 }
 

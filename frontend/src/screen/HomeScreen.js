@@ -4,17 +4,14 @@ import ImageSlider from "../components/ImageSlider";
 import ArticleScreen from "./articlesScreen/ArticleScreen";
 import { Helmet } from "react-helmet-async";
 import Homepage from "../components/homepage/Homepage";
+import axios from "axios";
+import { BASE_URL } from "../utils";
 
 function HomeScreen() {
 
 return (
     <>
       <div className="homescreen">
-      <div id="top-div">
-        <Helmet>
-          <title>BBC</title>
-        </Helmet>
-      </div>
         <div className="upper-homesreen">
             <ImageSlider/>
         </div>

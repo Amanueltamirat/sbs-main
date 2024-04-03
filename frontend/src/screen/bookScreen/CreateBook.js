@@ -92,7 +92,7 @@ const submitBookDatas = async(e)=>{
        <Helmet>
         <title>Creat-Book</title>
       </Helmet>
-      <h2>CreateBook</h2>
+      <h1>Create Book</h1>
       {loading ? <LoadingBox/> : error ? <MessageBox variant='danger'>{error}</MessageBox>: <>
       <input type='text' name='author' id='author' required placeholder='Enter Author Name...' onChange={(e)=>setAuthor(e.target.value)}/>
       <input type='text' name='title' id='title' required placeholder='Enter Book Title...' onChange={(e)=>setTitle(e.target.value)} />

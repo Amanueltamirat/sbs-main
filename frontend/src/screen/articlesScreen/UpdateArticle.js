@@ -19,13 +19,14 @@ import { BASE_URL, getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 const UpdateArticle = ()=> {
      const navigate = useNavigate();
+     const [data, setData] = useState([])
       const [profilePicture, setProfilePicture] = useState(null)
      const [profilePictureUploadProgress, setProfilePictureProgress] = useState(null);
      const [profilePictureUploadError, setPropfilePictureUploadError] = useState(null);
       const [image, setImage] = useState(null);
       const [imageUploadProgress, setImageUploadProgress] = useState(null);
       const [imageUploadError, setImageUploadError] = useState(null);
-      const [formData, setFormData] = useState({});
+      const [formData, setFormData] = useState([]);
       const [loading, setLoding] = useState(false);
       const [error, setError] = useState(null)
      const [publishError, setPublishError] = useState(null)
@@ -36,6 +37,7 @@ const UpdateArticle = ()=> {
         const res = await fetch(`${BASE_URL}/api/articles/getArticle/${id}`)
         const data = await res.json()
         setFormData(data)
+        setData(data)
     }
     fetchData()
    },[])
@@ -53,14 +55,18 @@ const UpdateArticle = ()=> {
     body:JSON.stringify(formData)
       }
     );
-    const data = await res.json()
-    setFormData(data)
+    const dataupdated = await res.json()
+    setData(dataupdated)
     setLoding(false)
     toast.success('Article Updated Successfully')
-    navigate(`/articles/${formData._id}`);
+    if(dataupdated._id){
+    navigate(`/articles/${dataupdated._id}`);
+    }
+      navigate(`/articles`);
     } catch(err){
      toast.error(getError(err))
      setError(err)
+     console.log(err)
     }
   };
 
@@ -93,6 +99,7 @@ const handleProfilePictureInput = async(e)=>{
             setProfilePictureProgress(null);
             setPropfilePictureUploadError(null);
             setFormData({ ...formData, profilePicture: downloadURL });
+            // setData({...data, profilePicture:downloadURL })
           });
         }
       );
@@ -133,6 +140,7 @@ const handleProfilePictureInput = async(e)=>{
                 setImageUploadProgress(null);
                 setImageUploadError(null);
                 setFormData({ ...formData, image: downloadURL });
+                // setData({...data, image:downloadURL })
               });
             }
           );
@@ -142,7 +150,8 @@ const handleProfilePictureInput = async(e)=>{
           console.log(err);
         }
       };
-  
+ console.log(formData)
+ console.log(data)
       return (
         <div className='new-article' >
             <Helmet>
@@ -152,7 +161,7 @@ const handleProfilePictureInput = async(e)=>{
             </Helmet>
           <h1>Update Article</h1>
           { loading ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox>:
-          <form onSubmit={handleUpdate}>
+          <form onSubmit={(e)=>handleUpdate(e)}>
           <div className='img-info'>
             <label htmlFor="uploadBanner">
               <input
@@ -160,7 +169,6 @@ const handleProfilePictureInput = async(e)=>{
                 name='image'
                 type="file"
                 accept="image/*"
-                
                 onChange={(e) => setImage(e.target.files[0])}
               />
             </label>
@@ -168,11 +176,11 @@ const handleProfilePictureInput = async(e)=>{
             {imageUploadError && (
               <MessageBox variant="danger">{imageUploadError}</MessageBox>
             )}
-            {formData.image && <img src={formData.image} alt="upload" />}
+            {formData?.image && <img src={formData.image} alt="upload" />}
              <Button
              style={{color:'black', padding:'10px'}}
               type="button"
-              onClick={handleFileInput}
+              onClick={(e)=>handleFileInput(e)}
               disabled={imageUploadProgress}
             >
               {imageUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}
@@ -187,25 +195,24 @@ const handleProfilePictureInput = async(e)=>{
               type="text"
               id="title"
               name="title"
-              value={formData.title}
+              value={formData?.title}
               onChange={(e) => setFormData({...formData, title:e.target.value})}
             />
           </div>
             <div>
             <label>Author</label>
             <input
-            value={formData?.authorName? formData.authorName:''}
+            value={formData?.authorName}
               type="text"
               id="authorName"
-              name="authorName"
-              
+              name="authorName" 
               placeholder="author name..."
               onChange={(e) => setFormData({...formData, authorName:e.target.value})}
             />
             </div>
            <div>
             <input
-            value={formData?.authorTitle? formData.authorTitle:''}
+            value={formData?.authorTitle}
               type="text"
               id="authorTitle"
               name="authorTitle"
@@ -216,15 +223,15 @@ const handleProfilePictureInput = async(e)=>{
           </div>
             <ReactQuill theme="snow" 
              className='react-quill'
-            value={formData.content}
+            value={formData?.content}
             onChange={(value)=>{
-              setFormData({...formData, content:value})
+             setFormData({...formData, content:value})
             }}
             placeholder="Update article content" />
 
  <ReactQuill theme="snow" 
   className='react-quill'
- value={formData.overView}
+ value={formData?.overView}
         onChange={(value)=>{
           setFormData({...formData, overView:value})
         }}
@@ -242,11 +249,11 @@ const handleProfilePictureInput = async(e)=>{
         {profilePictureUploadError && (
           <MessageBox variant="danger">{profilePictureUploadError}</MessageBox>
         )}
-        {formData.profilePicture && <img src={formData.profilePicture} alt="upload" />}
+        {formData?.profilePicture && <img src={formData?.profilePicture} alt="upload" />}
      <Button
      style={{color:'black', padding:'10px'}}
           type="button"
-          onClick={handleProfilePictureInput}
+          onClick={(e)=>handleProfilePictureInput(e)}
           disabled={profilePictureUploadProgress}
         >
           {profilePictureUploadProgress ? <div>Image Uploading</div> : 'Upload Image'}

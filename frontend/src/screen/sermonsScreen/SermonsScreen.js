@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useReducer } from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingBox from '../../components/LoadingBox'
@@ -8,6 +8,7 @@ import htmlReactParcer from 'html-react-parser'
 import './SermonScreen.css'
 import { BASE_URL, getError } from '../../utils'
 import { toast } from 'react-toastify'
+import { Store } from '../../Store'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,6 +32,8 @@ function SermonsScreen() {
    sermons: [],
   });
 
+ const {state} = useContext(Store)
+  const {userInfo} = state
 const navigate = useNavigate()
 
   useEffect(() => {
@@ -90,6 +93,10 @@ const navigate = useNavigate()
 
         </div>
       )}
+       {
+        userInfo.email === 'Perfecttesfa456@gmail.com'&&
+      <Link className='create-btn' to="/createsermons">Create New sermon</Link>
+      }
     </div>
     </div>
   )

@@ -1,70 +1,9 @@
-.articles {
-  display: flex; 
-  flex-direction: column;
-  align-items: center;
-   margin-top: 2rem;
-   margin-bottom: 5rem;
-}
-.articles-detail {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-
-}
-.articles-detail .aricle {
-  background-color: rgb(67, 59, 59);
-  display: flex;
-  flex-direction: column;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  transition: 0.3s all;
-  max-height: 690px;
-}
-.article-img {
-  padding: 10px;
-  cursor: pointer;
-  
-}
-.articles .articles-detail .aricle:hover {
-  transform: translateY(3px);
-}
-.author-info{
-    display: flex;
-    align-items: center;
-    gap: 5px; 
-}
-.upper-part{
-  flex: 1;
-
-}
-.profile-picture{
-max-width: 40px;
-height: 40px;
-border-radius: 50%;
-}
-.article-title{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.created-date{
-  font-style: italic;
-}
-.article-title h3{
-  padding: 10px;
-}
-.article-title p, .author-info {
-  padding: 0 10px;
-}
 .email-btn{
   position: absolute;
   left: 1rem;
   top: -1rem;
 }
-.home-article{
-  margin-top: -1rem;
-}
-@media (max-width:360px){
+@media (max-width:378px){
   .email-btn{
   left: 5px;
   font-size: 14px;
@@ -78,5 +17,28 @@ border-radius: 50%;
 }
 .article .article-content{
   min-width: 90%;
+}
+.articles {
+  margin-bottom: 20rem;
+}
+}
+@media (max-width:450px){
+  .email-btn{
+  left: 5px;
+  font-size: 14px;
+}
+.article h2{
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+   font-size: 18px;
+}
+.article img{
+ width: 90%;
+}
+.article .article-content{
+  min-width: 90%;
+}
+.articles {
+  margin-bottom: 20rem;
 }
 }

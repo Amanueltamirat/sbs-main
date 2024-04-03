@@ -1,23 +1,22 @@
-.sermons{
-    display: flex;
-      margin: 2rem;
+.home-article{
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
 }
 .sermons .aricle {
-  background-color: rgb(235, 234, 234);
-  display: flex;
-  flex-direction: column;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  transition: 0.3s all;
-  max-height: 690px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.7);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    justify-content: center;
+     transition: 0.3s all;
 }
 
 .sermons .aricle .article-img {
-  padding: 10px;
   cursor: pointer;
   height: 200px;
   
@@ -29,9 +28,6 @@
     display: flex;
     align-items: center;
     gap: 5px;  
-}
-.upper-part{
-  flex: 1;
 }
 .profile-picture{
 max-width: 40px;

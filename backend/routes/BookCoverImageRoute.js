@@ -11,18 +11,19 @@ import {GridFsStorage} from 'multer-gridfs-storage';
 const BookCoverImageRoute  = express.Router()
 //////////////////////////////////////////////////////
 
-const mongoURI = 'mongodb://localhost:27017';
+// const mongoURI = 'mongodb://localhost:27017';
+const mongoURI = 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app'
 const conn = mongoose.createConnection(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+// mongoose.connection
 let gfs, gridFs;
-conn.once('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+conn.once('open', async() => {
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
     bucketName: 'coverImage',
   });
-  gridFs= new Grid(mongoose.connection.db, mongoose.mongo);
+  gridFs= await new Grid(conn.db, mongoose.mongo);
   gridFs.collection('coverImage');
   return gfs,gridFs;
 });
@@ -30,7 +31,8 @@ conn.once('open', () => {
 
 
 var storage = new GridFsStorage({
-  url: 'mongodb://0.0.0.0:27017/sbc',
+  // url:'mongodb://localhost:27017/sbc',
+  url: 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app',
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {

@@ -35,6 +35,7 @@ const [loading, setLoading] = useState(false)
 const [error, setError] = useState(null)
 
 const [coverImga,setCoverImage] = useState()
+const [coverImageError, setCoverImageError] = useState(null)
 const [ppIMage, setPpImage]  = useState()
 
 
@@ -105,18 +106,13 @@ const saveProfilePicture = async()=>{
         <title>Create-Sermons</title>
       </Helmet>
       { loading ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox> : <>
+      <h1>Create Sermon</h1>
   <div className='sermon-inputs'>
     <input type='text' placeholder='Insert sermon title...' value={sermonTitle} onChange={(e)=>setSermonTitle(e.target.value)} name='title' id='title'/>
     <input id='preacherName' name='preacherName' type='text' placeholder='Insert preacher name...' value={preacherName} onChange={(e)=>setPreacherName(e.target.value)}/>
       <input name='preacherTitle' id='preacherTitle' type='text' placeholder='Insert preacher title...' value={preacherTitle} onChange={(e)=>setPreacherTitle(e.target.value)}/>
        <input name='videoUrl' id='videoUrl' type='text' placeholder='Insert video Url...' value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)}/>
          <input name='audioUrl' id='audioUrl' type='text' placeholder='Insert audio Url...' value={audioUrl} onChange={(e)=>setAudioUrl(e.target.value)}/>
-      {/* <ReactQuill theme="snow" 
-        className='react-quill'
-        onChange={(value)=>{
-          setContent(content = value)
-        }}
-        placeholder="write article content" /> */}
   </div>
   <div className='file-uploader'>
 
@@ -125,11 +121,18 @@ const saveProfilePicture = async()=>{
             {isImageLoading && <div>
               <p>{Math.round(progress) > 0 && <>{`${Math.round(progress)}%`}</>}</p>
             </div>}
-            {!isImageLoading && (
+            {
+             !isImageLoading &&  (
               <>
-                  {!imageUrl ? (<FileUploader coverImga={coverImga} setCoverImage={setCoverImage} isImageLoading={isImageLoading} updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>):<div>
+                  {!imageUrl ?  (<FileUploader coverImga={coverImga} setCoverImage={setCoverImage} setCoverImageError={setCoverImageError}  isImageLoading={isImageLoading} updateState = {setImageUrl} setProgress = {setProgess} isLoading={setIsImageLoading} isImage={true}/>) : <div>
+                    <>{
+                    coverImageError ? <MessageBox variant='danger'>{coverImageError}</MessageBox>: 
+                    <>
                   <img src={imageUrl} alt='image'/>
                   <button type='button' onClick={()=>deleteFileObject(imageUrl, true)} >Delete image</button>
+                    </>
+                    }
+                    </>
                   </div>}
               </>
             )}
@@ -201,9 +204,16 @@ export const DisabledButton = ()=>{
   )
 }
 
-export const FileUploader = ({setCoverImage,coverImga,isImageLoading,updateState,setProgress, isLoading, isImage })=>{
+export const FileUploader = ({setCoverImageError,setCoverImage,coverImga,isImageLoading,updateState,setProgress, isLoading, isImage })=>{
  
+
  const uploadFile = async(e)=>{
+  try{
+     if (!coverImga) {
+        setCoverImageError('Please select an image');
+        return;
+      }
+       setCoverImageError(null);
   isLoading(true)
   // `image/${Date.now()}-${coverImga.name}`
   const storage = getStorage(app);
@@ -227,8 +237,10 @@ setProgress((snapshot.bytesTransferred / snapshot.totalBytes)* 100)
   })
 }
 )
+ } catch(err){
+  setCoverImageError(err)
  }
- 
+ }
  
   return (
     <>
