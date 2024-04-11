@@ -50,12 +50,10 @@ function ArticleScreen() {
     fetchData();
   }, []);
 
- const countWords = (inputText) => {
-    // const wordsArray = inputText.trim().split(/\s+/);
-     const wordsArray = inputText.trim().toLowerCase().replace(/[>]/g,' ').split(' ').join(' ')
-    return wordsArray.length > 50 ?wordsArray.slice(2,50)+ '</p>':wordsArray;
-  };
 
+ function truncate(str, n) {
+    return str?.length > n ? str.substr(0, n) + "..." : str;
+  }
 
   return (
     <div className="articles">
@@ -81,8 +79,8 @@ function ArticleScreen() {
                 <h3>{article.title}</h3>
                 <p className='created-date'>{article.createdAt.substring(0, 10) }</p>
                 
-                <p className='article_overview' >{htmlReactParcer(String(article?.overView? countWords(article.overView):countWords(article.content)))}. . . <button onClick={()=>navigate(`/articles/${article._id}`)}>Read more</button></p>
-                {/* <p>{htmlReactParcer(String(article?.overView?article.overView:article.content))}</p> */}
+                <p className='article_overview' >{htmlReactParcer(String(truncate(article?.content,200)))}. . . <button onClick={()=>navigate(`/articles/${article._id}`)}>Read more</button></p>
+                
                </div>
            </div>
                 <div className='author-info'>

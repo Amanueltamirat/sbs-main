@@ -15,7 +15,6 @@ const [totalSermons, setTotalSermons] = useState()
 const [ArticlesLoading, setArticlesLoading] = useState(false)
 const [sermonsLoading, setSermonsLoading] = useState(false)
 const [error, setError] = useState(null)
-const [randomNumber, setRandomNumber] = useState()
 
 const navigate = useNavigate()
 
@@ -58,7 +57,9 @@ const randomNumber = Math.floor(Math.random()*2 + 1)
    ranNum.push(randomNumber)
 }
 
-// console.log(lastMonthArticles);
+ function truncate(str, n) {
+    return str?.length > n ? str.substr(0, n) + "..." : str;
+  }
 
   return (
  <div className="articles home-article">
@@ -92,7 +93,7 @@ const randomNumber = Math.floor(Math.random()*2 + 1)
               <div className='article-title'>
                 <h3>{article.title}</h3>
                 <p className='created-date'>{article.createdAt.substring(0, 10) }</p>
-                <p>{htmlReactParcer(article?.overView?article.overView:article.content)}</p>
+                <p className='readMore' >{htmlReactParcer(String(truncate(article?.content,200)))}. . . <button onClick={()=>navigate(`/articles/${article._id}`)}>Read more</button></p>
                </div>
            </div>
                 <div className='author-info'>
