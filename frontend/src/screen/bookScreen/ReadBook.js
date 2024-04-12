@@ -11,6 +11,8 @@ const [loading, setLoading] = useState(false)
 const [error, setError] = useState(null)
 const {filename} = useParams()
 
+
+
 useEffect(()=>{
   try{
 const bookData = async()=>{
@@ -22,8 +24,8 @@ const bookData = async()=>{
       responseType: 'blob' 
     },
    )
+console.log(data)
 const url = window.URL.createObjectURL(new Blob([data], {type: "application/pdf"}))
-// console.log(url)
   setBook(url)
 setLoading(false)
 }

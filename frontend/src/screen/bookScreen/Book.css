@@ -42,7 +42,7 @@
     margin-top: 5rem;
 }
 .bookdetail{
-    z-index: 1000;
+    z-index: 10000;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -234,4 +234,9 @@ transition:  all .2s;
 margin-left: 2rem;
 margin-right: 1rem;
 }
+.book-screen{
+    margin-top: 8rem;
+}
+
+
 }

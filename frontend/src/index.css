@@ -680,7 +680,7 @@ margin: 1rem;
     height: 60px;
   }
   .randomarticle{
-  margin-top: 5vh;
+  margin-top: 6rem;
 }
 }
 
@@ -696,13 +696,16 @@ margin: 1rem;
   flex-direction: column;
 }
 .navbar{
-   position: relative;
+   /* position: relative; */
   min-height: 80px;
 }  
 .search-input{
   /* margin-left: -3rem; */
   width: 40%;
-}   
+}  
+.randomarticle{
+  margin-top: 6rem;
+} 
 } 
 
 @media (min-width:821px) and (max-width:1024px){
@@ -729,4 +732,35 @@ margin: 1rem;
     .randomarticle{
   margin-top: 20vh;
 }
+.randomarticle{
+  margin-top: 6rem;
+}
+}
+@media (max-width:601px) {
+  .randomarticle .absoluteposition{
+    padding: 10px;
+    top: 15%;
+    left: 5%;
+    right: 20%;
+  }
+    .randomarticle .absoluteposition h1{
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+      .randomarticle .absoluteposition div p{
+        font-size: 14px;
+      }
+      .absoluteposition p{
+        margin-bottom: 5px;
+      }
+      .absoluteposition .author{
+        font-size: 16px;
+      }
+      .absoluteposition div .link{
+        right: -5px;
+        top: 75%;
+
+        font-size: 14px;
+
+      }
 }

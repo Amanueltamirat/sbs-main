@@ -50,7 +50,7 @@ import { BASE_URL } from './utils';
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  console.log(userInfo)
+
 const  [open, setOpen] = useState(false)
 
  const variants = {

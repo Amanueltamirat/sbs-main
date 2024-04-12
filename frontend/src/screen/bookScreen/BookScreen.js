@@ -217,7 +217,6 @@ ImageAddress(coverImage)
                   return ( book.files.length > 0  && <div className="book-info" key={i} onClick={()=>coverimage(book.coverImage)} >
 
             <img  className="cover-image" alt="hello" onClick={()=>navigate(`/books/${book.files}`)} src={`http://localhost:4000/api/bookCover/image/${book.coverImage}`}/>
-              {/* book.orignalName.length >0 &&  */}
               <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
               {
                 userInfo.email === 'Perfecttesfa456@gmail.com'
