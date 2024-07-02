@@ -5,6 +5,49 @@ import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
 import htmlReactParcer from 'html-react-parser'
 import { Link,useNavigate } from 'react-router-dom';
+import {motion} from 'framer-motion';
+const variants = {
+    initial:{
+        x:-500,
+        y:100,
+        opacity:0
+    },
+     animate:{
+        x:0,
+        y:0,
+        opacity:1,
+        transition:{
+            duration:1,
+            staggerChildren:0.1
+        }
+    }
+}
+
+const textVariants = {
+    initial:{
+        x:-500,
+        opacity:0
+    },
+     animate:{
+        x:0,
+        opacity:1,
+        transition:{
+        duration:1.5,
+        staggerChildren:0.1
+        },
+
+    },
+    scrollButton:{
+     opacity:0,
+     y:10,
+    transition:{
+       duration:2,
+       repeat:Infinity
+     }
+}
+
+}
+
 
 function Randomarticle() {
 const [article, setArticle] = useState()
@@ -38,7 +81,7 @@ const readMore = ()=>{
 }
 
   return (
-    <div className='randomarticle'>
+    <motion.div  variants={textVariants} initial='initial' animate='animate' className='randomarticle'>
     { loading ? <LoadingBox/> : error? <MessageBox variant='danger'>{error}</MessageBox>:
          <>
         <img alt='cover-image' src={article?.image} />
@@ -53,7 +96,7 @@ const readMore = ()=>{
         </>
     }
     <div className='shadow'></div>
-    </div>
+    </motion.div>
   )
 }
 

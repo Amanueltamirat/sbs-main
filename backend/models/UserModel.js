@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      // required: true,
     },
     email: {
       type: String,
@@ -13,13 +13,13 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
     resetToken: { type: String },
     isAdmin: {
       type: Boolean,
       default: false,
-      required: true,
+      // required: true,
     },
   },
   {

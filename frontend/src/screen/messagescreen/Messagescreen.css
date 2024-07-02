@@ -1,0 +1,5 @@
+.message{
+    height: 100vh;
+    background: linear-gradient( rgb(242, 241, 241),rgb(255, 255, 255) );
+    margin-top: 3px;
+}

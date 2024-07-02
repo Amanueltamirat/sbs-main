@@ -1,8 +1,9 @@
-footer{
+/* footer{
     z-index: 1;
-}
-.footer-box{
-    background-color: rgb(212, 206, 206);
+} */
+.footer-box, .subscribe-box{
+    background-color: rgb(19, 19, 19);
+    color: white;
     position:relative;
      display: flex;
     justify-content: center;
@@ -10,21 +11,45 @@ footer{
     gap: 30%;
     padding: 1rem;
     height: 40vh;
-    z-index: -1;
+    /* z-index: -1; */
 }
+.subscribe-box{
+    background-color: rgb(183, 181, 181);
+    color: black;
+}
+.subscribe-box form input{
+padding: 12px;
+border: none;
+outline: none;
+border-top-left-radius:5px;
+border-bottom-left-radius:5px;
+}
+.subscribe-box form button{
+padding: 10px;
+border: none;
+font-size: 18px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;
+background-color: rgb(36, 33, 33);
+color: white;
+}
+
 .footer{
-   
     font-weight: 400;
     font-style: italic;
     transition: all 0.5ms;
 }
 .icon{
     padding:0 0.5rem ;
-    color: black;
+    color: lightgray;
+    cursor: pointer;
 }
 .icon:hover{
-    color: rgb(141, 138, 138);
+    color: gray
 }
+/* .social-media-links div a{
+    cursor: pointer;
+} */
 .social-media-links{
     display: flex;
     flex-direction: column;

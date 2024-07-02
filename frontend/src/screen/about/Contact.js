@@ -5,7 +5,8 @@ import './About.css'
 import Map from './Map'
 import Contactform from './Contactform'
 
-function Contact() {
+function Contact({setIsHome}) {
+  setIsHome(false)
   return (
      <div>
       <Helmet>

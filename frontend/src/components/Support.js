@@ -3,7 +3,8 @@ import img from './imge/result (1).png'
 import img2 from './imge/CBE (2).png'
 
 // '../../public/images/result (1).png'
-function Support() {
+function Support({setIsHome}) {
+  setIsHome(false)
   return (
     <div className='support' >
         <div className='suport-text'>

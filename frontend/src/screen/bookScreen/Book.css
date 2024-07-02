@@ -1,13 +1,18 @@
 .book-screen,.create-book, .book-detail{
-    margin-top: 7rem;
+    /* margin-top: 10%; */
+    padding-top: 10%;
     flex-wrap: nowrap;
     position: relative;
     margin-bottom:2rem;
 }
-.create-book{
+.book-screen{
+    background: linear-gradient( rgb(242, 241, 241),rgb(255, 255, 255) )
+
+}
+.create-book{   
     display: flex;
     flex-direction: column;
-    margin: 6rem auto;
+    margin: 1px auto;
     gap: 10px;
     margin-bottom: 10rem;
    
@@ -28,7 +33,7 @@
 .new-book{
     position: absolute;
     right: 2rem;
-    top: -2.5rem;
+    top: 7rem;
     text-decoration: none;
     color: rgb(32, 32, 180);
     font-size: 20px;
@@ -56,25 +61,30 @@ height: 100vh;
     gap: 20px;
     display: flex;
     flex-wrap: wrap;  
+    padding-left: 1rem;
+
 }
 .container{
     flex-wrap: nowrap;   
 }
 .cover-image{
     width: 250px;
-    height: 200px;
+    height: 230px;
      gap: 20px;
     cursor: pointer;
 transition:  all .2s;
 }
 
 .book-info{
+    box-shadow:  0 0 5px rgba(0,0,0,0.5);
     transition:  transform 10s;
+    padding-bottom: 10px;
+    overflow: hidden;
 }
 .book-info img {
     
     padding-bottom: 2px;
-    border-bottom: 4px solid black;
+    border-bottom: 2px solid black;
 }
 .book-info img:hover{
     transform: scaleY(1.1);
@@ -83,6 +93,10 @@ transition:  all .2s;
    max-width:250px; 
    font-size: 18px;
    margin-top: 10px;
+   padding: 5px;
+}
+.d-btn{
+    margin-left: 5px;
 }
 .book, .about-book{
     display: flex;
@@ -114,7 +128,7 @@ transition:  all .2s;
     align-items: center;
     gap: 10px;
      min-height: 300px;
-     width: 60%;
+     width: 100%;
 }
 .about-book .read button{
     background-color: rgb(206, 206, 222);
@@ -123,7 +137,9 @@ transition:  all .2s;
     font-size: 20px;
     color: black;
 }
-
+.about-book .read button:hover{
+        background-color: rgb(186, 186, 194);
+}
 @media (max-width:378px){
     .about-book .read{
      width: 100%;
@@ -234,9 +250,4 @@ transition:  all .2s;
 margin-left: 2rem;
 margin-right: 1rem;
 }
-.book-screen{
-    margin-top: 8rem;
-}
-
-
 }

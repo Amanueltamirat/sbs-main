@@ -17,7 +17,8 @@ import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 import { BASE_URL, getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
-const UpdateArticle = ()=> {
+const UpdateArticle = ({setIsHome})=> {
+  setIsHome(false)
      const navigate = useNavigate();
      const [data, setData] = useState([])
       const [profilePicture, setProfilePicture] = useState(null)

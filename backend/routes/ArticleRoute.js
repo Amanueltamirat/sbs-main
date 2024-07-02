@@ -40,7 +40,7 @@ ArticleRoute.get('/getallarticles', async(req, res)=>{
       .limit(limit);
 
     const totalArticles = await Article.countDocuments();
-
+    const articleList = await Article.find({});
     const now = new Date();
 
     const oneMonthAgo = new Date(
@@ -59,7 +59,8 @@ const lastMonthArticlesList = await Article.find({
       articles,
       totalArticles,
       lastMonthArticles,
-      lastMonthArticlesList
+      lastMonthArticlesList,
+      articleList,
     });
   } catch (error) {
     console.log(error)

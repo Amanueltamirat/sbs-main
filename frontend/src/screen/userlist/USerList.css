@@ -1,6 +1,5 @@
 .user-list{
-    /* margin: 5rem; */
-    margin-top: 4rem;
+    padding-top: 10%;
     margin-bottom: 2rem;
     display: flex;
     align-items: center;

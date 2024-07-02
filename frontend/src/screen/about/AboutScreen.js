@@ -2,7 +2,8 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import './About.css'
 import { NavLink } from "react-router-dom";
-function AboutScreen() {
+function AboutScreen({setIsHome}) {
+  setIsHome(false)
   return (
     <div>
       <Helmet>

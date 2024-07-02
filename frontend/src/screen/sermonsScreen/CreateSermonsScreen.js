@@ -21,7 +21,8 @@ import { toast } from 'react-toastify';
 import { BASE_URL, getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 
-function CreateSermonsScreen() {
+function CreateSermonsScreen({setIsHome}) {
+  setIsHome(false)
 
 const [filterName, setFilterName] = useState('')
 const [sermonTitle, setSermonTitle] = useState('')

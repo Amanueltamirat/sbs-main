@@ -20,7 +20,7 @@ SermonRoute.get('/allsermons', async(req, res)=>{
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
-
+    const sermonList = await Sermons.find({})
     const totalSermons = await Sermons.countDocuments();
 
     const now = new Date();
@@ -42,7 +42,8 @@ const lastMonthSermonsList = await Sermons.find({
       sermons,
       totalSermons,
       lastMonthSermons,
-      lastMonthSermonsList
+      lastMonthSermonsList,
+      sermonList
     });
   } catch (error) {
     console.log(error)

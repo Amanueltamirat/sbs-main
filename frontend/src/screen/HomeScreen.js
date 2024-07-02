@@ -8,14 +8,15 @@ import axios from "axios";
 import { BASE_URL } from "../utils";
 import Randomarticle from "../components/Randomarticle";
 
-function HomeScreen() {
+function HomeScreen({setIsHome}) {
+  setIsHome(true)
 
 return (
     <>
       <div className="homescreen">
         <div className="upper-homesreen">
-          <Randomarticle/>
             <ImageSlider/>
+          {/* <Randomarticle/> */}
         </div>
         <div className="recent">
            <Homepage/>

@@ -15,7 +15,8 @@ export const ImageAddress = async(image)=>{
 
 }
 
-function BookDetail() {
+function BookDetail({setIsHome}) {
+  setIsHome(false)
 const [book, setBook] = useState()
 const [imageAddress, setImageAddress] = useState(imageUrl)
 const [loading, setLoading] = useState(false)

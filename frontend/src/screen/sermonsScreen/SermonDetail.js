@@ -24,7 +24,8 @@ const reducer = (state, action) => {
   }
 };
 
-function SermonDetail() {
+function SermonDetail({setIsHome}) {
+  setIsHome(false)
   const [{ sermon, error, loading }, dispatch] = useReducer(reducer, {
     sermon: [],
     error: '',

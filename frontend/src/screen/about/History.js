@@ -2,7 +2,8 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async';
 import { NavLink } from 'react-router-dom';
 
-function History() {
+function History({setIsHome}) {
+  setIsHome(false)
    return (
     <div>
       <Helmet>

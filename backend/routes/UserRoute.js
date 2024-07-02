@@ -16,18 +16,25 @@ UserRoute.post(
   '/signin',
   // req.body.email
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findOne({ email: adminUser});
+    const user = await User.findOne({email: req.body.email});
     if (user) {
-      if (bycrpt.compareSync(req.body.password, user.password)) {
-        res.send({
+      // if (bycrpt.compareSync(req.body.password, user.password)) {
+      //   res.send({
+      //     _id: user._id,
+      //     // name: user.name,
+      //     email: user.email,
+      //     isAdmin: user.isAdmin,
+      //     token: generateToken(user),
+      //   });
+      //   return;
+      // }
+       res.send({
           _id: user._id,
-          name: user.name,
+          // name: user.name,
           email: user.email,
-          isAdmin: user.isAdmin == 'amanuel.tamirat22@gmail.com'? true:false,
+          isAdmin: user.isAdmin,
           token: generateToken(user),
         });
-        return;
-      }
     }
     res.status(401).send({ message: 'Ivalid email or password' });
   })
@@ -46,7 +53,7 @@ UserRoute.post(
       _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin == 'amanuel.tamirat22@gmail.com'? true:false,
+      isAdmin: user.isAdmin,
       token: generateToken(user),
     });
   })

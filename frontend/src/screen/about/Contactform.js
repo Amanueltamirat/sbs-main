@@ -9,6 +9,7 @@ import LoadingBox from '../../components/LoadingBox'
 import MessageBox from '../../components/MessageBox'
 
 function Contactform() {
+  
 const [error, setError] = useState(false)
 const [success, setSuccess] = useState(false)
 const [loading, setLoading] = useState(false)

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { BASE_URL, getError } from "../../utils";
 import LoadingBox from "../../components/LoadingBox";
 import MessageBox from "../../components/MessageBox";
+import Header from "../../components/Header";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
@@ -24,7 +25,8 @@ export const TransferCoveImage =  (coverimage) => {
 };
 
 
-function BookScreen() {
+function BookScreen({setIsHome}) {
+  setIsHome(false)
 const [showModel, setShowModal] = useState(null)
 const [books, setBooks] = useState([])
 const [originalName, setOriginalName] = useState([])
@@ -201,14 +203,15 @@ const handleDelete = async(filename, coverImage, name) => {
 const coverimage = (coverImage)=>{
 ImageAddress(coverImage)
 }
-
+let isHome = false
   return (
     <div className="book-screen">
       <Helmet>
         <title>SBC-Books</title>
       </Helmet>
       { loadingBook ? <LoadingBox/> :error ? <MessageBox variant='danger'>{error}</MessageBox>:
-      
+      <>
+      {/* <Header isHome={isHome}/> */}
         <div className="container">
             <div className="image-box"> 
             {
@@ -219,9 +222,9 @@ ImageAddress(coverImage)
             <img  className="cover-image" alt="hello" onClick={()=>navigate(`/books/${book.files}`)} src={`http://localhost:4000/api/bookCover/image/${book.coverImage}`}/>
               <p>{String(book.orignalName).replace(/_/g, ' ')}</p>
               {
-                userInfo.email === 'Perfecttesfa456@gmail.com'
+                userInfo?.email === 'Perfecttesfa456@gmail.com'
               &&
-                <Button style={{color:'black'}} variant="danger" book={book} onClick={()=>
+                <Button className="d-btn" style={{color:'black'}} variant="danger" book={book} onClick={()=>
                 { 
                 setShowModal(true)
                 }
@@ -245,9 +248,10 @@ ImageAddress(coverImage)
             }
             </div>
         </div>
+        </>
 }
         {
-          userInfo.email === 'Perfecttesfa456@gmail.com'
+          userInfo?.email === 'Perfecttesfa456@gmail.com'
           &&
         <Link className="new-book" to='/createbook'>Create New Book</Link>
         }

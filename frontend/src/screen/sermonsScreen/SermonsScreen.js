@@ -24,7 +24,8 @@ const reducer = (state, action) => {
 };
 
 
-function SermonsScreen() {
+function SermonsScreen({setIsHome}) {
+  setIsHome(false)
 
  const [{ loading, error, sermons }, dispatch] = useReducer(reducer, {
     loading: false,
@@ -53,7 +54,7 @@ const navigate = useNavigate()
 
   return (
     <div>
-     <div className="articles sermons">
+     <div className="articles sermons only">
       <Helmet>
         <title>SBC-Sermons</title>
       </Helmet>
@@ -94,7 +95,7 @@ const navigate = useNavigate()
         </div>
       )}
        {
-        userInfo.email === 'Perfecttesfa456@gmail.com'&&
+        userInfo?.email === 'Perfecttesfa456@gmail.com'&&
       <Link className='create-btn' to="/createsermons">Create New sermon</Link>
       }
     </div>

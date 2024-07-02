@@ -11,8 +11,8 @@ import {GridFsStorage} from 'multer-gridfs-storage';
 const BookCoverImageRoute  = express.Router()
 //////////////////////////////////////////////////////
 
-// const mongoURI = 'mongodb://localhost:27017';
-const mongoURI = 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app'
+const mongoURI = 'mongodb://localhost:27017';
+// const mongoURI = 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app'
 const conn = mongoose.createConnection(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -20,10 +20,10 @@ const conn = mongoose.createConnection(mongoURI, {
 // mongoose.connection
 let gfs, gridFs;
 conn.once('open', async() => {
-  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     bucketName: 'coverImage',
   });
-  gridFs= await new Grid(conn.db, mongoose.mongo);
+  gridFs= await new Grid(mongoose.connection.db, mongoose.mongo);
   gridFs.collection('coverImage');
   return gfs,gridFs;
 });
@@ -31,8 +31,8 @@ conn.once('open', async() => {
 
 
 var storage = new GridFsStorage({
-  // url:'mongodb://localhost:27017/sbc',
-  url: 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app',
+  url:'mongodb://localhost:27017/sbc',
+  // url: 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app',
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {

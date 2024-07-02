@@ -19,33 +19,33 @@ function SigninScreen() {
   const [password, setPassword] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        `${BASE_URL}/api/users/signin`,
-        { email, password }
-      );
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      // console.log(data);
-      navigate(redirect || "/");
-    } catch (err) {
-      toast.error(getError(err));
-    }
-  };
-  useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [userInfo, redirect, navigate]);
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const { data } = await axios.post(
+  //       `${BASE_URL}/api/users/signin`,
+  //       { email, password }
+  //     );
+  //     ctxDispatch({ type: "USER_SIGNIN", payload: data });
+  //     localStorage.setItem("userInfo", JSON.stringify(data));
+  //     // console.log(data);
+  //     navigate(redirect || "/");
+  //   } catch (err) {
+  //     toast.error(getError(err));
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate(redirect);
+  //   }
+  // }, [userInfo, redirect, navigate]);
   return (
     <div className="small-container">
       <Helmet>
         <title>Sign In</title>
       </Helmet>
       <h1 className="signin-header">Sign In</h1>
-      <Form onSubmit={submitHandler} className="signin-form">
+      <Form  className="signin-form">
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control

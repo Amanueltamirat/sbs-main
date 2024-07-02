@@ -6,7 +6,10 @@ import { useNavigate, useNavigation } from 'react-router-dom'
 import './USerList.css'
 import { BASE_URL } from '../../utils'
 import LoadingBox from '../../components/LoadingBox'
-const UserList =()=> {
+
+
+const UserList =({setIsHome})=> {
+  setIsHome(false)
 const [showModal, setShowModal] = useState(false)
 const [usersList, setUsersList] = useState([])
 const [currentId, setCurrentId] = useState(null)

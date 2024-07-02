@@ -10,7 +10,8 @@ import { BASE_URL, getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 
-function CreateBook() {
+function CreateBook({setIsHome}) {
+  setIsHome(false)
 const [file, setFile] = useState('')
 const [coverImage, setCoverImage] = useState('')
 const [title, setTitle] = useState('')

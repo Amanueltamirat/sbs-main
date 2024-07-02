@@ -2,7 +2,8 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async';
 import { NavLink } from 'react-router-dom';
 
-function Doctrine() {
+function Doctrine({setIsHome}) {
+  setIsHome(false)
   return (
     <div>
       <Helmet>

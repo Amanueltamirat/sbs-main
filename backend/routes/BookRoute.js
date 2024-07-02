@@ -18,8 +18,8 @@ import { gridfs } from '../utils.js'
 
 //////////////////////////////////////////////////////
 
-// const mongoURI = 'mongodb://localhost:27017';
-const mongoURI = 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app'
+const mongoURI = 'mongodb://localhost:27017';
+// const mongoURI = 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app'
 const conn = (mongoose.createConnection(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -27,19 +27,19 @@ const conn = (mongoose.createConnection(mongoURI, {
 
 let gfs, gridFs;
 conn.once('open', () => {
-  gfs =new mongoose.mongo.GridFSBucket(conn.db, {
+  gfs =new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     bucketName: 'uploads',
   });
   // gridFs=  new Grid(mongoose.connection, mongoose.mongo);
-  gridFs=  new Grid(conn, mongoose.mongo);
+  gridFs=  new Grid(mongoose.connection, mongoose.mongo);
   gridFs.collection('uploads');
   return gfs,gridFs;
 });
 /////////////////////////////////////////////////////
 
 var storage = new GridFsStorage({
-  // url:'mongodb://localhost:27017/sbc',
-  url: 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app',
+  url:'mongodb://localhost:27017/sbc',
+  // url: 'mongodb+srv://amanueltamirat22:2JCfFJkwsRnmc7jV@cluster0.km4zucn.mongodb.net/sbc-app',
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {

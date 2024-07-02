@@ -10,6 +10,7 @@ import { Store } from '../../Store';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import './ArticleScreen.css'
+import Header from '../../components/Header';
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -23,7 +24,8 @@ const reducer = (state, action) => {
   }
 };
 
-function ArticleDetail() {
+function ArticleDetail({setIsHome}) {
+  setIsHome(false)
   const [{ article, error, loading }, dispatch] = useReducer(reducer, {
     article: [],
     error: '',
@@ -112,7 +114,7 @@ const data =  await axios.post(`${BASE_URL}/sendmail`, {
 navigate('/articles');
 
 }
-
+let isHome = false
   return (
     <div className="article-detail">
       <Helmet>
@@ -122,7 +124,8 @@ navigate('/articles');
         <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
+      ) : (<>
+          {/* <Header isHome={isHome}/> */}
         <div className="article">
           <h2>{article.title}</h2>
           <img src={article.image} alt={article.title}  />
@@ -165,6 +168,7 @@ navigate('/articles');
               <Button style={{color:'black'}} onClick={sendMail}  disabled={sendingEmail} className='email-btn' >{sendingEmail ? 'Seinding':'Send Article To Users'}</Button>
               }
         </div>
+      </>
       )}
     </div>
   );
