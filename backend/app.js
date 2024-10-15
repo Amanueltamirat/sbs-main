@@ -13,6 +13,7 @@ import BookRoute from './routes/BookRoute.js';
 import multer from 'multer'
 import BookCoverImageRoute from './routes/BookCoverImageRoute.js';
 import AuthorRoute from './routes/AuthorRoute.js';
+import path from 'path';
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -20,11 +21,11 @@ app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
 app.use(cors());
 
-const port = process.env.port || 4000;
+const PORT = process.env.PORT || 5000
+const __dirname = path.resolve()
+
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Db connected');
   });
@@ -83,6 +84,17 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-app.listen(port, () => {
-  console.log('Your app litening on port:' + port);
+
+
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
+
+
+app.listen(PORT, () => {
+  console.log('Your app litening on port:' + PORT);
 });
