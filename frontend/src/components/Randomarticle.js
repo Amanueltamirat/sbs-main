@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL } from '../utils';
 import axios from 'axios';
 import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
@@ -59,7 +58,7 @@ useEffect(() => {
     async function fetachData() {
     try{
       setLoading(true)
-      const {data:{articles}} = await axios.get(`${BASE_URL}/api/articles/getallarticles`);
+      const {data:{articles}} = await axios.get(`/api/articles/getallarticles`);
       console.log(articles)
       setArticle( articles[Math.floor(Math.random() * ( articles.length - 1))
         ]

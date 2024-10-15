@@ -14,7 +14,7 @@ import {
 import { app } from '../firebase';
 import MessageBox from './MessageBox';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../utils';
+import { getError } from '../utils';
 import LoadingBox from './LoadingBox';
 import { Helmet } from 'react-helmet-async';
 function NewAricles() {
@@ -109,7 +109,7 @@ const handleSubmit = async (e)=>{
   e.preventDefault()
   try{
     setLoding(true)
-    const res = await fetch(`${BASE_URL}/api/articles/newarticles`, {
+    const res = await fetch(`/api/articles/newarticles`, {
       method:'POST',
       headers:{
         'Content-Type':'application/json'

@@ -18,7 +18,7 @@ import { app } from '../../firebase';
 import MessageBox from '../../components/MessageBox';
 import ReactQuill from 'react-quill';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 
 function CreateSermonsScreen({setIsHome}) {
@@ -79,7 +79,7 @@ const sermonData  = {
 }
 
 const saveSermon = async()=>{
-  const {data} = await axios.post(`${BASE_URL}/api/sermons/newSermons`, {
+  const {data} = await axios.post(`/api/sermons/newSermons`, {
     ...sermonData
   })
   console.log(data)
@@ -89,7 +89,7 @@ const saveSermon = async()=>{
 const saveProfilePicture = async()=>{
   try{
   setLoading(true)
-   const {data} = await axios.post(`${BASE_URL}/api/sermons/newSermons`, {
+   const {data} = await axios.post(`/api/sermons/newSermons`, {
     ...sermonData
   })
     saveSermon()

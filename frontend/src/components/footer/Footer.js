@@ -24,7 +24,7 @@ const { search } = useLocation();
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        `${BASE_URL}/api/users/signin`,
+        `$/api/users/signin`,
         { email}
       );
       ctxDispatch({ type: "USER_SIGNIN", payload: data });

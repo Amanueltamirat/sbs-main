@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ArticleCard from './ArticleCard';
 import SermonCard from './SermonCard';
 import BookCard from './BookCard';
-import { BASE_URL } from '../utils';
+
 
 function Search() {
 
@@ -39,7 +39,7 @@ const sortFormUrl = urlParams.get('sort')
 const fetchArticles = async()=>{
     setLoading(true);
     const searchQuery = urlParams.toString()
-    const {data} = await axios.get(`${BASE_URL}/api/articles/getallarticles?${searchQuery}`);
+    const {data} = await axios.get(`/api/articles/getallarticles?${searchQuery}`);
         setArticles(data.articles);
         setLoading(false)
         if(data.articles.length === 2){
@@ -51,7 +51,7 @@ const fetchArticles = async()=>{
 const fetchSermons = async()=>{
     setLoading(true);
     const searchQuery = urlParams.toString()
-    const {data} = await axios.get(`${BASE_URL}/api/sermons/allsermons?${searchQuery}`);
+    const {data} = await axios.get(`/api/sermons/allsermons?${searchQuery}`);
         setSermons(data.sermons);
         setLoading(false)
         if(data.sermons.length === 2){
@@ -63,7 +63,7 @@ const fetchSermons = async()=>{
 const fetchBooks = async()=>{
     setLoading(true);
     const searchQuery = urlParams.toString()
-    const {data} = await axios.get(`${BASE_URL}/api/books/getallbooks?${searchQuery}`);
+    const {data} = await axios.get(`/api/books/getallbooks?${searchQuery}`);
         setBooks(data.books)
         setLoading(false)
         if(data.books.length == 2){
@@ -108,7 +108,7 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`${BASE_URL}/api/articles/getallarticles?${searchQuery}`);
+    const res = await fetch(`/api/articles/getallarticles?${searchQuery}`);
     if (!res.ok) {
       return;
     }
@@ -130,7 +130,7 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`${BASE_URL}/api/sermons/allsermons?${searchQuery}`);
+    const res = await fetch(`/api/sermons/allsermons?${searchQuery}`);
     if (!res.ok) {
       return;
     }
@@ -152,7 +152,7 @@ fetchArticles()
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`${BASE_URL}/api/books/getallbooks?${searchQuery}`);
+    const res = await fetch(`/api/books/getallbooks?${searchQuery}`);
     if (!res.ok) {
       return;
     }

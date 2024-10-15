@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { BASE_URL, getError } from '../utils'
+import { getError } from '../utils'
 
 function Analysis() {
 
@@ -20,7 +20,7 @@ useEffect(()=>{
 const allArticles = async()=>{
     try{
         setLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/articles/getallarticles`);
+    const {data} = await axios.get(`/api/articles/getallarticles`);
     setLoading(false)
     setTotalArticles(data.totalArticles)
     setLastMonthArticles(data.lastMonthArticles)
@@ -32,7 +32,7 @@ const allArticles = async()=>{
 const allSermons = async()=>{
     try{
     setLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/sermons/allsermons`);
+    const {data} = await axios.get(`/api/sermons/allsermons`);
       setLoading(false);
       setTotalSermons(data.totalSermons);
       setLastMonthSermons(data.lastMonthSermons)
@@ -44,7 +44,7 @@ const allSermons = async()=>{
 const allBooks = async()=>{
     try{
     setLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/books/getallbooks`);
+    const {data} = await axios.get(`/api/books/getallbooks`);
         setLoading(false);
       setTotalBooks(data.totalBooks);
       setLastMonthBooks(data.lastMonthBooks)
@@ -56,7 +56,7 @@ const allBooks = async()=>{
 const allUsers = async()=>{
      try{
     setLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/users/allUsers`);
+    const {data} = await axios.get(`/api/users/allUsers`);
       setLoading(false);
       setTotalUsers(data.totalUsers);
       setLastMonthUsers(data.lastMonthUsers)

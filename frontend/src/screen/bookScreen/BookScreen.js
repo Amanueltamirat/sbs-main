@@ -8,7 +8,7 @@ import './Book.css'
 import { Store } from "../../Store";
 import { ImageAddress } from "./BookDetail";
 import { toast } from "react-toastify";
-import { BASE_URL, getError } from "../../utils";
+import  {getError } from "../../utils";
 import LoadingBox from "../../components/LoadingBox";
 import MessageBox from "../../components/MessageBox";
 import Header from "../../components/Header";
@@ -42,7 +42,7 @@ const navigate = useNavigate()
 
 useEffect(()=>{
   const bookData = async()=>{
-    const {data} = await axios.get(`${BASE_URL}/api/books/alldata`)
+    const {data} = await axios.get(`/api/books/alldata`)
     setBookItems(data)
   }
   bookData()
@@ -52,7 +52,7 @@ useEffect(()=>{
 const booksName = async ()=>{
   try{
     setLoadingBookData(true)
-  const {data:{files}} = await axios.get(`${BASE_URL}/api/bookCover/image`)
+  const {data:{files}} = await axios.get(`/api/bookCover/image`)
   setCoverImage(files)
   setLoadingBookData(false)
   } catch(err){
@@ -154,7 +154,7 @@ bookDatas[i].orignalName.push(book.title)
 
 const deleteOriginalName = async(name) => {
   try{
-  await axios.delete(`${BASE_URL}/api/books/bookname/${name}`)
+  await axios.delete(`/api/books/bookname/${name}`)
   } catch(err){
     toast.error(getError(err))
   }
@@ -162,7 +162,7 @@ const deleteOriginalName = async(name) => {
 
 const deleteCoverImage = async(coverImage) => {
   try{
-  await axios.delete(`${BASE_URL}/api/bookCover/coverimage/${coverImage}`)
+  await axios.delete(`/api/bookCover/coverimage/${coverImage}`)
   } catch(err){
     toast.error(getError(err))
   }
@@ -170,7 +170,7 @@ const deleteCoverImage = async(coverImage) => {
 
 const deleteCoverImageFromDb = async(coverImage) => {
   try{
-  await axios.delete(`${BASE_URL}/api/bookCover/bookname/${coverImage}`)
+  await axios.delete(`/api/bookCover/bookname/${coverImage}`)
   } catch(err){
     toast.error(getError(err))
   }
@@ -178,7 +178,7 @@ const deleteCoverImageFromDb = async(coverImage) => {
 
 const deleteBookFromDb = async(filename) => {
   try{
-  await axios.delete(`${BASE_URL}/api/books/bookname/${filename}`)
+  await axios.delete(`/api/books/bookname/${filename}`)
     window.location.reload()
   } catch(err){
     toast.error(getError(err))
@@ -192,7 +192,7 @@ const handleDelete = async(filename, coverImage, name) => {
   deleteBookFromDb(filename)
   deleteCoverImageFromDb(coverImage)
   try{
-  await axios.delete(`${BASE_URL}/api/books/files/${filename}`)
+  await axios.delete(`/api/books/files/${filename}`)
     window.location.reload()
   } catch(err){
     toast.error(getError(err))

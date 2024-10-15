@@ -15,7 +15,7 @@ import { app } from '../../firebase'
 import MessageBox from '../../components/MessageBox';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 const UpdateArticle = ({setIsHome})=> {
   setIsHome(false)
@@ -35,7 +35,7 @@ const UpdateArticle = ({setIsHome})=> {
 
    useEffect(()=>{
     const fetchData = async()=>{
-        const res = await fetch(`${BASE_URL}/api/articles/getArticle/${id}`)
+        const res = await fetch(`/api/articles/getArticle/${id}`)
         const data = await res.json()
         setFormData(data)
         setData(data)
@@ -48,7 +48,7 @@ const UpdateArticle = ({setIsHome})=> {
     try{
    setLoding(true)
     const res = await fetch(
-      `${BASE_URL}/api/articles/updateArticle/${formData._id}`,
+      `/api/articles/updateArticle/${formData._id}`,
       { method:"PUT",
       headers:{
         'Content-Type':'application/json',

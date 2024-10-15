@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import './Book.css'
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 
@@ -35,7 +35,7 @@ const submitHandler = async(e)=>{
         formData.append('overView', overView)
       try{
         setLoading(true)
-           const {data} = await axios.post(`${BASE_URL}/api/books/createbook`,
+           const {data} = await axios.post(`/api/books/createbook`,
           formData,
            )
           setLoading(false)
@@ -50,7 +50,7 @@ const bookCoverHandler = async(e)=>{
         const formData = new FormData()
         formData.append('image', coverImage)
       try{
-           const {data} = await axios.post(`${BASE_URL}/api/bookCover/creatcoverimage`,
+           const {data} = await axios.post(`/api/bookCover/creatcoverimage`,
        formData
            )
       } catch(err){
@@ -66,7 +66,7 @@ const handleInput = async(e)=>{
           overView
         }
       try{
-           const {data} = await axios.post(`${BASE_URL}/api/authors/author`,
+           const {data} = await axios.post(`/api/authors/author`,
           { 
             mode:'cors',
             headers: {

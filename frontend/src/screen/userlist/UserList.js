@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button'
 import { Store } from '../../Store'
 import { useNavigate, useNavigation } from 'react-router-dom'
 import './USerList.css'
-import { BASE_URL } from '../../utils'
 import LoadingBox from '../../components/LoadingBox'
 
 
@@ -23,7 +22,7 @@ useEffect(() => {
       setLoading(true)
       const fetchData = async () => {
         const { data } = await axios.get(
-          `${BASE_URL}/api/users`
+          `/api/users`
         );
         setUsersList(data)
         setLoading(false)
@@ -38,7 +37,7 @@ useEffect(() => {
 const handleDeleteUser = async()=>{
 setShowModal(false)
 try{
-const {data} = await axios.delete(`${BASE_URL}/api/users/deleteUser/${currentId}`)
+const {data} = await axios.delete(`/api/users/deleteUser/${currentId}`)
 window.location.reload()
 removeUserHandler(data)
 } catch (err){

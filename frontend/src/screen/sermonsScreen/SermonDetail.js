@@ -7,10 +7,11 @@ import ReactPlayer from 'react-player'
 import Button from 'react-bootstrap/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Store } from '../../Store';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 import { toast } from 'react-toastify';
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -49,7 +50,7 @@ const navigate = useNavigate()
       const fetchData = async () => {
         setLoadingVideo(true)
         const { data } = await axios.get(
-          `${BASE_URL}/api/sermons/${articleId}`
+          `/api/sermons/${articleId}`
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: data }); 
         setLoadingVideo(false)
@@ -64,7 +65,7 @@ const navigate = useNavigate()
 const handleDeleteSermon =async()=>{
 setShowModal(false)
   try{
-    const res =  await fetch(`${BASE_URL}/api/sermons/deleteSermon/${deleteId}`, {
+    const res =  await fetch(`/api/sermons/deleteSermon/${deleteId}`, {
       method:'DELETE'
     })
 navigate('/sermons')

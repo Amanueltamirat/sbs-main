@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TransferCoveImage } from './BookScreen'
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
@@ -29,7 +29,7 @@ useEffect(()=>{
 const fetchData = async()=>{
   try{
     setLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/books/bookdata/${filename}`)
+    const {data} = await axios.get(`/api/books/bookdata/${filename}`)
     setBook(data)
     setLoading(false)
   } catch(err){
@@ -49,7 +49,7 @@ fetchData()
         <div className='read'>
           {
             imageAddress && 
-          <img  className="cover-image" alt="hello"  src={`${BASE_URL}/api/bookCover/image/${imageAddress}`}/>
+          <img  className="cover-image" alt="hello"  src={`/api/bookCover/image/${imageAddress}`}/>
           }
           <button onClick={()=>navigate(`/book/${filename}`)}>Read Book</button>
         </div>

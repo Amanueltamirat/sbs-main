@@ -16,7 +16,7 @@ import MessageBox from './MessageBox';
 import { prototype } from 'react-quill';
 import DisabledButton from './DisabledButton';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../utils';
+import { getError } from '../utils';
 import LoadingBox from './LoadingBox';
 
 function UpdateSermon() {
@@ -36,7 +36,7 @@ const navigate = useNavigate()
 
  useEffect(()=>{
     const fetchData = async()=>{
-        const res = await fetch(`${BASE_URL}/api/sermons/${id}`)
+        const res = await fetch(`/api/sermons/${id}`)
         const data = await res.json()
        setFormData(data)
     }
@@ -48,7 +48,7 @@ const saveSermon= async (e) => {
     try{
    setLoading(true)
     const res = await fetch(
-      `${BASE_URL}/api/sermons/updateSermon/${formData._id}`,
+      `/api/sermons/updateSermon/${formData._id}`,
       { method:"PUT",
       headers:{
         'Content-Type':'application/json',

@@ -5,7 +5,6 @@ import ArticleScreen from "./articlesScreen/ArticleScreen";
 import { Helmet } from "react-helmet-async";
 import Homepage from "../components/homepage/Homepage";
 import axios from "axios";
-import { BASE_URL } from "../utils";
 import Randomarticle from "../components/Randomarticle";
 
 function HomeScreen({setIsHome}) {

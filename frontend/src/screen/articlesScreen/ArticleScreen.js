@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import LoadingBox from '../../components/LoadingBox';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import MessageBox from '../../components/MessageBox';
 import htmlReactParcer from 'html-react-parser'
 import './ArticleScreen.css'
@@ -49,7 +49,7 @@ setIsHome(false)
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const { data } = await axios.get(`${BASE_URL}/api/articles`);
+        const { data } = await axios.get(`/api/articles`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
      
       } catch (err) {

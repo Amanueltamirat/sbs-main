@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
 import { Store } from "../Store";
-import { BASE_URL, getError } from "../utils";
+import { getError } from "../utils";
 import { toast } from "react-toastify";
 
 function SigninScreen() {
@@ -23,7 +23,7 @@ function SigninScreen() {
   //   e.preventDefault();
   //   try {
   //     const { data } = await axios.post(
-  //       `${BASE_URL}/api/users/signin`,
+  //       `/api/users/signin`,
   //       { email, password }
   //     );
   //     ctxDispatch({ type: "USER_SIGNIN", payload: data });

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { BASE_URL, getError } from '../../utils'
+import { getError } from '../../utils'
 import LoadingBox from '../../components/LoadingBox'
 import MessageBox from '../../components/MessageBox'
 
@@ -17,7 +17,7 @@ useEffect(()=>{
   try{
 const bookData = async()=>{
   setLoading(true)
-  const {data} = await axios.get(`${BASE_URL}/api/books/document/${filename}`,{
+  const {data} = await axios.get(`/api/books/document/${filename}`,{
       headers: {
         'Content-type': 'application/pdf',
       },

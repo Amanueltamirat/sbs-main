@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../../components/LoadingBox';
-import { BASE_URL, getError } from '../../utils';
+import  {getError } from '../../utils';
 import MessageBox from '../../components/MessageBox';
 import htmlReactParcer from 'html-react-parser'
 import { Store } from '../../Store';
@@ -46,7 +46,7 @@ function ArticleDetail({setIsHome}) {
       dispatch({ type: 'FETCH_REQUEST' });
       const fetchData = async () => {
         const { data } = await axios.get(
-          `${BASE_URL}/api/articles/${articleId}`
+          `/api/articles/${articleId}`
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       };
@@ -60,7 +60,7 @@ function ArticleDetail({setIsHome}) {
 const handleDeleteArticle =async()=>{
 setShowModal(false)
   try{
-    const res =  await fetch(`${BASE_URL}/api/articles/deleteArticle/${deleteId}`, {
+    const res =  await fetch(`/api/articles/deleteArticle/${deleteId}`, {
       method:'DELETE'
     })
 navigate('/articles')
@@ -75,7 +75,7 @@ useEffect(() => {
     try {
       const fetchData = async () => {
         const { data } = await axios.get(
-          `${BASE_URL}/api/users`
+          `/api/users`
         );
         setUserlist(data)
       };
@@ -101,7 +101,7 @@ var message = `<div style=${{maxWidth:400}}  >
 const sendMail =  async ()=>{
   try{
 setSendingEmail(true)
-const data =  await axios.post(`${BASE_URL}/sendmail`, {
+const data =  await axios.post(`/sendmail`, {
   emails:allEmaill,
   subject,
   message

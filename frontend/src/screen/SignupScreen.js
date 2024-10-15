@@ -7,7 +7,6 @@ import { Helmet } from 'react-helmet-async';
 import { Store } from '../Store';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BASE_URL, getError } from '../utils';
 
 function SignupScreen() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ function SignupScreen() {
     }
     try {
       const { data } = await axios.post(
-        `${BASE_URL}/api/users/signup`,
+        `/api/users/signup`,
         { name, email, password }
       );
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });

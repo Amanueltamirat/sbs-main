@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import { BASE_URL, getError } from '../../utils'
+import  {getError } from '../../utils'
 import axios from 'axios'
 import { Helmet } from 'react-helmet-async'
 import LoadingBox from '../LoadingBox'
@@ -26,7 +26,7 @@ const navigate = useNavigate()
 const allArticles = async()=>{
     try{
         setArticlesLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/articles/getallarticles`);
+    const {data} = await axios.get(`/api/articles/getallarticles`);
     setArticlesLoading(false)
     if(data.lastMonthArticles < 3 ){
       setLastMonthArticles(data.articleList)
@@ -42,7 +42,7 @@ const allArticles = async()=>{
 const allSermons = async()=>{
     try{
     setSermonsLoading(true)
-    const {data} = await axios.get(`${BASE_URL}/api/sermons/allsermons`);
+    const {data} = await axios.get(`/api/sermons/allsermons`);
       setSermonsLoading(false);
        console.log(data)
       if(data.lastMonthSermons < 3){
